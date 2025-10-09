@@ -1,0 +1,8 @@
+{
+  "name"             : "hippo-edo-frontend",
+  "namespace"        : "hippo-edo",
+  "script"           : "serve -s build -p 1010",
+  "out_file"         : "/var/log/pm2/hippo-edo-frontend/hippo-edo-frontend.log",
+  "error_file"       : "/var/log/pm2/hippo-edo-frontend/hippo-edo-frontend_error.log",
+  "autorestart"      : true
+}
