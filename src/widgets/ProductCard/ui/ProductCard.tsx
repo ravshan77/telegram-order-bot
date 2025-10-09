@@ -57,16 +57,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <Button
                     variant="plain"
                     type="button"
-                    className="mt-3 w-full h-9 bg-cyan-100 p-2 rounded-lg hover:bg-cyan-200"
+                    className="mt-3 w-full bg-cyan-100 p-2 rounded-lg hover:bg-cyan-200"
                     onClick={(e) => {
                         e.stopPropagation()
                         addToCart(product)
                     }}
                 >
-                    <p className="flex items-center justify-center text-base font-medium text-cyan-500">
-                        в корзину &nbsp;{' '}
-                        <BasketSvg width={'100%'} height={'100%'} />
-                    </p>
+                    <div className="flex items-center justify-center text-base font-medium text-cyan-500 p-0 m-0">
+                        в корзину &nbsp; <BasketSvg width={20} height={20} />
+                    </div>
                 </Button>
             </div>
         </div>

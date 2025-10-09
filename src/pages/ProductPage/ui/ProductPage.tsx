@@ -16,8 +16,8 @@ export const ProductPage: React.FC = () => {
             <div className="bg-white p-4 border-b sticky top-14 z-10">
                 <Button
                     variant="plain"
-                    onClick={() => setPage('main')}
                     className="text-cyan-500"
+                    onClick={() => setPage('main')}
                 >
                     Назад
                 </Button>
