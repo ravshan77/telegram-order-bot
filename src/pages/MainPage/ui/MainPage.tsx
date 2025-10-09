@@ -25,7 +25,7 @@ export const MainPage: React.FC = () => {
                 </div>
             </div> */}
 
-            <div className="px-0 py-4">
+            <div className="px-0 py-0">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold">Товары</h2>
                 </div>
