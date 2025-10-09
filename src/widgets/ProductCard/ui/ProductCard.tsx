@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@/shared/ui/kit'
 import type { Product } from '@/entities/product'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { BoxSvg } from '@/shared/ui/svg'
+import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 
 interface ProductCardProps {
     product: Product
@@ -56,13 +56,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </div>
                 <Button
                     variant="plain"
-                    className="mt-3 w-full bg-cyan-100 text-cyan-500 py-2 rounded-lg text-base font-medium hover:bg-cyan-200"
+                    type="button"
+                    className="mt-3 w-full h-9 bg-cyan-100 p-2 rounded-lg hover:bg-cyan-200"
                     onClick={(e) => {
                         e.stopPropagation()
                         addToCart(product)
                     }}
                 >
-                    в корзину
+                    <p className="flex items-center justify-center text-base font-medium text-cyan-500">
+                        в корзину &nbsp;{' '}
+                        <BasketSvg width={'100%'} height={'100%'} />
+                    </p>
                 </Button>
             </div>
         </div>

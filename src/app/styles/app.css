@@ -1,4 +1,12 @@
-@import "./components/index.css";
-@import "./template/index.css";
-@import "./vendors/index.css";
-@import "./tailwind/index.css";
+@import './components/index.css';
+@import './template/index.css';
+@import './vendors/index.css';
+@import './tailwind/index.css';
+
+.hide-scrollbar {
+    -ms-overflow-style: none; /* IE va Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}

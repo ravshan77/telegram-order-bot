@@ -31,12 +31,12 @@ export const MainPage: React.FC = () => {
                     <h2 className="text-lg font-semibold">Товары</h2>
                 </div>
 
-                <div className="flex gap-2 overflow-x-auto">
+                <div className="flex gap-2 overflow-x-auto hide-scrollbar">
                     {categories.map((cat) => (
                         <Link to={getCategoryPath(cat.id)} key={cat?.id}>
                             <Button
                                 variant="plain"
-                                className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-xl"
+                                className="flex items-center gap-2 px-4 py-2 mb-4 bg-white rounded-full border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-lg"
                             >
                                 <span>{cat.icon}</span>
                                 <span className="text-sm">{cat.name}</span>

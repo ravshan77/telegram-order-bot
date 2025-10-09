@@ -16,3 +16,4 @@ export { TopBarClassicSvg } from './TopBarClassicSvg'
 export { UploadMedia } from './UploadMedia'
 
 export { BoxSvg } from './BoxSvg'
+export { BasketSvg } from './BasketSvg'
