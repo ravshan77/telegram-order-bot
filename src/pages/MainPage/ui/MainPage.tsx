@@ -1,17 +1,18 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/shared/ui/kit'
 import { ChevronRight } from 'lucide-react'
 import { products } from '@/entities/product'
 import { categories } from '@/entities/category'
+import { getCategoryPath } from '@/shared/config'
 import { ProductCard } from '@/widgets/ProductCard'
-import { useCartStore } from '@/shared/store/useCartStore'
+// import { useCartStore } from '@/shared/store/useCartStore'
 
 export const MainPage: React.FC = () => {
-    const setSelectedCategory = useCartStore(
-        (state) => state.setSelectedCategory,
-    )
-    const setPage = useCartStore((state) => state.setPage)
-
+    // const setSelectedCategory = useCartStore(
+    //     (state) => state.setSelectedCategory,
+    // )
+    // const setPage = useCartStore((state) => state.setPage)
     return (
         <div className="pb-24">
             {/* <div className="bg-white p-4 sticky top-14 z-10">
@@ -25,25 +26,22 @@ export const MainPage: React.FC = () => {
                 </div>
             </div> */}
 
-            <div className="px-0 py-0">
-                <div className="flex items-center justify-between mb-4">
+            <div>
+                <div className="flex items-center justify-between mb-2">
                     <h2 className="text-lg font-semibold">Товары</h2>
                 </div>
 
-                <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+                <div className="flex gap-2 overflow-x-auto">
                     {categories.map((cat) => (
-                        <Button
-                            variant="plain"
-                            key={cat.id}
-                            onClick={() => {
-                                setSelectedCategory(cat.name)
-                                setPage('category')
-                            }}
-                            className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-gray-200 whitespace-nowrap hover:border-cyan-500"
-                        >
-                            <span>{cat.icon}</span>
-                            <span className="text-sm">{cat.name}</span>
-                        </Button>
+                        <Link to={getCategoryPath(cat.id)} key={cat?.id}>
+                            <Button
+                                variant="plain"
+                                className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-xl"
+                            >
+                                <span>{cat.icon}</span>
+                                <span className="text-sm">{cat.name}</span>
+                            </Button>
+                        </Link>
                     ))}
                 </div>
 

@@ -1,27 +1,32 @@
 import React from 'react'
 import { Button } from '@/shared/ui/kit'
 import { products } from '@/entities/product'
+import { useNavigate } from 'react-router-dom'
 import { ProductCard } from '@/widgets/ProductCard'
-import { useCartStore } from '@/shared/store/useCartStore'
 
 export const CategoryPage: React.FC = () => {
-    const selectedCategory = useCartStore((state) => state.selectedCategory)
-    const setPage = useCartStore((state) => state.setPage)
+    const temporarily_category = 'Электроника'
+
     const categoryProducts = products.filter(
-        (p) => p.category === selectedCategory,
+        (p) => p.category === temporarily_category,
     )
+
+    const navigate = useNavigate()
 
     return (
         <div className="pb-24">
             <div className="bg-white p-4 border-b sticky top-14 z-10">
                 <Button
                     variant="plain"
-                    onClick={() => setPage('main')}
+                    type="button"
                     className="text-cyan-500 mb-2"
+                    onClick={() => navigate(-1)}
                 >
                     Назад
                 </Button>
-                <h2 className="text-xl font-semibold">{selectedCategory}</h2>
+                <h2 className="text-xl font-semibold">
+                    {temporarily_category}
+                </h2>
             </div>
 
             <div className="px-4 py-4">
