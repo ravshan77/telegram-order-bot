@@ -1,15 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
 import { products } from '@/entities/product'
 import { ProductCard } from '@/widgets/ProductCard'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { ImageGallery } from '@/shared/ui/kit-pro'
+import { useNavigate } from 'react-router-dom'
 
 export const ProductPage: React.FC = () => {
     const selectedProduct = useCartStore((state) => state.selectedProduct)
     const setPage = useCartStore((state) => state.setPage)
     const addToCart = useCartStore((state) => state.addToCart)
+    const naviagte = useNavigate()
 
     if (!selectedProduct) return null
+    //! shu yerda rasmlarni quyishda tuxtadim
+    const slides = [
+        {
+            src: 'https://picsum.photos/id/1018/1000/600/',
+            title: 'test',
+            thumbnail: 'https://picsum.photos/id/1018/250/150/',
+        },
+        {
+            src: 'https://picsum.photos/id/1015/1000/600/',
+            title: 'test',
+            thumbnail: 'https://picsum.photos/id/1015/250/150/',
+        },
+        {
+            src: 'https://picsum.photos/id/1019/1000/600/',
+            title: 'test',
+            thumbnail: 'https://picsum.photos/id/1019/250/150/',
+        },
+    ]
+
+    const [currentIndex, setCurrentIndex] = useState(-1)
 
     return (
         <div className="pb-24">
@@ -17,19 +40,46 @@ export const ProductPage: React.FC = () => {
                 <Button
                     variant="plain"
                     className="text-cyan-500"
-                    onClick={() => setPage('main')}
+                    onClick={() => naviagte(-1)}
                 >
                     Назад
                 </Button>
             </div>
 
             <div className="bg-white">
-                <img
+                {/* <img
                     src={selectedProduct.image}
                     alt={selectedProduct.name}
                     className="w-full h-80 object-cover"
-                />
-
+                /> */}
+                <ImageGallery
+                    index={currentIndex}
+                    slides={
+                        slides?.map((img) => {
+                            return {
+                                src: img.src,
+                            }
+                        }) || []
+                    }
+                    onClose={() => setCurrentIndex(-1)}
+                >
+                    <div className="grid grid-cols-3 gap-2">
+                        {slides?.map((img, index) => (
+                            <div
+                                key={img.title}
+                                data-src={img.src}
+                                className="cursor-pointer overflow-auto flex gap-4"
+                                role="button"
+                                onClick={() => setCurrentIndex(index)}
+                            >
+                                <img
+                                    className="rounded-xl h-96 min-w-80"
+                                    src={img.src}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </ImageGallery>
                 <div className="p-4">
                     <h1 className="text-lg font-semibold mb-4">
                         {selectedProduct.name}

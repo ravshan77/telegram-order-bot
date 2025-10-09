@@ -3,6 +3,8 @@
 @import './vendors/index.css';
 @import './tailwind/index.css';
 
+/* @import '~react-image-gallery/styles/css/image-gallery.css'; */
+
 .hide-scrollbar {
     -ms-overflow-style: none; /* IE va Edge */
     scrollbar-width: none; /* Firefox */

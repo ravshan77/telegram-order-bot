@@ -26,7 +26,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     return (
         <div
-            className="rounded-lg overflow-hidden cursor-pointer border"
+            className="rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
             onClick={goShowProduct}
         >
             <div className="relative">
