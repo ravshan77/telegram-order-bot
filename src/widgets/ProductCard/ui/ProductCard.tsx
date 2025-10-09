@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button } from '@/shared/ui/kit'
 import type { Product } from '@/entities/product'
-import { useCartStore } from '@/shared/store/useCartStore'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
+import { useCartStore } from '@/shared/store/useCartStore'
 
 interface ProductCardProps {
     product: Product
