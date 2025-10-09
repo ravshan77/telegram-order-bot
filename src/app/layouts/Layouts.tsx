@@ -10,7 +10,7 @@ const Layout = ({ children }: CommonProps) => {
     const layoutType = useThemeStore((state) => state.layout.type)
 
     // const { authenticated } = useUserStore()
-    const { authenticated } = {authenticated:true}
+    const { authenticated } = { authenticated: true }
 
     return (
         <Suspense
@@ -20,11 +20,13 @@ const Layout = ({ children }: CommonProps) => {
                 </div>
             }
         >
-            {
-                authenticated
-                ? <PostLoginLayout layoutType={layoutType}>{children}</PostLoginLayout>
-                : <PreLoginLayout>{children}</PreLoginLayout>
-            }
+            {authenticated ? (
+                <PostLoginLayout layoutType={layoutType}>
+                    {children}
+                </PostLoginLayout>
+            ) : (
+                <PreLoginLayout>{children}</PreLoginLayout>
+            )}
         </Suspense>
     )
 }

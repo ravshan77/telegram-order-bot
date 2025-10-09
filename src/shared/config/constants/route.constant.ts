@@ -7,11 +7,11 @@ export const getAccountsPayablePath = () => '/accounts-payable'
 export const getReconciliationStatementPath = () => '/reconciliation-statement'
 export const getDeliveryAddressPath = () => '/delivery-address'
 export const getCardPath = () => '/card'
-export const getCategoryPath = (
-    categoryId: number | string = ':categoryName',
-) => `/category/${categoryId}`
+export const getCategoryPath = (categoryId: number | string = ':categoryId') =>
+    `/category/${categoryId}`
 export const getCheckoutPath = () => '/checkout'
-export const getProductPath = () => '/product'
+export const getProductPath = (productId: number | string = ':productId') =>
+    `/product/${productId}`
 
 export const getTaskPath = () => '/task'
 export const getDocumentPath = () => '/document'

@@ -1,25 +1,33 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Button } from '@/shared/ui/kit'
 import type { Product } from '@/entities/product'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { useNavigate } from 'react-router-dom'
+import { getProductPath } from '@/shared/config'
+// import { useRequiredParam } from '@/shared/lib/hooks/useRequiredParam'
 
 interface ProductCardProps {
     product: Product
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+    const navigate = useNavigate()
+    // const productId = useRequiredParam('productId')
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
-    const setPage = useCartStore((state) => state.setPage)
+    // const setPage = useCartStore((state) => state.setPage)
     const addToCart = useCartStore((state) => state.addToCart)
+    // const goShowProduct = () => navigate(getProductPath(product.id))
+
+    const goShowProduct = useCallback(() => {
+        setSelectedProduct(product)
+        navigate(getProductPath(product.id))
+    }, [navigate, product.id])
 
     return (
         <div
-            className="rounded-lg overflow-hidden cursor-pointer"
-            onClick={() => {
-                setSelectedProduct(product)
-                setPage('product')
-            }}
+            className="rounded-lg overflow-hidden cursor-pointer border"
+            onClick={goShowProduct}
         >
             <div className="relative">
                 <img
@@ -35,7 +43,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
             <div className="p-3">
                 <div className="text-cyan-500 font-bold text-sm">
-                    {product.price.toLocaleString()} сўм
+                    {product.price.toLocaleString()} UZS
                 </div>
                 {/* {product.oldPrice && (
                     <div className="text-gray-400 line-through text-sm">

@@ -19,7 +19,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
     return (
         <LayoutBase
             type={LAYOUT_COLLAPSIBLE_SIDE}
-            className="app-layout-collapsible-side flex flex-auto flex-col"
+            className="app-layout-collapsible-side flex flex-auto flex-col bg-white"
         >
             <div className="flex flex-auto min-w-0">
                 {larger.lg && <SideNav />}

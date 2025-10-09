@@ -13,6 +13,8 @@ export const MainPage: React.FC = () => {
     //     (state) => state.setSelectedCategory,
     // )
     // const setPage = useCartStore((state) => state.setPage)
+    console.log('MainPage')
+
     return (
         <div className="pb-24">
             {/* <div className="bg-white p-4 sticky top-14 z-10">
@@ -36,7 +38,7 @@ export const MainPage: React.FC = () => {
                         <Link to={getCategoryPath(cat.id)} key={cat?.id}>
                             <Button
                                 variant="plain"
-                                className="flex items-center gap-2 px-4 mb-3 bg-white rounded-full border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-md"
+                                className="flex items-center gap-2 px-4 mb-3 bg-white rounded-2xl border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-md"
                             >
                                 <span>{cat.icon}</span>
                                 <span className="text-sm">{cat.name}</span>

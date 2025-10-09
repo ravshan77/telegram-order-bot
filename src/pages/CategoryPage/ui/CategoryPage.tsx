@@ -1,8 +1,9 @@
 import React, { useRef } from 'react'
-// import { Button } from '@/shared/ui/kit'
+import { Button } from '@/shared/ui/kit'
 import { products } from '@/entities/product'
 import { useNavigate } from 'react-router-dom'
 import { ProductCard } from '@/widgets/ProductCard'
+import { ChevronLeft } from 'lucide-react'
 
 export const CategoryPage: React.FC = () => {
     const temporarily_category = 'Электроника'
@@ -12,6 +13,7 @@ export const CategoryPage: React.FC = () => {
     )
 
     const navigate = useNavigate()
+    const goBack = () => navigate(-1)
 
     const touchStartX = useRef<number | null>(null)
     const touchEndX = useRef<number | null>(null)
@@ -30,7 +32,7 @@ export const CategoryPage: React.FC = () => {
 
             // 👇 Faqat chapdan o‘ngga harakat bo‘lsa
             if (diff > 80) {
-                navigate(-1) // ortga qaytish
+                goBack() // ortga qaytish
             }
         }
 
@@ -42,13 +44,18 @@ export const CategoryPage: React.FC = () => {
     return (
         <div
             className="pb-24"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchMove}
+            onTouchStart={handleTouchStart}
         >
             <div>
                 <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="flex justify-center items-center text-lg font-semibold">
+                        <Button
+                            variant="plain"
+                            icon={<ChevronLeft />}
+                            onClick={goBack}
+                        />
                         {temporarily_category}
                     </h2>
                 </div>
