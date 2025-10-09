@@ -4,9 +4,9 @@ import LayoutBase from '@/shared/ui/template/LayoutBase'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import { LAYOUT_STACKED_SIDE } from '@/shared/config/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
-import { UserProfileDropdown } from '@/entities/User'
+// import { UserProfileDropdown } from '@/entities/User'
 import StackedSideNav from '@/shared/ui/template/StackedSideNav'
-import { TaskNotificationList } from '@/features/TaskNotificationList'
+// import { TaskNotificationList } from '@/features/TaskNotificationList'
 
 const StackedSide = ({ children }: CommonProps) => {
     const { larger, smaller } = useResponsive()
@@ -24,8 +24,8 @@ const StackedSide = ({ children }: CommonProps) => {
                         headerStart={<>{smaller.lg && <MobileNav />}</>}
                         headerEnd={
                             <>
-                                <TaskNotificationList />
-                                <UserProfileDropdown hoverable={false} />
+                                {/* <TaskNotificationList />
+                                <UserProfileDropdown hoverable={false} /> */}
                             </>
                         }
                     />

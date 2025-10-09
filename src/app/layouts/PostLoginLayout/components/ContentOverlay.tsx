@@ -9,8 +9,8 @@ import useResponsive from '@/shared/lib/hooks/useResponsive'
 import { LAYOUT_CONTENT_OVERLAY } from '@/shared/config/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
 import type { FooterPageContainerType } from '@/shared/ui/template/Footer'
-import { UserProfileDropdown } from '@/entities/User'
-import { TaskNotificationList } from '@/features/TaskNotificationList'
+// import { UserProfileDropdown } from '@/entities/User'
+// import { TaskNotificationList } from '@/features/TaskNotificationList'
 
 const ContentOverlay = ({ children }: CommonProps) => {
     const { isSticky } = useScrollTop()
@@ -110,8 +110,8 @@ const ContentOverlay = ({ children }: CommonProps) => {
                         headerMiddle={<>{larger.lg && <HorizontalNav />}</>}
                         headerEnd={
                             <>
-                                <TaskNotificationList />
-                                <UserProfileDropdown hoverable={false} />
+                                {/* <TaskNotificationList />
+                                <UserProfileDropdown hoverable={false} /> */}
                             </>
                         }
                     />

@@ -10,8 +10,8 @@ import useResponsive from '@/shared/lib/hooks/useResponsive'
 import { LAYOUT_FRAMELESS_SIDE } from '@/shared/config/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
 import type { FooterPageContainerType } from '@/shared/ui/template/Footer'
-import { UserProfileDropdown } from '@/entities/User'
-import { TaskNotificationList } from '@/features/TaskNotificationList'
+// import { UserProfileDropdown } from '@/entities/User'
+// import { TaskNotificationList } from '@/features/TaskNotificationList'
 
 const FrameLessSide = ({ children }: CommonProps) => {
     const { isSticky } = useScrollTop()
@@ -99,8 +99,8 @@ const FrameLessSide = ({ children }: CommonProps) => {
                             }
                             headerEnd={
                                 <>
-                                    <TaskNotificationList />
-                                    <UserProfileDropdown hoverable={false} />
+                                    {/* <TaskNotificationList />
+                                    <UserProfileDropdown hoverable={false} /> */}
                                 </>
                             }
                         />

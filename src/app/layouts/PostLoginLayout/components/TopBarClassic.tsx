@@ -6,8 +6,8 @@ import LayoutBase from '@/shared/ui/template/LayoutBase'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import { LAYOUT_TOP_BAR_CLASSIC } from '@/shared/config/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
-import { UserProfileDropdown } from '@/entities/User'
-import { TaskNotificationList } from '@/features/TaskNotificationList'
+// import { UserProfileDropdown } from '@/entities/User'
+// import { TaskNotificationList } from '@/features/TaskNotificationList'
 
 const TopBarClassic = ({ children }: CommonProps) => {
     const { larger, smaller } = useResponsive()
@@ -31,8 +31,8 @@ const TopBarClassic = ({ children }: CommonProps) => {
                         headerMiddle={<>{larger.lg && <HorizontalNav />}</>}
                         headerEnd={
                             <>
-                                <TaskNotificationList />
-                                <UserProfileDropdown hoverable={false} />
+                                {/* <TaskNotificationList />
+                                <UserProfileDropdown hoverable={false} /> */}
                             </>
                         }
                     />
