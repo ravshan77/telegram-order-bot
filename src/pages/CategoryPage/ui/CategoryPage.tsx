@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button } from '@/shared/ui/kit'
+import React, { useRef } from 'react'
+// import { Button } from '@/shared/ui/kit'
 import { products } from '@/entities/product'
 import { useNavigate } from 'react-router-dom'
 import { ProductCard } from '@/widgets/ProductCard'
@@ -13,24 +13,47 @@ export const CategoryPage: React.FC = () => {
 
     const navigate = useNavigate()
 
-    return (
-        <div className="pb-24">
-            <div className="bg-white p-4 border-b sticky top-14 z-10">
-                <Button
-                    variant="plain"
-                    type="button"
-                    className="text-cyan-500 mb-2"
-                    onClick={() => navigate(-1)}
-                >
-                    Назад
-                </Button>
-                <h2 className="text-xl font-semibold">
-                    {temporarily_category}
-                </h2>
-            </div>
+    const touchStartX = useRef<number | null>(null)
+    const touchEndX = useRef<number | null>(null)
 
-            <div className="px-4 py-4">
-                <div className="grid grid-cols-2 gap-3">
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX
+    }
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        touchEndX.current = e.touches[0].clientX
+    }
+
+    const handleTouchEnd = () => {
+        if (touchStartX.current !== null && touchEndX.current !== null) {
+            const diff = touchEndX.current - touchStartX.current
+
+            // 👇 Faqat chapdan o‘ngga harakat bo‘lsa
+            if (diff > 80) {
+                navigate(-1) // ortga qaytish
+            }
+        }
+
+        // qiymatlarni tozalash
+        touchStartX.current = null
+        touchEndX.current = null
+    }
+
+    return (
+        <div
+            className="pb-24"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+        >
+            <div>
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-semibold">
+                        {temporarily_category}
+                    </h2>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mb-6">
                     {categoryProducts.map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}

@@ -15,7 +15,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     return (
         <div
-            className="bg-white rounded-lg overflow-hidden cursor-pointer"
+            className="rounded-lg overflow-hidden cursor-pointer"
             onClick={() => {
                 setSelectedProduct(product)
                 setPage('product')
@@ -45,15 +45,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <div className="text-sm text-black mt-2 line-clamp-2">
                     {product.name}
                 </div>
-                <div className="flex gap-2">
-                    <div className="w-14 max-w-16 py-0 px-2 mt-2 flex justify-between items-center rounded-xl bg-red-100 text-red-600">
+                {/* <div className="flex gap-2"> */}
+                {/* <div className="w-14 max-w-16 py-0 px-2 mt-2 flex justify-between items-center rounded-xl bg-red-100 text-red-600">
                         <span>-{product.discount}%</span>
-                    </div>
-                    <div className="w-14 mt-2 border flex justify-between items-center rounded-xl py-0 px-2">
-                        <BoxSvg width={18} height={18} />
-                        <span>24</span>
-                    </div>
+                    </div> */}
+                <div className="w-14 mt-2 border flex justify-between items-center rounded-xl py-0 px-2">
+                    <BoxSvg width={18} height={18} />
+                    <span>24</span>
                 </div>
+                {/* </div> */}
                 <Button
                     variant="plain"
                     type="button"
