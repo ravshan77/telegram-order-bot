@@ -27,7 +27,7 @@ export const MainPage: React.FC = () => {
             </div> */}
 
             <div>
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                     <h2 className="text-lg font-semibold">Товары</h2>
                 </div>
 
@@ -36,7 +36,7 @@ export const MainPage: React.FC = () => {
                         <Link to={getCategoryPath(cat.id)} key={cat?.id}>
                             <Button
                                 variant="plain"
-                                className="flex items-center gap-2 px-4 py-2 mb-4 bg-white rounded-full border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-lg"
+                                className="flex items-center gap-2 px-4 mb-3 bg-white rounded-full border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-md"
                             >
                                 <span>{cat.icon}</span>
                                 <span className="text-sm">{cat.name}</span>
