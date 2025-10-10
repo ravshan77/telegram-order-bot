@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
+import { ArrowLeft } from 'lucide-react'
+import { BoxSvg } from '@/shared/ui/svg'
 import { products } from '@/entities/product'
 import { useNavigate } from 'react-router-dom'
 import { ImageGallery } from '@/shared/ui/kit-pro'
 import { ProductCard } from '@/widgets/ProductCard'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { ArrowLeft } from 'lucide-react'
-import { BoxSvg } from '@/shared/ui/svg'
 
 export const ProductPage: React.FC = () => {
+    const [currentIndex, setCurrentIndex] = useState(-1)
     const selectedProduct = useCartStore((state) => state.selectedProduct)
     const setPage = useCartStore((state) => state.setPage)
     const addToCart = useCartStore((state) => state.addToCart)
@@ -18,26 +19,19 @@ export const ProductPage: React.FC = () => {
 
     const slides = [
         {
-            src: 'https://picsum.photos/id/1018/1000/600/',
-        },
-        {
-            src: 'https://picsum.photos/id/1015/1000/600/',
-        },
-        {
-            src: 'https://picsum.photos/id/1019/1000/600/',
+            src: selectedProduct.image,
         },
     ]
 
-    const [currentIndex, setCurrentIndex] = useState(-1)
     const isSingle = slides.length === 1
 
     return (
-        <div className="pb-16 relative">
+        <div className="pb-16">
             {/* Header */}
             <div className="bg-white fixed top-16 z-10 w-full">
                 <Button
                     variant="plain"
-                    className="text-cyan-500 p-0"
+                    className="p-0"
                     icon={<ArrowLeft />}
                     onClick={() => navigate(-1)}
                 >
@@ -207,8 +201,8 @@ export const ProductPage: React.FC = () => {
                     <p className="text-xs font-light">Цена продажи</p>
                 </div>
                 <Button
-                    variant="default"
-                    className="w-auto min-w-32 bg-cyan-500  text-white rounded-lg font-medium hover:text-white"
+                    variant="solid"
+                    className="w-auto min-w-32 rounded-lg font-medium"
                     onClick={() => {
                         addToCart(selectedProduct)
                         setPage('cart')

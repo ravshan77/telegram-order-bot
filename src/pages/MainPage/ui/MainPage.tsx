@@ -38,7 +38,7 @@ export const MainPage: React.FC = () => {
                         <Link key={cat?.id} to={getCategoryPath(cat.id)}>
                             <Button
                                 variant="plain"
-                                className="flex items-center gap-2 px-4 mb-3 bg-white rounded-2xl border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-md"
+                                className="flex items-center gap-2 px-3 mb-3 bg-white rounded-2xl border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-md"
                             >
                                 <span>{cat.icon}</span>
                                 <span className="text-sm">{cat.name}</span>

@@ -72,6 +72,7 @@ module.exports = {
                 'info-subtle': 'var(--info-subtle)',
                 warning: 'var(--warning)',
                 'warning-subtle': 'var(--warning-subtle)',
+                lightblue: 'var(--light-blue)',
                 neutral: 'var(--neutral)',
                 'gray-50': 'var(--gray-50)',
                 'gray-100': 'var(--gray-100)',

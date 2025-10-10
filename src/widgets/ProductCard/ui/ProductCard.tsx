@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react'
 import { Button } from '@/shared/ui/kit'
+import React, { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getProductPath } from '@/shared/config'
 import type { Product } from '@/entities/product'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { useNavigate } from 'react-router-dom'
-import { getProductPath } from '@/shared/config'
 // import { useRequiredParam } from '@/shared/lib/hooks/useRequiredParam'
 
 interface ProductCardProps {
@@ -36,13 +36,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     className="w-full h-48 object-cover"
                 />
                 {product.discount && (
-                    <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-xl text-xs font-bold">
+                    <div className="absolute bottom-0 left-0 bg-red-500 text-white px-2 py-1 rounded-se-lg text-xs font-bold">
                         -{product.discount}%
                     </div>
                 )}
             </div>
             <div className="p-3">
-                <div className="text-cyan-500 font-bold text-sm">
+                <div className="text-primary font-bold text-sm">
                     {product.price.toLocaleString()} UZS
                 </div>
                 {/* {product.oldPrice && (
@@ -63,15 +63,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </div>
                 {/* </div> */}
                 <Button
-                    variant="plain"
+                    variant="primary"
                     type="button"
-                    className="mt-3 w-full bg-cyan-100 p-2 rounded-lg hover:bg-cyan-200"
+                    className="mt-3 w-full p-2 "
                     onClick={(e) => {
                         e.stopPropagation()
                         addToCart(product)
                     }}
                 >
-                    <div className="flex items-center justify-center text-base font-medium text-cyan-500 p-0 m-0">
+                    <div className="flex items-center justify-center text-base font-medium p-0 m-0">
                         в корзину &nbsp; <BasketSvg width={20} height={20} />
                     </div>
                 </Button>

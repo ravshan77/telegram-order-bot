@@ -10,6 +10,7 @@ import { useCartStore } from '@/shared/store/useCartStore'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
+import { getCardPath } from '@/shared/config'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
     const { larger, smaller } = useResponsive()
@@ -50,7 +51,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                         headerEnd={
                             <>
                                 <div className="flex items-center gap-2">
-                                    <Link to="/korzinka">
+                                    <Link to={getCardPath()}>
                                         <Button
                                             variant="plain"
                                             className="p-2 relative"

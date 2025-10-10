@@ -30,7 +30,7 @@ export interface ButtonProps
     ref?: React.Ref<HTMLButtonElement>
     shape?: TypeAttributes.Shape
     size?: TypeAttributes.Size
-    variant?: 'solid' | 'plain' | 'default'
+    variant?: 'solid' | 'plain' | 'primary' | 'default'
     iconAlignment?: 'start' | 'end'
 }
 
@@ -39,6 +39,7 @@ type ButtonColor = {
     hoverColor: string
     activeColor: string
     textColor: string
+    borderColor?: string
 }
 
 const radiusShape: Record<TypeAttributes.Shape, string> = {
@@ -77,7 +78,7 @@ const Button = (props: ButtonProps) => {
     const unclickable = disabled || loading
 
     const getButtonSize = () => {
-        let sizeClass: string;
+        let sizeClass: string
         switch (buttonSize) {
             case SIZES.LG:
                 sizeClass = classNames(
@@ -141,6 +142,17 @@ const Button = (props: ButtonProps) => {
         return getBtnColor(btn)
     }
 
+    const primaryColor = () => {
+        const btn = {
+            bgColor: active ? `hover:bg-blue-50` : `bg-blue-50`,
+            textColor: 'text-primary',
+            hoverColor: active ? 'hover:bg-blue-50' : `hover:bg-lightblue`,
+            activeColor: `active:bg-blue-100`,
+            borderColor: `border`,
+        }
+        return getBtnColor(btn)
+    }
+
     const defaultColor = () => {
         const btn = {
             bgColor: active
@@ -160,10 +172,11 @@ const Button = (props: ButtonProps) => {
         hoverColor,
         activeColor,
         textColor,
+        borderColor,
     }: ButtonColor) => {
         return `${bgColor} ${
             unclickable ? disabledClass : hoverColor + ' ' + activeColor
-        } ${textColor}`
+        } ${textColor} ${borderColor}`
     }
 
     const btnColor = () => {
@@ -172,6 +185,8 @@ const Button = (props: ButtonProps) => {
                 return solidColor()
             case 'plain':
                 return plainColor()
+            case 'primary':
+                return primaryColor()
             case 'default':
                 return defaultColor()
             default:
