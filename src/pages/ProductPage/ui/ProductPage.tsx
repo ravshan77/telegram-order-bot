@@ -32,9 +32,9 @@ export const ProductPage: React.FC = () => {
     const isSingle = slides.length === 1
 
     return (
-        <div className="pb-16">
+        <div className="pb-16 relative">
             {/* Header */}
-            <div className="bg-white sticky top-14 z-10">
+            <div className="bg-white fixed top-16 z-10 w-full">
                 <Button
                     variant="plain"
                     className="text-cyan-500 p-0"
@@ -46,7 +46,7 @@ export const ProductPage: React.FC = () => {
             </div>
 
             {/* Image gallery */}
-            <div className="bg-white">
+            <div className="bg-white mt-8">
                 <ImageGallery
                     index={currentIndex}
                     slides={slides.map((img) => ({ src: img.src }))}
@@ -199,7 +199,7 @@ export const ProductPage: React.FC = () => {
             </div>
 
             {/* Bottom fixed bar */}
-            <div className="header-wrapper fixed flex justify-between bottom-0 left-0 right-0 py-2 bg-white border-t">
+            <div className="header-wrapper fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 bg-white border-t">
                 <div>
                     <p className="text-cyan-500 font-bold">
                         {selectedProduct.price.toLocaleString()} UZS
@@ -208,7 +208,7 @@ export const ProductPage: React.FC = () => {
                 </div>
                 <Button
                     variant="default"
-                    className="w-auto min-w-32 bg-cyan-500 h-10 text-white rounded-lg font-medium hover:text-white"
+                    className="w-auto min-w-32 bg-cyan-500  text-white rounded-lg font-medium hover:text-white"
                     onClick={() => {
                         addToCart(selectedProduct)
                         setPage('cart')
