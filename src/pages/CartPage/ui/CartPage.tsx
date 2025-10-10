@@ -162,7 +162,7 @@ export const CartPage: React.FC = () => {
                     variant="solid"
                     className="w-auto min-w-32 rounded-lg font-medium"
                 >
-                    в корзину
+                    Оформление заказ
                 </Button>
             </div>
         </div>
