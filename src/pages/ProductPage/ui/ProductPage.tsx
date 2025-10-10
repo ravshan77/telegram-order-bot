@@ -32,12 +32,12 @@ export const ProductPage: React.FC = () => {
     const isSingle = slides.length === 1
 
     return (
-        <div className="pb-24">
+        <div className="pb-16">
             {/* Header */}
-            <div className="bg-white p-0 sticky top-14 z-10">
+            <div className="bg-white sticky top-14 z-10">
                 <Button
                     variant="plain"
-                    className="text-cyan-500 p-2"
+                    className="text-cyan-500 p-0"
                     icon={<ArrowLeft />}
                     onClick={() => navigate(-1)}
                 >
@@ -63,7 +63,7 @@ export const ProductPage: React.FC = () => {
                             />
                         </div>
                     ) : (
-                        <div className="flex overflow-x-auto gap-3 px-2">
+                        <div className="flex overflow-x-auto gap-3">
                             {slides.map((img, index) => (
                                 <div
                                     key={`${img.src}-${index}`}
@@ -176,7 +176,7 @@ export const ProductPage: React.FC = () => {
                             <span className="text-gray-600">
                                 Цена продажи:{' '}
                             </span>
-                            <span className="text-base text-primary-mild font-bold">
+                            <span className="text-base text-cyan-500 font-bold">
                                 {selectedProduct.price.toLocaleString()} UZS
                             </span>
                         </div>
@@ -199,19 +199,20 @@ export const ProductPage: React.FC = () => {
             </div>
 
             {/* Bottom fixed bar */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
-                <div className="flex items-center justify-between mb-2">
-                    <span className="text-2xl font-bold">
-                        {selectedProduct.price.toLocaleString()} сўм
-                    </span>
+            <div className="header-wrapper fixed flex justify-between bottom-0 left-0 right-0 py-2 bg-white border-t">
+                <div>
+                    <p className="text-cyan-500 font-bold">
+                        {selectedProduct.price.toLocaleString()} UZS
+                    </p>
+                    <p className="text-xs font-light">Цена продажи</p>
                 </div>
                 <Button
-                    variant="plain"
+                    variant="default"
+                    className="w-auto min-w-32 bg-cyan-500 h-10 text-white rounded-lg font-medium hover:text-white"
                     onClick={() => {
                         addToCart(selectedProduct)
                         setPage('cart')
                     }}
-                    className="w-full bg-cyan-500 text-white py-3 rounded-lg font-medium"
                 >
                     в корзину
                 </Button>
