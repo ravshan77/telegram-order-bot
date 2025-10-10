@@ -1,117 +1,135 @@
 import React, { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
 import { products } from '@/entities/product'
+import { useNavigate } from 'react-router-dom'
+import { ImageGallery } from '@/shared/ui/kit-pro'
 import { ProductCard } from '@/widgets/ProductCard'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { ImageGallery } from '@/shared/ui/kit-pro'
-import { useNavigate } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
+import { BoxSvg } from '@/shared/ui/svg'
 
 export const ProductPage: React.FC = () => {
     const selectedProduct = useCartStore((state) => state.selectedProduct)
     const setPage = useCartStore((state) => state.setPage)
     const addToCart = useCartStore((state) => state.addToCart)
-    const naviagte = useNavigate()
+    const navigate = useNavigate()
 
     if (!selectedProduct) return null
-    //! shu yerda rasmlarni quyishda tuxtadim
+
     const slides = [
         {
             src: 'https://picsum.photos/id/1018/1000/600/',
-            title: 'test',
-            thumbnail: 'https://picsum.photos/id/1018/250/150/',
         },
         {
             src: 'https://picsum.photos/id/1015/1000/600/',
-            title: 'test',
-            thumbnail: 'https://picsum.photos/id/1015/250/150/',
         },
         {
             src: 'https://picsum.photos/id/1019/1000/600/',
-            title: 'test',
-            thumbnail: 'https://picsum.photos/id/1019/250/150/',
         },
     ]
 
     const [currentIndex, setCurrentIndex] = useState(-1)
+    const isSingle = slides.length === 1
 
     return (
         <div className="pb-24">
-            <div className="bg-white p-4 border-b sticky top-14 z-10">
+            {/* Header */}
+            <div className="bg-white p-0 sticky top-14 z-10">
                 <Button
                     variant="plain"
-                    className="text-cyan-500"
-                    onClick={() => naviagte(-1)}
+                    className="text-cyan-500 p-2"
+                    icon={<ArrowLeft />}
+                    onClick={() => navigate(-1)}
                 >
                     Назад
                 </Button>
             </div>
 
+            {/* Image gallery */}
             <div className="bg-white">
-                {/* <img
-                    src={selectedProduct.image}
-                    alt={selectedProduct.name}
-                    className="w-full h-80 object-cover"
-                /> */}
                 <ImageGallery
                     index={currentIndex}
-                    slides={
-                        slides?.map((img) => {
-                            return {
-                                src: img.src,
-                            }
-                        }) || []
-                    }
+                    slides={slides.map((img) => ({ src: img.src }))}
                     onClose={() => setCurrentIndex(-1)}
                 >
-                    <div className="grid grid-cols-3 gap-2">
-                        {slides?.map((img, index) => (
-                            <div
-                                key={img.title}
-                                data-src={img.src}
-                                className="cursor-pointer overflow-auto flex gap-4"
-                                role="button"
-                                onClick={() => setCurrentIndex(index)}
-                            >
-                                <img
-                                    className="rounded-xl h-96 min-w-80"
-                                    src={img.src}
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    {isSingle ? (
+                        <div className="w-full flex justify-center">
+                            <img
+                                src={slides[0].src}
+                                alt="product"
+                                className={`rounded-xl h-96 object-cover cursor-pointer 
+                                    w-full sm:w-80 transition-all duration-300`}
+                                onClick={() => setCurrentIndex(0)}
+                            />
+                        </div>
+                    ) : (
+                        <div className="flex overflow-x-auto gap-3 px-2">
+                            {slides.map((img, index) => (
+                                <div
+                                    key={`${img.src}-${index}`}
+                                    className="flex-shrink-0 cursor-pointer"
+                                    onClick={() => setCurrentIndex(index)}
+                                >
+                                    <img
+                                        src={img.src}
+                                        alt={`product-${index}`}
+                                        className="rounded-xl h-96 w-80 object-cover"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </ImageGallery>
-                <div className="p-4">
-                    <h1 className="text-lg font-semibold mb-4">
+
+                {/* Product info */}
+                <div className="py-4">
+                    <h1 className="text-base font-semibold mb-2">
                         {selectedProduct.name}
                     </h1>
+                    <div className="flex gap-2 mb-4">
+                        <div className="w-14 border flex justify-between items-center rounded-xl py-0 px-2">
+                            <BoxSvg width={18} height={18} />
+                            <span className="text-xs text-gray-500">24</span>
+                        </div>
+                        <div className="w-12 max-w-16 py-0 px-2 flex justify-between items-center rounded-xl bg-red-100 text-red-600">
+                            <span className="text-xs">
+                                -{selectedProduct.discount}%
+                            </span>
+                        </div>
+                    </div>
 
-                    <div className="space-y-3 mb-6">
+                    <hr />
+
+                    <div className="space-y-3 my-4">
                         <div className="flex justify-between">
-                            <span className="text-gray-600">Особенность</span>
+                            <span className="text-black font-semibold text-base">
+                                Особенность
+                            </span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-gray-600">
+                                Складовый учёт товара:
+                            </span>
                             <span className="font-medium">Нет</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">
-                                Единица измерения
+                                Единица измерения:
                             </span>
                             <span className="font-medium">Килограм</span>
                         </div>
                         {selectedProduct.article && (
                             <div className="flex justify-between">
-                                <span className="text-gray-600">Артикул</span>
+                                <span className="text-gray-600">Артикул:</span>
                                 <span className="font-medium">
                                     {selectedProduct.article}
                                 </span>
                             </div>
                         )}
-                        {selectedProduct.color && (
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">Цвет</span>
-                                <span className="font-medium">
-                                    {selectedProduct.color}
-                                </span>
-                            </div>
-                        )}
+                        <div className="flex justify-between">
+                            <span className="text-gray-600">Код:</span>
+                            <span className="font-medium">#859086</span>
+                        </div>
                         {selectedProduct.package && (
                             <div className="flex justify-between">
                                 <span className="text-gray-600">Упаковка</span>
@@ -122,34 +140,51 @@ export const ProductPage: React.FC = () => {
                         )}
                         {selectedProduct.barcode && (
                             <div className="flex justify-between">
-                                <span className="text-gray-600">Штрихкод</span>
+                                <span className="text-gray-600">
+                                    Штрих-код:
+                                </span>
                                 <span className="font-medium">
                                     {selectedProduct.barcode}
                                 </span>
                             </div>
                         )}
+                        <div className="flex justify-between">
+                            <span className="text-gray-600">
+                                Единица измерения:
+                            </span>
+                            <span className="font-medium">194765</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-gray-600">ИКПУ:</span>
+                            <span className="font-medium">
+                                пачка=1000 грамм
+                            </span>
+                        </div>
                         {selectedProduct.nds && (
                             <div className="flex justify-between">
-                                <span className="text-gray-600">НДС</span>
+                                <span className="text-gray-600">НДС:</span>
                                 <span className="font-medium">
                                     {selectedProduct.nds}
                                 </span>
                             </div>
                         )}
                         <div className="flex justify-between">
-                            <span className="text-gray-600">Описание</span>
+                            <span className="text-gray-600">Описание: </span>
                             <span className="font-medium">Не указано</span>
+                        </div>
+                        <div className="flex p-4 rounded-md justify-between bg-cyan-50 ">
+                            <span className="text-gray-600">
+                                Цена продажи:{' '}
+                            </span>
+                            <span className="text-base text-primary-mild font-bold">
+                                {selectedProduct.price.toLocaleString()} UZS
+                            </span>
                         </div>
                     </div>
 
-                    <div className="text-cyan-600 font-bold text-2xl mb-2">
-                        {selectedProduct.price.toLocaleString()} сўм
-                    </div>
-                    <div className="text-sm text-gray-500 mb-1">
-                        Цена продажи
-                    </div>
+                    <hr />
 
-                    <h3 className="text-base font-semibold mt-6 mb-3">
+                    <h3 className="text-black font-semibold text-base my-4">
                         Похожие товары
                     </h3>
                     <div className="grid grid-cols-2 gap-3">
@@ -163,6 +198,7 @@ export const ProductPage: React.FC = () => {
                 </div>
             </div>
 
+            {/* Bottom fixed bar */}
             <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
                 <div className="flex items-center justify-between mb-2">
                     <span className="text-2xl font-bold">

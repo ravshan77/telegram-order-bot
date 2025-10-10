@@ -35,7 +35,7 @@ export const MainPage: React.FC = () => {
 
                 <div className="flex gap-2 overflow-x-auto hide-scrollbar">
                     {categories.map((cat) => (
-                        <Link to={getCategoryPath(cat.id)} key={cat?.id}>
+                        <Link key={cat?.id} to={getCategoryPath(cat.id)}>
                             <Button
                                 variant="plain"
                                 className="flex items-center gap-2 px-4 mb-3 bg-white rounded-2xl border border-gray-200 whitespace-nowrap hover:border-cyan-500 shadow-md"
