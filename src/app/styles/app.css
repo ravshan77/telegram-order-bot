@@ -12,3 +12,9 @@
 .hide-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome, Safari */
 }
+
+/* Telegram WebApp uchun scroll tuzatish */
+.overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+}

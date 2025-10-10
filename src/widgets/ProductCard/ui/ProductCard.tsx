@@ -5,7 +5,6 @@ import { getProductPath } from '@/shared/config'
 import type { Product } from '@/entities/product'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
-// import { useRequiredParam } from '@/shared/lib/hooks/useRequiredParam'
 
 interface ProductCardProps {
     product: Product
@@ -13,11 +12,8 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const navigate = useNavigate()
-    // const productId = useRequiredParam('productId')
-    const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
-    // const setPage = useCartStore((state) => state.setPage)
     const addToCart = useCartStore((state) => state.addToCart)
-    // const goShowProduct = () => navigate(getProductPath(product.id))
+    const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
 
     const goShowProduct = useCallback(() => {
         setSelectedProduct(product)
