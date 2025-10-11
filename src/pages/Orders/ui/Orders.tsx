@@ -1,5 +1,131 @@
-import React from 'react'
+import { Button } from '@/shared/ui/kit'
+import { Dot, MoreHorizontal } from 'lucide-react'
 
-export const Orders = () => {
-    return <div>Orders</div>
+export const OrdersPage = () => {
+    const orders = [
+        {
+            id: 1,
+            status: 'confirmed',
+            seller: 'Bakhrom Yuldasshaikhov',
+            salesCount: 980,
+            orderDate: '16.03.2025',
+            confirmDate: '24.06.2025',
+            totalAmount: '100$ • 1 250 000 uzs',
+        },
+        {
+            id: 2,
+            status: 'pending',
+            seller: 'Bakhrom Yuldasshaikhov',
+            salesCount: 980,
+            orderDate: '16.03.2025',
+            confirmDate: '24.06.2025',
+            totalAmount: '3 000 000 uzs',
+        },
+        {
+            id: 3,
+            status: 'confirmed',
+            seller: 'Bakhrom Yuldasshaikhov',
+            salesCount: 980,
+            orderDate: '16.03.2025',
+            confirmDate: '24.06.2025',
+            totalAmount: '100$ • 1 250 000 uzs',
+        },
+    ]
+
+    return (
+        <div className="pb-16">
+            <div>
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-semibold">Заказы</h2>
+                </div>
+                <div className="space-y-4 mb-4 overflow-y-auto">
+                    {orders.map((order) => (
+                        <div
+                            key={order.id}
+                            className="bg-white border rounded-lg shadow-sm p-2"
+                        >
+                            <div className="flex items-start justify-between mb-3">
+                                <span
+                                    className={`text-xs font-semibold px-3 py-1 rounded ${
+                                        order.status === 'confirmed'
+                                            ? 'bg-green-100 text-green-700'
+                                            : 'bg-red-100 text-red-700'
+                                    }`}
+                                >
+                                    {order.status === 'confirmed'
+                                        ? 'Подтверждён'
+                                        : 'Не подтверждён'}
+                                </span>
+                                <Button
+                                    variant="plain"
+                                    className="p-0"
+                                    size="xs"
+                                    icon={<MoreHorizontal size={20} />}
+                                />
+                            </div>
+
+                            <h2 className="text-lg font-bold mb-3">
+                                {order.seller}
+                            </h2>
+
+                            <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500">
+                                        Продажа:
+                                    </span>
+                                    <span className="font-medium text-black">
+                                        {order.salesCount}
+                                    </span>
+                                </div>
+
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500">
+                                        Дата заказы:
+                                    </span>
+                                    <span className="font-medium text-black">
+                                        {order.orderDate}
+                                    </span>
+                                </div>
+
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500">
+                                        Дата подтверждена:
+                                    </span>
+                                    <span className="font-medium text-black">
+                                        {order.confirmDate}
+                                    </span>
+                                </div>
+
+                                <div
+                                    className="flex justify-between pt-2 border-t border-dashed mt-3"
+                                    style={{
+                                        borderImage:
+                                            'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
+                                    }}
+                                >
+                                    <span className="text-gray-500">
+                                        Общая сумма:
+                                    </span>
+                                    <span className="font-bold text-black">
+                                        {order.totalAmount}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="header-wrapper fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 bg-white border-t">
+                    <div className="w-full flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">
+                            Общая сумма:
+                        </span>
+                        <span className="text-sm font-bold flex text-black">
+                            100$ <Dot /> 1 250 000 UZS
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }

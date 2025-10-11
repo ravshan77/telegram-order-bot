@@ -1,1 +1,1 @@
-export { Orders as default } from './ui/Orders'
+export { OrdersPage as default } from './ui/Orders'

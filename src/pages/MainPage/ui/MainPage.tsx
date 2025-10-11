@@ -16,7 +16,7 @@ export const MainPage: React.FC = () => {
     console.log('MainPage')
 
     return (
-        <div className="pb-24">
+        <div className="pb-16">
             {/* <div className="bg-white p-4 sticky top-14 z-10">
                 <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
                     <Search size={20} className="text-gray-400" />

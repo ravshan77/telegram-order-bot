@@ -7,11 +7,12 @@ import { useNavigate } from 'react-router-dom'
 import { ImageGallery } from '@/shared/ui/kit-pro'
 import { ProductCard } from '@/widgets/ProductCard'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { getCardPath } from '@/shared/config'
 
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
     const selectedProduct = useCartStore((state) => state.selectedProduct)
-    const setPage = useCartStore((state) => state.setPage)
+    // const setPage = useCartStore((state) => state.setPage)
     const addToCart = useCartStore((state) => state.addToCart)
     const navigate = useNavigate()
 
@@ -205,7 +206,7 @@ export const ProductPage: React.FC = () => {
                     className="w-auto min-w-32 rounded-lg font-medium"
                     onClick={() => {
                         addToCart(selectedProduct)
-                        setPage('cart')
+                        navigate(getCardPath())
                     }}
                 >
                     в корзину
