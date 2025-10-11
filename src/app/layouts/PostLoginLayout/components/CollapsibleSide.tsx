@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button, Input } from '@/shared/ui/kit'
 import Header from '@/shared/ui/template/Header'
+import { getBasketPath } from '@/shared/config'
 import SideNav from '@/shared/ui/template/SideNav'
 import type { CommonProps } from '@/@types/common'
 import { Search, ShoppingCart } from 'lucide-react'
@@ -10,7 +11,6 @@ import { useCartStore } from '@/shared/store/useCartStore'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
-import { getCardPath } from '@/shared/config'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
     const { larger, smaller } = useResponsive()
@@ -51,8 +51,9 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                         headerEnd={
                             <>
                                 <div className="flex items-center gap-2">
-                                    <Link to={getCardPath()}>
+                                    <Link to={getBasketPath()}>
                                         <Button
+                                            id="cart-icon"
                                             variant="plain"
                                             className="p-2 relative"
                                             onClick={() => setPage('cart')}

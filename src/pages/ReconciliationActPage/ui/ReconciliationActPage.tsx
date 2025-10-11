@@ -1,5 +1,5 @@
 import React from 'react'
 
-export const DeliveryAddressPage = () => {
+export const ReconciliationActPage = () => {
     return <div>Coming soon...</div>
 }

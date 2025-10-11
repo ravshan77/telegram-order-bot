@@ -3,7 +3,7 @@ import authRoute from './authRoute'
 import othersRoute from './othersRoute'
 import type { Routes } from '@/@types/routes'
 import {
-    getCardPath,
+    getBasketPath,
     getCategoryPath,
     getCheckoutPath,
     getDebtPath,
@@ -14,7 +14,7 @@ import {
     getPaymentsPath,
     getPayoutsPath,
     getProductPath,
-    getReconciliationStatementPath,
+    getReconciliationActPath,
     getSalesPath,
 } from '@/shared/config'
 
@@ -64,9 +64,9 @@ export const protectedRoutes: Routes = [
         authority: [],
     },
     {
-        key: 'reconciliation-statement',
-        path: getReconciliationStatementPath(),
-        component: lazy(() => import('@/pages/ReconciliationStatementPage')),
+        key: 'reconciliation-act',
+        path: getReconciliationActPath(),
+        component: lazy(() => import('@/pages/ReconciliationActPage')),
         authority: [],
     },
     {
@@ -76,9 +76,9 @@ export const protectedRoutes: Routes = [
         authority: [],
     },
     {
-        key: 'cartPage',
-        path: getCardPath(),
-        component: lazy(() => import('@/pages/CartPage')),
+        key: 'basket',
+        path: getBasketPath(),
+        component: lazy(() => import('@/pages/BasketPage')),
         authority: [],
     },
     {

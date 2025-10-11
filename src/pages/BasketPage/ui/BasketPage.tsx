@@ -29,7 +29,7 @@ interface FormDataType {
     additionalInfo: string | null
 }
 
-export const CartPage: React.FC = () => {
+export const BasketPage: React.FC = () => {
     const cart = useCartStore((state) => state.cart)
     const navigate = useNavigate()
     const removeFromCart = useCartStore((state) => state.removeFromCart)
@@ -236,6 +236,7 @@ export const CartPage: React.FC = () => {
                             <Select
                                 placeholder="Выберите"
                                 options={paymentOptions}
+                                isSearchable={false}
                                 value={formData.paymentType}
                                 onChange={(option: SingleValue<Option>) =>
                                     setFormData({

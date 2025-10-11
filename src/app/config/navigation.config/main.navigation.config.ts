@@ -6,7 +6,7 @@ import {
     getOrdersPath,
     getPaymentsPath,
     getPayoutsPath,
-    getReconciliationStatementPath,
+    getReconciliationActPath,
     getSalesPath,
 } from '@/shared/config'
 import { NAV_ITEM_TYPE_ITEM } from '@/shared/config/constants/navigation.constant'
@@ -74,7 +74,7 @@ const mainNavigationConfig: NavigationTree[] = [
     },
     {
         key: 'main/reconciliation-statement',
-        path: getReconciliationStatementPath(),
+        path: getReconciliationActPath(),
         title: 'АКТ сверка',
         translateKey: 'nav.main.incoming',
         icon: 'managementsContractors',

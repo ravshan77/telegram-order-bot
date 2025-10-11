@@ -1,4 +1,4 @@
-export const getHomePath = () => '/home'
+export const getHomePath = () => '/main'
 export const getOrdersPath = () => '/orders'
 export const getOrderDetailsPath = (orderId: number | string = ':orderId') =>
     `/order/order-details/${orderId}`
@@ -7,9 +7,9 @@ export const getSalesPath = () => '/sales'
 export const getPaymentsPath = () => '/payments'
 export const getPayoutsPath = () => '/payouts'
 export const getDebtPath = () => '/debt'
-export const getReconciliationStatementPath = () => '/reconciliation-statement'
+export const getReconciliationActPath = () => '/reconciliation-act'
 export const getDeliveryAddressPath = () => '/delivery-address'
-export const getCardPath = () => '/card'
+export const getBasketPath = () => '/basket'
 export const getCategoryPath = (categoryId: number | string = ':categoryId') =>
     `/category/${categoryId}`
 export const getCheckoutPath = () => '/checkout'

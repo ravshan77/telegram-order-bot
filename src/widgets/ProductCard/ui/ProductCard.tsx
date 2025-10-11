@@ -1,10 +1,11 @@
 import { Button } from '@/shared/ui/kit'
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
 import type { Product } from '@/entities/product'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { useFlyToCart } from '@/shared/lib/hooks'
 
 interface ProductCardProps {
     product: Product
@@ -15,13 +16,29 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const addToCart = useCartStore((state) => state.addToCart)
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
 
+    const cardRef = useRef<HTMLDivElement>(null)
+    const flyToCart = useFlyToCart('#cart-icon', { duration: 0.8, scale: 0.2 })
+
     const goShowProduct = useCallback(() => {
         setSelectedProduct(product)
         navigate(getProductPath(product.id))
     }, [navigate, product.id])
 
+    const handleAddToCart = (
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+        if (cardRef.current) {
+            flyToCart(cardRef.current)
+            // bu yerda savatchaga +1 qilish logikasi
+            e.stopPropagation()
+            addToCart(product)
+            console.log(`${product.name} added to cart!`)
+        }
+    }
+
     return (
         <div
+            ref={cardRef}
             className="rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
             onClick={goShowProduct}
         >
@@ -62,10 +79,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     variant="primary"
                     type="button"
                     className="mt-3 w-full p-2 "
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        addToCart(product)
-                    }}
+                    onClick={handleAddToCart}
                 >
                     <div className="flex items-center justify-center text-base font-medium p-0 m-0">
                         в корзину &nbsp; <BasketSvg width={20} height={20} />
