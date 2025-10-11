@@ -1,5 +1,8 @@
 export const getHomePath = () => '/home'
 export const getOrdersPath = () => '/orders'
+export const getOrderDetailsPath = (orderId: number | string = ':orderId') =>
+    `/order/order-details/${orderId}`
+
 export const getSalesPath = () => '/sales'
 export const getPaymentsPath = () => '/payments'
 export const getDisbursementsPath = () => '/disbursements'

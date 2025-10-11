@@ -1,7 +1,10 @@
 import { Button } from '@/shared/ui/kit'
+import { useNavigate } from 'react-router-dom'
 import { Dot, MoreHorizontal } from 'lucide-react'
+import { getOrderDetailsPath } from '@/shared/config'
 
 export const OrdersPage = () => {
+    const navigate = useNavigate()
     const orders = [
         {
             id: 1,
@@ -32,6 +35,10 @@ export const OrdersPage = () => {
         },
     ]
 
+    const goToOrderDetails = (orderId: number) => {
+        navigate(getOrderDetailsPath(orderId))
+    }
+
     return (
         <div className="pb-16">
             <div>
@@ -42,7 +49,8 @@ export const OrdersPage = () => {
                     {orders.map((order) => (
                         <div
                             key={order.id}
-                            className="bg-white border rounded-lg shadow-sm p-2"
+                            className="bg-white border rounded-lg shadow-sm p-3"
+                            onClick={() => goToOrderDetails(order.id)}
                         >
                             <div className="flex items-start justify-between mb-3">
                                 <span
@@ -58,7 +66,6 @@ export const OrdersPage = () => {
                                 </span>
                                 <Button
                                     variant="plain"
-                                    className="p-0"
                                     size="xs"
                                     icon={<MoreHorizontal size={20} />}
                                 />

@@ -10,6 +10,7 @@ import {
     getDeliveryAddressPath,
     getDisbursementsPath,
     getHomePath,
+    getOrderDetailsPath,
     getOrdersPath,
     getPaymentsPath,
     getProductPath,
@@ -36,6 +37,12 @@ export const protectedRoutes: Routes = [
         key: 'orders',
         path: getOrdersPath(),
         component: lazy(() => import('@/pages/Orders')),
+        authority: [],
+    },
+    {
+        key: 'order-details',
+        path: getOrderDetailsPath(),
+        component: lazy(() => import('@/pages/Orders/ui/OrderDetailsPage')),
         authority: [],
     },
     {

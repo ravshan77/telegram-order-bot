@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
 import { Button } from '@/shared/ui/kit'
+import { ChevronLeft } from 'lucide-react'
 import { products } from '@/entities/product'
 import { useNavigate } from 'react-router-dom'
 import { ProductCard } from '@/widgets/ProductCard'
-import { ChevronLeft } from 'lucide-react'
 
 export const CategoryPage: React.FC = () => {
     const temporarily_category = 'Электроника'
