@@ -1,5 +1,5 @@
 import React from 'react'
 
-export const DeliveryAddress = () => {
+export const DeliveryAddressPage = () => {
     return <div>DeliveryAddress</div>
 }

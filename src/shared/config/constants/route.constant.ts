@@ -5,8 +5,8 @@ export const getOrderDetailsPath = (orderId: number | string = ':orderId') =>
 
 export const getSalesPath = () => '/sales'
 export const getPaymentsPath = () => '/payments'
-export const getDisbursementsPath = () => '/disbursements'
-export const getAccountsPayablePath = () => '/accounts-payable'
+export const getPayoutsPath = () => '/payouts'
+export const getDebtPath = () => '/debt'
 export const getReconciliationStatementPath = () => '/reconciliation-statement'
 export const getDeliveryAddressPath = () => '/delivery-address'
 export const getCardPath = () => '/card'

@@ -1,10 +1,11 @@
 import { NavigationTree } from '@/@types/navigation'
 import {
-    getAccountsPayablePath,
+    getDebtPath,
     getDeliveryAddressPath,
-    getDisbursementsPath,
     getHomePath,
     getOrdersPath,
+    getPaymentsPath,
+    getPayoutsPath,
     getReconciliationStatementPath,
     getSalesPath,
 } from '@/shared/config'
@@ -43,7 +44,7 @@ const mainNavigationConfig: NavigationTree[] = [
     },
     {
         key: 'main/payments',
-        path: getAccountsPayablePath(),
+        path: getPaymentsPath(),
         title: 'Оплаты',
         translateKey: 'nav.main.incoming',
         icon: 'documentsApproval',
@@ -52,8 +53,8 @@ const mainNavigationConfig: NavigationTree[] = [
         subMenu: [],
     },
     {
-        key: 'main/disbursements',
-        path: getDisbursementsPath(),
+        key: 'main/payouts',
+        path: getPayoutsPath(),
         title: 'Выплаты',
         translateKey: 'nav.main.incoming',
         icon: 'documentsTasks',
@@ -62,8 +63,8 @@ const mainNavigationConfig: NavigationTree[] = [
         subMenu: [],
     },
     {
-        key: 'main/accounts-payable',
-        path: getAccountsPayablePath(),
+        key: 'main/debt',
+        path: getDebtPath(),
         title: 'Задолженность',
         translateKey: 'nav.main.incoming',
         icon: 'managementsFolders',

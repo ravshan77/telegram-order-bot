@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Button } from '@/shared/ui/kit'
 import { useNavigate } from 'react-router-dom'
 import { Dot, MoreHorizontal } from 'lucide-react'
@@ -35,9 +36,10 @@ export const OrdersPage = () => {
         },
     ]
 
-    const goToOrderDetails = (orderId: number) => {
-        navigate(getOrderDetailsPath(orderId))
-    }
+    const goToOrderDetails = useCallback(
+        (orderId: number) => navigate(getOrderDetailsPath(orderId)),
+        [navigate],
+    )
 
     return (
         <div className="pb-16">

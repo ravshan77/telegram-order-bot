@@ -1,6 +1,6 @@
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
-export const Sales = () => {
+export const SalesPage = () => {
     const sales = [
         {
             id: 1,
@@ -63,7 +63,7 @@ export const Sales = () => {
                                     <span className="text-xs text-gray-500 block mb-1">
                                         Сумма
                                     </span>
-                                    <span className="text-base font-bold text-black">
+                                    <span className="text-base font-bold text-gray-600">
                                         {sale.totalAmount}
                                     </span>
                                 </div>
@@ -71,7 +71,7 @@ export const Sales = () => {
                                     <span className="text-xs text-gray-500 block mb-1">
                                         Оплата
                                     </span>
-                                    <span className="text-base font-bold text-black">
+                                    <span className="text-base font-bold text-gray-600">
                                         {sale.paidAmount}
                                     </span>
                                 </div>
@@ -81,7 +81,7 @@ export const Sales = () => {
                                 <span className="text-sm text-gray-600">
                                     В долг:
                                 </span>
-                                <span className="text-base font-bold text-red-600">
+                                <span className="text-base font-bold text-red-500">
                                     {sale.debt}
                                 </span>
                             </div>

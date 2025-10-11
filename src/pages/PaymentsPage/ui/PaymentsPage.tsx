@@ -1,9 +1,10 @@
-import { Button, Drawer } from '@/shared/ui/kit'
-import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
-import { Dot } from 'lucide-react'
 import { useState } from 'react'
+import { Dot } from 'lucide-react'
+import { Button } from '@/shared/ui/kit'
+import { PaymentViewDrawer } from './PaymentViewDrawer'
+import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
-export const AccountsPayable = () => {
+export const PaymentsPage = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const payments = [
         {
@@ -50,6 +51,10 @@ export const AccountsPayable = () => {
 
     return (
         <div className="pb-32">
+            <PaymentViewDrawer
+                isDrawerOpen={isDrawerOpen}
+                setIsDrawerOpen={setIsDrawerOpen}
+            />
             <div>
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-lg font-semibold">Оплаты</h2>
@@ -115,7 +120,7 @@ export const AccountsPayable = () => {
                 </div>
 
                 {!isDrawerOpen && (
-                    <div className="w-full bg-white fixed flex justify-between items-start bottom-0 left-0 right-0 py-2 pb-4 px-4 border-t">
+                    <div className="w-full bg-white fixed flex justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
                         <div className="w-full">
                             <div className="flex justify-between items-center mb-4">
                                 <span className="text-gray-700 font-medium">
@@ -136,106 +141,6 @@ export const AccountsPayable = () => {
                     </div>
                 )}
             </div>
-            <Drawer
-                isOpen={isDrawerOpen}
-                placement="bottom"
-                title="Подробности"
-                closable={true}
-                height="auto"
-                bodyClass="p-0"
-                // headerClass="border border-red-500"
-                className={'overflow-hidden rounded-lg'}
-                onClose={() => setIsDrawerOpen(false)}
-            >
-                <div className="px-4 pb-6">
-                    <div>
-                        <div
-                            className="flex justify-between items-center py-3 border-b border-dashed"
-                            style={{
-                                borderImage:
-                                    'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-                            }}
-                        >
-                            <span className="text-gray-700">Наличный</span>
-                            <span className="font-semibold text-black">
-                                146 000 сум
-                            </span>
-                        </div>
-
-                        <div
-                            className="flex justify-between items-center py-3 border-b border-dashed"
-                            style={{
-                                borderImage:
-                                    'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-                            }}
-                        >
-                            <span className="text-gray-700">Uzcard</span>
-                            <span className="font-semibold text-black">
-                                20 000 сум
-                            </span>
-                        </div>
-
-                        <div
-                            className="flex justify-between items-center py-3 border-b border-dashed"
-                            style={{
-                                borderImage:
-                                    'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-                            }}
-                        >
-                            <span className="text-gray-700">Humo</span>
-                            <span className="font-semibold text-black">
-                                150 000 сум
-                            </span>
-                        </div>
-
-                        <div
-                            className="flex justify-between items-center py-3 border-b border-dashed"
-                            style={{
-                                borderImage:
-                                    'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-                            }}
-                        >
-                            <span className="text-gray-700">Перечисления</span>
-                            <span className="font-semibold text-black">
-                                75 000 сум
-                            </span>
-                        </div>
-
-                        <div
-                            className="flex justify-between items-center py-3 border-b border-dashed"
-                            style={{
-                                borderImage:
-                                    'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-                            }}
-                        >
-                            <span className="text-gray-700">Click</span>
-                            <span className="font-semibold text-black">
-                                210 000 сум
-                            </span>
-                        </div>
-
-                        <div
-                            className="flex justify-between items-center py-3 border-b border-dashed"
-                            style={{
-                                borderImage:
-                                    'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-                            }}
-                        >
-                            <span className="text-gray-700">Payme</span>
-                            <span className="font-semibold text-black">
-                                15 000 сум
-                            </span>
-                        </div>
-
-                        <div className="flex justify-between items-center py-3">
-                            <span className="text-gray-700">Visa</span>
-                            <span className="font-semibold text-black">
-                                50$
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </Drawer>
         </div>
     )
 }
