@@ -51,9 +51,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         // В корзине или нет
         if (isExistInCart) {
             return (
-                <div className="flex items-center justify-between gap-3 border rounded">
+                <div className="flex items-center justify-between h-10 rounded border overflow-hidden">
                     <Button
-                        className="w-12 h-10 rounded-lg flex items-center p-0 justify-center border-none"
+                        variant="plain"
+                        className="w-12 h-full flex items-center justify-center border-none outline-none"
+                        icon={<Minus size={18} className="text-gray-700" />}
                         onClick={(e) => {
                             e.stopPropagation()
                             updateQuantity(
@@ -61,14 +63,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                                 isExistInCart.quantity - 1,
                             )
                         }}
-                    >
-                        <Minus size={16} className="text-gray-700" />
-                    </Button>
+                    />
                     <span className="text-base font-medium w-8 text-center">
                         {isExistInCart.quantity}
                     </span>
                     <Button
-                        className="w-12 h-10 rounded-lg flex items-center p-0 justify-center border-none"
+                        variant="plain"
+                        className="w-12 h-full flex items-center justify-center border-none outline-none"
+                        icon={<Plus size={18} className="text-gray-700" />}
                         onClick={(e) => {
                             e.stopPropagation()
                             updateQuantity(
@@ -76,9 +78,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                                 isExistInCart.quantity + 1,
                             )
                         }}
-                    >
-                        <Plus size={16} className="text-gray-700" />
-                    </Button>
+                    />
                 </div>
             )
         }
@@ -87,12 +87,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <Button
                 variant="primary"
                 type="button"
-                className="w-full p-2 h-10 rounded"
+                className="w-full h-10 flex items-center justify-center rounded border"
                 onClick={handleAddToCart}
             >
-                <div className="flex items-center justify-center text-base font-medium p-0 m-0">
-                    в корзину &nbsp; <BasketSvg width={20} height={20} />
-                </div>
+                <span className="text-base font-medium flex items-center gap-2">
+                    в корзину <BasketSvg width={18} height={18} />
+                </span>
             </Button>
         )
     }
