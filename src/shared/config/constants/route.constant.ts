@@ -1,4 +1,4 @@
-export const getHomePath = () => '/main'
+export const getMainPath = () => '/main'
 export const getOrdersPath = () => '/orders'
 export const getOrderDetailsPath = (orderId: number | string = ':orderId') =>
     `/order/order-details/${orderId}`

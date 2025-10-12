@@ -1,11 +1,12 @@
 import { Button } from '@/shared/ui/kit'
-import React, { useCallback, useRef } from 'react'
+import { Minus, Plus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
 import type { Product } from '@/entities/product'
+import { useFlyToCart } from '@/shared/lib/hooks'
+import React, { useCallback, useRef } from 'react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { useFlyToCart } from '@/shared/lib/hooks'
 
 interface ProductCardProps {
     product: Product
@@ -15,6 +16,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const navigate = useNavigate()
     const addToCart = useCartStore((state) => state.addToCart)
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
+    const updateQuantity = useCartStore((state) => state.updateQuantity)
+    const isExistInCart = useCartStore((state) =>
+        state.cart.find((item) => item.id === product.id),
+    )
 
     const cardRef = useRef<HTMLDivElement>(null)
     const flyToCart = useFlyToCart('#cart-icon', { duration: 0.8, scale: 0.2 })
@@ -29,11 +34,67 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     ) => {
         if (cardRef.current) {
             flyToCart(cardRef.current)
-            // bu yerda savatchaga +1 qilish logikasi
             e.stopPropagation()
             addToCart(product)
-            console.log(`${product.name} added to cart!`)
         }
+    }
+
+    const take = () => {
+        // Товар нет в наличии
+        if (product?.not_available) {
+            return (
+                <p className="w-full justify-center flex items-center h-10 text-red-400 text-xs italic">
+                    Товар нет в наличии
+                </p>
+            )
+        }
+        // В корзине или нет
+        if (isExistInCart) {
+            return (
+                <div className="flex items-center justify-between gap-3 border rounded">
+                    <Button
+                        className="w-12 h-10 rounded-lg flex items-center p-0 justify-center border-none"
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            updateQuantity(
+                                isExistInCart.id,
+                                isExistInCart.quantity - 1,
+                            )
+                        }}
+                    >
+                        <Minus size={16} className="text-gray-700" />
+                    </Button>
+                    <span className="text-base font-medium w-8 text-center">
+                        {isExistInCart.quantity}
+                    </span>
+                    <Button
+                        className="w-12 h-10 rounded-lg flex items-center p-0 justify-center border-none"
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            updateQuantity(
+                                isExistInCart.id,
+                                isExistInCart.quantity + 1,
+                            )
+                        }}
+                    >
+                        <Plus size={16} className="text-gray-700" />
+                    </Button>
+                </div>
+            )
+        }
+        // В корзину
+        return (
+            <Button
+                variant="primary"
+                type="button"
+                className="w-full p-2 h-10 rounded"
+                onClick={handleAddToCart}
+            >
+                <div className="flex items-center justify-center text-base font-medium p-0 m-0">
+                    в корзину &nbsp; <BasketSvg width={20} height={20} />
+                </div>
+            </Button>
+        )
     }
 
     return (
@@ -58,33 +119,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <div className="text-primary font-bold text-sm">
                     {product.price.toLocaleString()} UZS
                 </div>
-                {/* {product.oldPrice && (
-                    <div className="text-gray-400 line-through text-sm">
-                        {product.oldPrice.toLocaleString()} сўм
-                    </div>
-                )} */}
                 <div className="text-sm text-black mt-2 line-clamp-2">
                     {product.name}
                 </div>
-                {/* <div className="flex gap-2"> */}
-                {/* <div className="w-14 max-w-16 py-0 px-2 mt-2 flex justify-between items-center rounded-xl bg-red-100 text-red-600">
-                        <span>-{product.discount}%</span>
-                    </div> */}
                 <div className="w-14 mt-2 border flex justify-between items-center rounded-xl py-0 px-2">
                     <BoxSvg width={18} height={18} />
                     <span>24</span>
                 </div>
-                {/* </div> */}
-                <Button
-                    variant="primary"
-                    type="button"
-                    className="mt-3 w-full p-2 "
-                    onClick={handleAddToCart}
-                >
-                    <div className="flex items-center justify-center text-base font-medium p-0 m-0">
-                        в корзину &nbsp; <BasketSvg width={20} height={20} />
-                    </div>
-                </Button>
+                <div className="mt-3">{take()}</div>
             </div>
         </div>
     )

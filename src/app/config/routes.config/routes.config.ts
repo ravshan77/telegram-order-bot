@@ -8,7 +8,7 @@ import {
     getCheckoutPath,
     getDebtPath,
     getDeliveryAddressPath,
-    getHomePath,
+    getMainPath,
     getOrderDetailsPath,
     getOrdersPath,
     getPaymentsPath,
@@ -23,7 +23,7 @@ export const publicRoutes: Routes = [...authRoute]
 export const protectedRoutes: Routes = [
     {
         key: 'home',
-        path: getHomePath(),
+        path: getMainPath(),
         component: lazy(() => import('@/pages/MainPage')),
         authority: [],
     },

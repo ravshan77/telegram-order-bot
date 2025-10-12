@@ -15,7 +15,10 @@ import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constan
 const CollapsibleSide = ({ children }: CommonProps) => {
     const { larger, smaller } = useResponsive()
     const setPage = useCartStore((state) => state.setPage)
-    const getTotalItems = useCartStore((state) => state.getTotalItems)
+
+    const totalItems = useCartStore((state) =>
+        state.cart.reduce((sum, item) => sum + item.quantity, 0),
+    )
 
     return (
         <LayoutBase
@@ -59,9 +62,9 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                             onClick={() => setPage('cart')}
                                         >
                                             <ShoppingCart size={24} />
-                                            {getTotalItems() > 0 && (
+                                            {totalItems > 0 && (
                                                 <span className="absolute top-0 right-0 bg-cyan-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                                    {getTotalItems()}
+                                                    {totalItems}
                                                 </span>
                                             )}
                                         </Button>
