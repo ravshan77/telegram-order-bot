@@ -106,35 +106,33 @@ export const CheckoutPage = () => {
                         </FormItem>
                     </Form>
                 </div>
-                <div className="border sticky bg-white bottom-0 left-0 w-full border-red-500">
-                    <div className="border border-red-500 p-4">
-                        <div className="border-t py-2">
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">
-                                    Общая сумма:
-                                </span>
-                                <div className="text-right">
-                                    <p className="text-base font-bold text-cyan-600">
-                                        {usdAmount}
-                                    </p>
-                                    <p className="text-xs text-gray-500">
-                                        {uzsAmount}
-                                    </p>
-                                </div>
+            </div>
+            <div className="border fixed bg-white bottom-0 left-0 w-full border-red-500">
+                <div className="border border-red-500 p-4">
+                    <div className="border-t py-2">
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-600">
+                                Общая сумма:
+                            </span>
+                            <div className="text-right">
+                                <p className="text-base font-bold text-cyan-600">
+                                    {usdAmount}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                    {uzsAmount}
+                                </p>
                             </div>
                         </div>
-
-                        <Button
-                            variant="solid"
-                            className="w-full mt-2 rounded-lg font-medium"
-                            disabled={
-                                !formData.paymentType || !formData.orderDate
-                            }
-                            onClick={handleSubmitOrder}
-                        >
-                            Оформить
-                        </Button>
                     </div>
+
+                    <Button
+                        variant="solid"
+                        className="w-full mt-2 rounded-lg font-medium"
+                        disabled={!formData.paymentType || !formData.orderDate}
+                        onClick={handleSubmitOrder}
+                    >
+                        Оформить
+                    </Button>
                 </div>
             </div>
         </div>
