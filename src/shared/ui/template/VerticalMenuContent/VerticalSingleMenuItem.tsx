@@ -47,7 +47,7 @@ const CollapsedItem = ({
     onLinkClick,
     userAuthority,
     t,
-    currentKey
+    currentKey,
 }: CollapsedItemProps) => {
     return (
         <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
@@ -84,7 +84,7 @@ const CollapsedItem = ({
     )
 }
 
-const DefaultItem = (props: DefaultItemProps) => {
+export const DefaultItem = (props: DefaultItemProps) => {
     const {
         nav,
         onLinkClick,
@@ -97,10 +97,18 @@ const DefaultItem = (props: DefaultItemProps) => {
 
     return (
         <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
-            <MenuItem key={nav.key} eventKey={nav.key} dotIndent={indent} className={classNames({'!px-0': !showTitle})}>
+            <MenuItem
+                key={nav.key}
+                eventKey={nav.key}
+                dotIndent={indent}
+                className={classNames({ '!px-0': !showTitle })}
+            >
                 <Link
                     to={nav.path}
-                    className={classNames("flex items-center gap-2 h-full w-full", {"justify-center": !showTitle})}
+                    className={classNames(
+                        'flex items-center gap-2 h-full w-full',
+                        { 'justify-center': !showTitle },
+                    )}
                     target={nav.isExternalLink ? '_blank' : ''}
                     onClick={() =>
                         onLinkClick?.({
@@ -130,7 +138,7 @@ const VerticalSingleMenuItem = ({
     showTitle,
     t,
     currentKey,
-    parentKeys
+    parentKeys,
 }: Omit<VerticalMenuItemProps, 'title' | 'translateKey'>) => {
     return (
         <>

@@ -1,5 +1,5 @@
-import { useState, useEffect, Fragment } from 'react'
 import { Menu } from '@/shared/ui/kit'
+import { useState, useEffect, Fragment } from 'react'
 import VerticalSingleMenuItem from './VerticalSingleMenuItem'
 import VerticalCollapsedMenuItem from './VerticalCollapsedMenuItem'
 import AuthorityCheck from '@/shared/ui/kit-pro/AuthorityCheck'
@@ -14,6 +14,9 @@ import { useTranslation } from '@/shared/lib/hooks'
 import { Direction } from '@/@types/theme'
 import type { NavigationTree } from '@/@types/navigation'
 import type { TraslationFn } from '@/@types/common'
+import { getDeliveryAddressPath } from '@/shared/config'
+import { ChevronRight } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export interface VerticalMenuContentProps {
     collapsed?: boolean
@@ -39,6 +42,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
     } = props
 
     const { t } = useTranslation(!translationSetup)
+    const navigate = useNavigate()
 
     const [defaulExpandKey, setDefaulExpandKey] = useState<string[]>([])
 
@@ -133,9 +137,25 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
         )
     }
 
+    // const adresNav = {
+    //     key: 'delivery-address',
+    //     path: getDeliveryAddressPath(),
+    //     title: 'Адрес доставки',
+    //     translateKey: 'nav.main.incoming',
+    //     icon: 'managementsBranches',
+    //     type: 'item',
+    //     authority: [],
+    //     subMenu: [],
+    // }
+
+    const dd = () => {
+        navigate(getDeliveryAddressPath())
+        handleLinkClick()
+    }
+
     return (
         <Menu
-            className="px-4 pb-4"
+            className="px-4 pb-4 relative"
             sideCollapsed={collapsed}
             defaultActiveKeys={activedRoute?.key ? [activedRoute.key] : []}
             defaultExpandedKeys={defaulExpandKey}
@@ -144,6 +164,33 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
             }
         >
             {renderNavigation(navigationTree, 0)}
+            <AuthorityCheck userAuthority={userAuthority} authority={[]}>
+                <div className="fixed w-[200px] bottom-6">
+                    <div
+                        className="bg-gray-100 p-3 flex flex-col items-start rounded-lg overflow-hidden"
+                        onClick={dd}
+                    >
+                        <div className="w-full flex justify-between items-center">
+                            <span>Адрес доставки</span>
+                            <ChevronRight size={24} />
+                        </div>
+                        <p className="pt-1 text-base text-black line-clamp-2">
+                            Ташкент город, проспект мустакиллик, 17 дом
+                            dsdsfsdfsdfsdfsd sdfsdf
+                        </p>
+                    </div>
+                    <div className="pt-4">
+                        <span>Разработка: &ensp; </span>
+                        <Link
+                            to={'https://hippo.uz/uz/'}
+                            className="text-primary"
+                            target="_blank"
+                        >
+                            <span>Hippo.uz</span>
+                        </Link>
+                    </div>
+                </div>
+            </AuthorityCheck>
         </Menu>
     )
 }

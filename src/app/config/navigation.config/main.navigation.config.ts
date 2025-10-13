@@ -83,7 +83,7 @@ const mainNavigationConfig: NavigationTree[] = [
         subMenu: [],
     },
     // {
-    //     key: 'main/delivery-address',
+    //     key: 'delivery-address',
     //     path: getDeliveryAddressPath(),
     //     title: 'Адрес доставки',
     //     translateKey: 'nav.main.incoming',
