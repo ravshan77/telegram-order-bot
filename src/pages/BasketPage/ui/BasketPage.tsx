@@ -120,7 +120,7 @@ export const BasketPage: React.FC = () => {
                                     <h3 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2">
                                         {item.name}
                                     </h3>
-                                    <p className="text-sm font-bold text-cyan-600 mb-1">
+                                    <p className="text-sm font-bold text-primary mb-1">
                                         {item.price.toLocaleString()} UZS
                                     </p>
                                     <p className="text-xs text-gray-500">
@@ -135,7 +135,7 @@ export const BasketPage: React.FC = () => {
                                     <input
                                         defaultChecked
                                         type="checkbox"
-                                        className="w-5 h-5 rounded border-gray-300 text-cyan-500 focus:ring-cyan-500"
+                                        className="w-5 h-5 rounded border-gray-300"
                                     />
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -192,7 +192,7 @@ export const BasketPage: React.FC = () => {
             {/* Bottom fixed bar */}
             <div className="header-wrapper fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 bg-white border-t">
                 <div>
-                    <p className="text-cyan-500 font-bold">
+                    <p className="text-primary font-bold">
                         {getTotalPrice().toLocaleString()} UZS
                     </p>
                     <p className="text-xs font-light">Общая сумма:</p>
@@ -269,7 +269,7 @@ export const BasketPage: React.FC = () => {
                                 Общая сумма:
                             </span>
                             <div className="text-right">
-                                <p className="text-base font-bold text-cyan-600">
+                                <p className="text-base font-bold text-primary">
                                     {usdAmount}
                                 </p>
                                 <p className="text-xs text-gray-500">

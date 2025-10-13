@@ -48,9 +48,9 @@ export const CheckoutPage = () => {
     const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
 
     return (
-        <div className="pb-16 border h-full border-black relative">
-            <div className="border flex flex-col justify-between border-green-600">
-                <div className="bg-white w-full">
+        <div className="pb-16 h-full relative">
+            <div>
+                <div className="">
                     <GoBack text={'Оформление заказа'} />
                 </div>
                 <div className="mt-4">
@@ -106,15 +106,15 @@ export const CheckoutPage = () => {
                     </Form>
                 </div>
                 <div
-                    className={`w-full absolute bg-white bottom-0 py-4 left-0 border border-red-500`}
+                    className={`w-full absolute bg-white bottom-0 pt-0 left-0`}
                 >
-                    <div className="border-t py-2">
+                    <div className="border-t py-1">
                         <div className="flex justify-between items-center">
                             <span className="text-sm text-gray-600">
                                 Общая сумма:
                             </span>
                             <div className="text-right">
-                                <p className="text-base font-bold text-cyan-600">
+                                <p className="text-base font-bold text-primary">
                                     {usdAmount}
                                 </p>
                                 <p className="text-xs text-gray-500">
