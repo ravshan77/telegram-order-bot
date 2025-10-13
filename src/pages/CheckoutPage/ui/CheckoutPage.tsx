@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/shared/ui/kit'
 import { SingleValue } from 'react-select'
 import { GoBack } from '@/shared/ui/kit-pro'
@@ -45,6 +45,17 @@ export const CheckoutPage = () => {
         })
         // Здесь можно добавить логику отправки заказа
     }
+
+    useEffect(() => {
+        const handleFocus = () => (document.body.style.position = 'relative')
+        const handleBlur = () => (document.body.style.position = '')
+        window.addEventListener('focusin', handleFocus)
+        window.addEventListener('focusout', handleBlur)
+        return () => {
+            window.removeEventListener('focusin', handleFocus)
+            window.removeEventListener('focusout', handleBlur)
+        }
+    }, [])
 
     const totalAmount = getTotalPrice()
     const uzsAmount = `${totalAmount.toLocaleString()} сум`
