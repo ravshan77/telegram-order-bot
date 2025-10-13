@@ -14,7 +14,7 @@ import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
-import useFixDrawerKeyboard from '@/shared/ui/kit/hooks/useFixDrawerKeyboard'
+// import useFixDrawerKeyboard from '@/shared/ui/kit/hooks/useFixDrawerKeyboard'
 
 const paymentOptions: Option[] = [
     { value: 'cash', label: 'Наличные' },
@@ -39,7 +39,7 @@ interface BottomSheetProps {
 }
 
 export function SheetDemo({ open, setOpen }: BottomSheetProps) {
-    useFixDrawerKeyboard()
+    // useFixDrawerKeyboard()
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const cart = useCartStore((state) => state.cart)
 
@@ -69,7 +69,7 @@ export function SheetDemo({ open, setOpen }: BottomSheetProps) {
 
     return (
         <Drawer open={open} onOpenChange={(prew) => setOpen(prew)}>
-            <DrawerContent className="bg-white">
+            <DrawerContent className="bg-white pb-4">
                 <div className="mx-auto w-full px-4">
                     <DrawerHeader className="p-0">
                         <DrawerTitle className="text-start">
