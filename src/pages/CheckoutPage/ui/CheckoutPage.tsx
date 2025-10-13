@@ -7,6 +7,7 @@ import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { useTelegramKeyboardFix } from './useTelegramKeyboardFix'
 
 const paymentOptions: Option[] = [
     { value: 'cash', label: 'Наличные' },
@@ -28,7 +29,7 @@ interface FormDataType {
 export const CheckoutPage = () => {
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const cart = useCartStore((state) => state.cart)
-
+    const { isKeyboardOpen } = useTelegramKeyboardFix()
     const [formData, setFormData] = useState<FormDataType>({
         paymentType: null as Option | null,
         orderDate: null,
@@ -106,9 +107,13 @@ export const CheckoutPage = () => {
                         </FormItem>
                     </Form>
                 </div>
-            </div>
-            <div className="border fixed bg-white bottom-0 left-0 w-full border-red-500">
-                <div className="border border-red-500 p-4">
+                <div
+                    className={`w-full fixed bg-white bottom-0 p-4 left-0 border border-red-500 transition-all duration-300 ${
+                        isKeyboardOpen
+                            ? 'translate-y-full opacity-0'
+                            : 'translate-y-0 opacity-100'
+                    }`}
+                >
                     <div className="border-t py-2">
                         <div className="flex justify-between items-center">
                             <span className="text-sm text-gray-600">
