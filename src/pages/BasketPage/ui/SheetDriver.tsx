@@ -69,10 +69,10 @@ export function SheetDemo({ open, setOpen }: BottomSheetProps) {
 
     return (
         <Drawer open={open} onOpenChange={(prew) => setOpen(prew)}>
-            <DrawerContent className="bg-white pb-4">
+            <DrawerContent className="bg-white mb-8">
                 <div className="mx-auto w-full px-4">
                     <DrawerHeader className="p-0">
-                        <DrawerTitle className="text-start">
+                        <DrawerTitle className="text-start text-xl">
                             Оформление заказа
                         </DrawerTitle>
                         <DrawerDescription className="text-start">
@@ -126,7 +126,7 @@ export function SheetDemo({ open, setOpen }: BottomSheetProps) {
                             </FormItem>
                         </Form>
 
-                        <div className="border-t pt-4 space-y-2">
+                        <div className="border-t space-y-2">
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-gray-600">
                                     Общая сумма:
