@@ -26,8 +26,9 @@ export { default as StrictModeDroppable } from './StrictModeDroppable'
 export { default as SyntaxHighlighter } from './SyntaxHighlighter'
 export { default as ToggleDrawer } from './ToggleDrawer'
 export { default as UsersAvatarGroup } from './UsersAvatarGroup'
-export { AmountInput } from "./AmountInput";
+export { AmountInput } from './AmountInput'
 export { NumericFormat } from './NumericFormat'
 export { PhoneEmailInput } from './PhoneEmailInput'
-export type { PhoneEmailInputType } from "./PhoneEmailInput"
-export { FileIcon } from "./FileIcon"
+export type { PhoneEmailInputType } from './PhoneEmailInput'
+export { FileIcon } from './FileIcon'
+export { GoBack } from './GoBack'

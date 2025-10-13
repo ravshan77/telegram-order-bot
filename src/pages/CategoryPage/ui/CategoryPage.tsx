@@ -1,16 +1,20 @@
-import React, { useRef } from 'react'
-import { Button } from '@/shared/ui/kit'
-import { ChevronLeft } from 'lucide-react'
+// import { ArrowLeft } from 'lucide-react'
 import { products } from '@/entities/product'
+import { Tabs } from '@/shared/ui/kit'
 import { useNavigate } from 'react-router-dom'
+import React, { useRef, useState } from 'react'
+import TabNav from '@/shared/ui/kit/Tabs/TabNav'
+import TabList from '@/shared/ui/kit/Tabs/TabList'
 import { ProductCard } from '@/widgets/ProductCard'
+import TabContent from '@/shared/ui/kit/Tabs/TabContent'
+import { GoBack } from '@/shared/ui/kit-pro'
 
 export const CategoryPage: React.FC = () => {
     const temporarily_category = 'Электроника'
+    const [currentTab, setCurrentTab] = useState(temporarily_category)
 
-    const categoryProducts = products.filter(
-        (p) => p.category === temporarily_category,
-    )
+    const subCategoryTabFilter = () =>
+        products.filter((p) => p.category === currentTab)
 
     const navigate = useNavigate()
     const goBack = () => navigate(-1)
@@ -43,27 +47,102 @@ export const CategoryPage: React.FC = () => {
 
     return (
         <div
-            className="pb-24"
+            className="pb-16"
             onTouchEnd={handleTouchEnd}
             onTouchMove={handleTouchMove}
             onTouchStart={handleTouchStart}
         >
             <div>
-                <div className="flex items-center justify-between mb-3">
-                    <h2 className="flex justify-center items-center text-lg font-semibold">
-                        <Button
-                            variant="plain"
-                            icon={<ChevronLeft />}
-                            onClick={goBack}
-                        />
-                        {temporarily_category}
-                    </h2>
+                <div className="bg-white w-full">
+                    <GoBack text={temporarily_category} />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                    {categoryProducts.map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                    ))}
+                <div className="">
+                    <Tabs value={currentTab} onChange={setCurrentTab}>
+                        <TabList>
+                            <TabNav value="Электроника" className="min-w-max">
+                                Все товары
+                            </TabNav>
+                            <TabNav value="Смартфоны" className="min-w-max">
+                                Смартфоны
+                            </TabNav>
+                            <TabNav value="Гаджеты" className="min-w-max">
+                                Телевизор
+                            </TabNav>
+                            <TabNav value="Аксессуары" className="min-w-max">
+                                Aксессуары
+                            </TabNav>
+                            <TabNav
+                                value="Компьютерные аксессуары"
+                                className="min-w-max"
+                            >
+                                Компьютерные аксессуары
+                            </TabNav>
+                            <TabNav value="Игры">Игры</TabNav>
+                        </TabList>
+                        <div className="py-4">
+                            <TabContent value="Электроника">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    {subCategoryTabFilter().map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                        />
+                                    ))}
+                                </div>
+                            </TabContent>
+                            <TabContent value="Смартфоны">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    {subCategoryTabFilter().map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                        />
+                                    ))}
+                                </div>
+                            </TabContent>
+                            <TabContent value="Гаджеты">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    {subCategoryTabFilter().map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                        />
+                                    ))}
+                                </div>
+                            </TabContent>
+                            <TabContent value="Аксессуары">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    {subCategoryTabFilter().map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                        />
+                                    ))}
+                                </div>
+                            </TabContent>
+                            <TabContent value="Компьютерные аксессуары">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    {subCategoryTabFilter().map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                        />
+                                    ))}
+                                </div>
+                            </TabContent>
+                            <TabContent value="Игры">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    {subCategoryTabFilter().map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                        />
+                                    ))}
+                                </div>
+                            </TabContent>
+                        </div>
+                    </Tabs>
                 </div>
             </div>
         </div>

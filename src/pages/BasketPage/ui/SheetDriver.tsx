@@ -1,72 +1,156 @@
-'use client'
-
-import * as React from 'react'
-import { Minus, Plus } from 'lucide-react'
-
+import { useState } from 'react'
 import {
     Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
+    DrawerTitle,
     DrawerFooter,
     DrawerHeader,
-    DrawerTitle,
+    DrawerContent,
+    DrawerDescription,
 } from '@/shared/ui/kit/Sheet'
 import { Button } from '@/shared/ui/kit'
+import { SingleValue } from 'react-select'
+import { Input } from '@/shared/ui/kit/Input'
+import { Select } from '@/shared/ui/kit/Select'
+import { Form, FormItem } from '@/shared/ui/kit/Form'
+import { DatePicker } from '@/shared/ui/kit/DatePicker'
+import { useCartStore } from '@/shared/store/useCartStore'
 
-export function SheetDemo() {
-    const [goal, setGoal] = React.useState(350)
+const paymentOptions: Option[] = [
+    { value: 'cash', label: 'Наличные' },
+    { value: 'card', label: 'Карта' },
+    { value: 'transfer', label: 'Перевод' },
+]
 
-    function onClick(adjustment: number) {
-        setGoal(Math.max(200, Math.min(400, goal + adjustment)))
+type Option = {
+    value: string
+    label: string
+}
+
+interface FormDataType {
+    paymentType: Option | null
+    orderDate: Date | null
+    additionalInfo: string | null
+}
+
+interface BottomSheetProps {
+    open: boolean
+    setOpen: (prev: boolean) => void
+}
+
+export function SheetDemo({ open, setOpen }: BottomSheetProps) {
+    const getTotalPrice = useCartStore((state) => state.getTotalPrice)
+    const cart = useCartStore((state) => state.cart)
+
+    const [formData, setFormData] = useState<FormDataType>({
+        paymentType: null as Option | null,
+        orderDate: null,
+        additionalInfo: '',
+    })
+
+    const handleCloseDrawer = () => {
+        setOpen(false)
     }
 
+    const handleSubmitOrder = () => {
+        console.log('Order submitted:', {
+            cart,
+            totalPrice: getTotalPrice(),
+            ...formData,
+        })
+        // Здесь можно добавить логику отправки заказа
+        handleCloseDrawer()
+    }
+
+    const totalAmount = getTotalPrice()
+    const uzsAmount = `${totalAmount.toLocaleString()} сум`
+    const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
+
     return (
-        <Drawer>
-            <DrawerContent>
-                <div className="mx-auto w-full max-w-sm">
-                    <DrawerHeader>
-                        <DrawerTitle>Move Goal</DrawerTitle>
-                        <DrawerDescription>
-                            Set your daily activity goal.
+        <Drawer open={open} onOpenChange={(prew) => setOpen(prew)}>
+            <DrawerContent className="bg-white">
+                <div className="mx-auto w-full px-4">
+                    <DrawerHeader className="p-0">
+                        <DrawerTitle className="text-start">
+                            Оформление заказа
+                        </DrawerTitle>
+                        <DrawerDescription className="text-start">
+                            После оформления начнутся этапы по выполнению вашего
+                            заказа
                         </DrawerDescription>
                     </DrawerHeader>
-                    <div className="p-4 pb-0">
-                        <div className="flex items-center justify-center space-x-2">
-                            <Button
-                                className="h-8 w-8 shrink-0 rounded-full"
-                                disabled={goal <= 200}
-                                onClick={() => onClick(-10)}
-                            >
-                                <Minus />
-                                <span className="sr-only">Decrease</span>
-                            </Button>
-                            <div className="flex-1 text-center">
-                                <div className="text-7xl font-bold tracking-tighter">
-                                    {goal}
-                                </div>
-                                <div className="text-muted-foreground text-[0.70rem] uppercase">
-                                    Calories/day
+                    <div className="mt-3">
+                        <Form>
+                            <FormItem label="Выберите тип оплаты">
+                                <Select
+                                    placeholder="Выберите"
+                                    options={paymentOptions}
+                                    isSearchable={false}
+                                    value={formData.paymentType}
+                                    onChange={(option: SingleValue<Option>) =>
+                                        setFormData({
+                                            ...formData,
+                                            paymentType: option,
+                                        })
+                                    }
+                                />
+                            </FormItem>
+
+                            <FormItem label="Дата заказа">
+                                <DatePicker
+                                    placeholder="Выберите"
+                                    value={formData.orderDate}
+                                    onChange={(date) =>
+                                        setFormData({
+                                            ...formData,
+                                            orderDate: date,
+                                        })
+                                    }
+                                />
+                            </FormItem>
+
+                            <FormItem label="Дополнительная информация">
+                                <Input
+                                    textArea
+                                    rows={4}
+                                    placeholder="Введите дополнительную информацию"
+                                    value={formData.additionalInfo}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            additionalInfo: e.target.value,
+                                        })
+                                    }
+                                />
+                            </FormItem>
+                        </Form>
+
+                        <div className="border-t pt-4 space-y-2">
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm text-gray-600">
+                                    Общая сумма:
+                                </span>
+                                <div className="text-right">
+                                    <p className="text-base font-bold text-cyan-600">
+                                        {usdAmount}
+                                    </p>
+                                    <p className="text-xs text-gray-500">
+                                        {uzsAmount}
+                                    </p>
                                 </div>
                             </div>
-                            <Button
-                                className="h-8 w-8 shrink-0 rounded-full"
-                                disabled={goal >= 400}
-                                onClick={() => onClick(10)}
-                            >
-                                <Plus />
-                                <span className="sr-only">Increase</span>
-                            </Button>
-                        </div>
-                        <div className="mt-3 h-[120px]">
-                            <h1>Nimadurlar</h1>
                         </div>
                     </div>
                     <DrawerFooter>
-                        <Button>Submit</Button>
-                        <DrawerClose asChild>
-                            <Button>Cancel</Button>
-                        </DrawerClose>
+                        <Button
+                            variant="solid"
+                            className="w-full rounded-lg font-medium"
+                            disabled={
+                                !formData.paymentType || !formData.orderDate
+                            }
+                            onClick={handleSubmitOrder}
+                        >
+                            Оформить
+                        </Button>
                     </DrawerFooter>
                 </div>
             </DrawerContent>

@@ -80,6 +80,9 @@ export const protectedRoutes: Routes = [
         path: getBasketPath(),
         component: lazy(() => import('@/pages/BasketPage')),
         authority: [],
+        // meta: {
+        //     layout: 'collapsibleSide',
+        // },
     },
     {
         key: 'categoryPage',

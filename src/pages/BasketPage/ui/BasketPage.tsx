@@ -1,33 +1,35 @@
 import { Button } from '@/shared/ui/kit'
-import { SingleValue } from 'react-select'
+// import { SingleValue } from 'react-select'
 import { Product } from '@/entities/product'
-import { Input } from '@/shared/ui/kit/Input'
+import { GoBack } from '@/shared/ui/kit-pro'
+// import { Input } from '@/shared/ui/kit/Input'
 import { useNavigate } from 'react-router-dom'
-import { Select } from '@/shared/ui/kit/Select'
-import { Drawer } from '@/shared/ui/kit/Drawer'
+// import { Select } from '@/shared/ui/kit/Select'
+// import { Drawer } from '@/shared/ui/kit/Drawer'
 import { getProductPath } from '@/shared/config'
+import { Minus, Plus, Trash2 } from 'lucide-react'
 import React, { useCallback, useState } from 'react'
-import { Form, FormItem } from '@/shared/ui/kit/Form'
-import { DatePicker } from '@/shared/ui/kit/DatePicker'
+// import { Form, FormItem } from '@/shared/ui/kit/Form'
+// import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react'
+import { SheetDemo } from './SheetDriver'
 
-const paymentOptions: Option[] = [
-    { value: 'cash', label: 'Наличные' },
-    { value: 'card', label: 'Карта' },
-    { value: 'transfer', label: 'Перевод' },
-]
+// const paymentOptions: Option[] = [
+//     { value: 'cash', label: 'Наличные' },
+//     { value: 'card', label: 'Карта' },
+//     { value: 'transfer', label: 'Перевод' },
+// ]
 
-type Option = {
-    value: string
-    label: string
-}
+// type Option = {
+//     value: string
+//     label: string
+// }
 
-interface FormDataType {
-    paymentType: Option | null
-    orderDate: Date | null
-    additionalInfo: string | null
-}
+// interface FormDataType {
+//     paymentType: Option | null
+//     orderDate: Date | null
+//     additionalInfo: string | null
+// }
 
 export const BasketPage: React.FC = () => {
     const cart = useCartStore((state) => state.cart)
@@ -38,11 +40,11 @@ export const BasketPage: React.FC = () => {
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const [formData, setFormData] = useState<FormDataType>({
-        paymentType: null as Option | null,
-        orderDate: null,
-        additionalInfo: '',
-    })
+    // const [formData, setFormData] = useState<FormDataType>({
+    //     paymentType: null as Option | null,
+    //     orderDate: null,
+    //     additionalInfo: '',
+    // })
 
     const goShowProduct = useCallback(
         (product: Product) => {
@@ -56,62 +58,49 @@ export const BasketPage: React.FC = () => {
         setIsDrawerOpen(true)
     }
 
-    const handleCloseDrawer = () => {
-        setIsDrawerOpen(false)
-    }
+    // const handleCloseDrawer = () => {
+    //     setIsDrawerOpen(false)
+    // }
 
-    const handleSubmitOrder = () => {
-        console.log('Order submitted:', {
-            cart,
-            totalPrice: getTotalPrice(),
-            ...formData,
-        })
-        // Здесь можно добавить логику отправки заказа
-        handleCloseDrawer()
-    }
+    // const handleSubmitOrder = () => {
+    //     console.log('Order submitted:', {
+    //         cart,
+    //         totalPrice: getTotalPrice(),
+    //         ...formData,
+    //     })
+    //     // Здесь можно добавить логику отправки заказа
+    //     handleCloseDrawer()
+    // }
 
     if (cart.length === 0) {
         return (
-            <div className="flex flex-col">
-                <div className="bg-white fixed top-16 z-10 w-full">
-                    <Button
-                        variant="plain"
-                        className="p-0"
-                        icon={<ArrowLeft />}
-                        onClick={() => navigate(-1)}
-                    >
-                        Назад
-                    </Button>
+            <div className="h-full">
+                <div className="bg-white w-full">
+                    <GoBack />
                 </div>
 
-                <div className="flex-1 flex items-center mt-8 justify-center">
+                <div className="h-full flex-1 flex flex-col items-center justify-around">
                     <p className="text-gray-500">Корзина пуста</p>
                 </div>
             </div>
         )
     }
 
-    const totalAmount = getTotalPrice()
-    const uzsAmount = `${totalAmount.toLocaleString()} сум`
-    const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
+    // const totalAmount = getTotalPrice()
+    // const uzsAmount = `${totalAmount.toLocaleString()} сум`
+    // const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
 
     return (
-        <div className="flex flex-col pb-16">
+        <div className="pb-16">
+            <SheetDemo open={isDrawerOpen} setOpen={setIsDrawerOpen} />
             {/* Header */}
-            <div className="bg-white fixed top-16 z-10 w-full">
-                <Button
-                    variant="plain"
-                    className="p-0"
-                    icon={<ArrowLeft />}
-                    onClick={() => navigate(-1)}
-                >
-                    Назад
-                </Button>
+            <div className="bg-white w-full">
+                <GoBack />
             </div>
 
             {/* Cart Items */}
-            <div className="flex-1 overflow-y-auto mt-8">
-                <div className="p-2 space-y-3">
+            <div className="flex-1 overflow-y-auto">
+                <div className="py-2 space-y-3">
                     {cart.map((item) => (
                         <div
                             key={item.id}
@@ -220,7 +209,7 @@ export const BasketPage: React.FC = () => {
             </div>
 
             {/* Order Form Drawer */}
-            <Drawer
+            {/* <Drawer
                 isOpen={isDrawerOpen}
                 placement="bottom"
                 height="auto"
@@ -301,7 +290,7 @@ export const BasketPage: React.FC = () => {
                         Оформить
                     </Button>
                 </div>
-            </Drawer>
+            </Drawer> */}
         </div>
     )
 }

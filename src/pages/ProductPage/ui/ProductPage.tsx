@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
-import { ArrowLeft } from 'lucide-react'
 import { BoxSvg } from '@/shared/ui/svg'
 import { products } from '@/entities/product'
 import { useNavigate } from 'react-router-dom'
-import { ImageGallery } from '@/shared/ui/kit-pro'
-import { ProductCard } from '@/widgets/ProductCard'
-import { useCartStore } from '@/shared/store/useCartStore'
 import { getBasketPath } from '@/shared/config'
+import { ProductCard } from '@/widgets/ProductCard'
+import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
+import { useCartStore } from '@/shared/store/useCartStore'
 
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
     const selectedProduct = useCartStore((state) => state.selectedProduct)
-    // const setPage = useCartStore((state) => state.setPage)
     const addToCart = useCartStore((state) => state.addToCart)
     const navigate = useNavigate()
 
@@ -29,19 +27,12 @@ export const ProductPage: React.FC = () => {
     return (
         <div className="pb-16">
             {/* Header */}
-            <div className="bg-white fixed top-16 z-10 w-full">
-                <Button
-                    variant="plain"
-                    className="p-0"
-                    icon={<ArrowLeft />}
-                    onClick={() => navigate(-1)}
-                >
-                    Назад
-                </Button>
+            <div className="bg-white w-full">
+                <GoBack />
             </div>
 
             {/* Image gallery */}
-            <div className="bg-white mt-8">
+            <div className="bg-white mt-4">
                 <ImageGallery
                     index={currentIndex}
                     slides={slides.map((img) => ({ src: img.src }))}

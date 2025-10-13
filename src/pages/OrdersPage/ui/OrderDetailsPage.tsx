@@ -1,10 +1,6 @@
-import { Button } from '@/shared/ui/kit'
-import { ArrowLeft } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { GoBack } from '@/shared/ui/kit-pro'
 
 export const OrderDetailsPage = () => {
-    const navigate = useNavigate()
-    const goBack = () => navigate(-1)
     const orderInfo = {
         status: 'confirmed',
         createdDate: '16.03.2025',
@@ -42,18 +38,11 @@ export const OrderDetailsPage = () => {
     return (
         <div className="pb-16">
             <div>
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-semibold flex justify-center items-center">
-                        <Button
-                            variant="plain"
-                            size="xs"
-                            icon={<ArrowLeft />}
-                            onClick={goBack}
-                        />
-                        Информация для заказа
-                    </h2>
+                <div className="bg-white w-full">
+                    <GoBack text={'Информация для заказа'} />
                 </div>
-                <div className="mb-4">
+
+                <div className="my-4">
                     <div className="mb-4">
                         <span
                             className={`text-xs font-semibold px-3 py-1 rounded ${
