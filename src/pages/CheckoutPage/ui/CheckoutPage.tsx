@@ -61,86 +61,91 @@ export const CheckoutPage = () => {
 
     return (
         <div className="pb-16">
-            <div className="bg-white w-full">
-                <GoBack text={'Оформление заказа'} />
-            </div>
-            <div className="mt-4">
-                <p>
-                    После оформления начнутся этапы по выполнению вашего заказа
-                </p>
-            </div>
-            <div className="mt-4">
-                <Form onSubmit={handleSubmit}>
-                    <FormItem label="Выберите тип оплаты">
-                        <Select
-                            placeholder="Выберите"
-                            options={paymentOptions}
-                            isSearchable={false}
-                            value={formData.paymentType}
-                            onChange={(option: SingleValue<Option>) =>
-                                setFormData({
-                                    ...formData,
-                                    paymentType: option,
-                                })
-                            }
-                        />
-                    </FormItem>
+            <div>
+                <div className="bg-white w-full">
+                    <GoBack text={'Оформление заказа'} />
+                </div>
+                <div className="mt-4">
+                    <p>
+                        После оформления начнутся этапы по выполнению вашего
+                        заказа
+                    </p>
+                </div>
+                <div className="mt-4">
+                    <Form onSubmit={handleSubmit}>
+                        <FormItem label="Выберите тип оплаты">
+                            <Select
+                                placeholder="Выберите"
+                                options={paymentOptions}
+                                isSearchable={false}
+                                value={formData.paymentType}
+                                onChange={(option: SingleValue<Option>) =>
+                                    setFormData({
+                                        ...formData,
+                                        paymentType: option,
+                                    })
+                                }
+                            />
+                        </FormItem>
 
-                    <FormItem label="Дата заказа">
-                        <DatePicker
-                            placeholder="Выберите"
-                            value={formData.orderDate}
-                            onChange={(date) =>
-                                setFormData({
-                                    ...formData,
-                                    orderDate: date,
-                                })
-                            }
-                        />
-                    </FormItem>
+                        <FormItem label="Дата заказа">
+                            <DatePicker
+                                placeholder="Выберите"
+                                value={formData.orderDate}
+                                onChange={(date) =>
+                                    setFormData({
+                                        ...formData,
+                                        orderDate: date,
+                                    })
+                                }
+                            />
+                        </FormItem>
 
-                    <FormItem label="Дополнительная информация">
-                        <Input
-                            textArea
-                            rows={4}
-                            placeholder="Введите дополнительную информацию"
-                            value={formData.additionalInfo}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    additionalInfo: e.target.value,
-                                })
-                            }
-                        />
-                    </FormItem>
-                </Form>
-            </div>
-            <div className="border border-red-500">
-                <div className="border border-red-500 fixed z-0 w-full p-0 left-0 h-32 bottom-0 px-4">
-                    <div className="border-t pt-2">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-600">
-                                Общая сумма:
-                            </span>
-                            <div className="text-right">
-                                <p className="text-base font-bold text-cyan-600">
-                                    {usdAmount}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                    {uzsAmount}
-                                </p>
+                        <FormItem label="Дополнительная информация">
+                            <Input
+                                textArea
+                                rows={4}
+                                placeholder="Введите дополнительную информацию"
+                                value={formData.additionalInfo}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        additionalInfo: e.target.value,
+                                    })
+                                }
+                            />
+                        </FormItem>
+                    </Form>
+                </div>
+                <div className="border border-red-500">
+                    <div className="border border-red-500 fixed z-0 w-full p-0 left-0 h-32 bottom-0 px-4">
+                        <div className="border-t pt-2">
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm text-gray-600">
+                                    Общая сумма:
+                                </span>
+                                <div className="text-right">
+                                    <p className="text-base font-bold text-cyan-600">
+                                        {usdAmount}
+                                    </p>
+                                    <p className="text-xs text-gray-500">
+                                        {uzsAmount}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <Button
-                        variant="solid"
-                        className="w-full mt-2 rounded-lg font-medium"
-                        disabled={!formData.paymentType || !formData.orderDate}
-                        onClick={handleSubmitOrder}
-                    >
-                        Оформить
-                    </Button>
+                        <Button
+                            variant="solid"
+                            className="w-full mt-2 rounded-lg font-medium"
+                            disabled={
+                                !formData.paymentType || !formData.orderDate
+                            }
+                            onClick={handleSubmitOrder}
+                        >
+                            Оформить
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
