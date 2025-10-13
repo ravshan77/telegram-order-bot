@@ -7,7 +7,6 @@ import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { useTelegramKeyboardFix } from './useTelegramKeyboardFix'
 
 const paymentOptions: Option[] = [
     { value: 'cash', label: 'Наличные' },
@@ -29,7 +28,6 @@ interface FormDataType {
 export const CheckoutPage = () => {
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const cart = useCartStore((state) => state.cart)
-    const { isKeyboardOpen } = useTelegramKeyboardFix()
     const [formData, setFormData] = useState<FormDataType>({
         paymentType: null as Option | null,
         orderDate: null,
@@ -50,8 +48,8 @@ export const CheckoutPage = () => {
     const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
 
     return (
-        <div className="pb-16">
-            <div className="border flex flex-col justify-between border-red-500 h-full">
+        <div className="pb-16 border h-full border-black relative">
+            <div className="border flex flex-col justify-between border-green-600">
                 <div className="bg-white w-full">
                     <GoBack text={'Оформление заказа'} />
                 </div>
@@ -108,11 +106,7 @@ export const CheckoutPage = () => {
                     </Form>
                 </div>
                 <div
-                    className={`w-full fixed bg-white bottom-0 p-4 left-0 border border-red-500 transition-all duration-300 ${
-                        isKeyboardOpen
-                            ? 'translate-y-full opacity-0'
-                            : 'translate-y-0 opacity-100'
-                    }`}
+                    className={`w-full absolute bg-white bottom-0 py-4 left-0 border border-red-500`}
                 >
                     <div className="border-t py-2">
                         <div className="flex justify-between items-center">
