@@ -26,3 +26,8 @@
     transform: translateY(0) !important;
     transition: none !important;
 }
+
+/* DrawerContent balandligi uchun fix */
+.DrawerContent {
+    height: calc(var(--vh, 1vh) * 100);
+}
