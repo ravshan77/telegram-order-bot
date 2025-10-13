@@ -106,7 +106,7 @@ export const CheckoutPage = () => {
                         </FormItem>
                     </Form>
                 </div>
-                <div className="border fixed bottom-0 left-0 w-full border-red-500">
+                <div className="border sticky bg-white bottom-0 left-0 w-full border-red-500">
                     <div className="border border-red-500 p-4">
                         <div className="border-t py-2">
                             <div className="flex justify-between items-center">
