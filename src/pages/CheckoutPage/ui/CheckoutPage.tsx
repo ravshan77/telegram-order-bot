@@ -7,6 +7,7 @@ import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
+import useViewportHeightFix from '@/shared/ui/kit/hooks/useViewportHeightFix'
 
 const paymentOptions: Option[] = [
     { value: 'cash', label: 'Наличные' },
@@ -28,6 +29,7 @@ interface FormDataType {
 export const CheckoutPage = () => {
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const cart = useCartStore((state) => state.cart)
+    useViewportHeightFix()
 
     const [formData, setFormData] = useState<FormDataType>({
         paymentType: null as Option | null,
@@ -104,7 +106,7 @@ export const CheckoutPage = () => {
                     </FormItem>
                 </Form>
             </div>
-            <div className=" fixed w-full p-0 left-0 h-32 bottom-0 px-4">
+            <div className="fixed w-full p-0 left-0 h-32 bottom-0 px-4">
                 <div className="border-t pt-2">
                     <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600">
