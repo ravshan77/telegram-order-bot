@@ -1,10 +1,10 @@
+import React, { useRef } from 'react'
 import { Button } from '@/shared/ui/kit'
 import { Minus, Plus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
 import type { Product } from '@/entities/product'
 import { useFlyToCart } from '@/shared/lib/hooks'
-import React, { useCallback, useRef } from 'react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
 
@@ -24,10 +24,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const cardRef = useRef<HTMLDivElement>(null)
     const flyToCart = useFlyToCart('#cart-icon', { duration: 0.8, scale: 0.2 })
 
-    const goShowProduct = useCallback(() => {
+    const goShowProduct = () => {
         setSelectedProduct(product)
         navigate(getProductPath(product.id))
-    }, [navigate, product.id])
+    }
 
     const handleAddToCart = (
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -55,7 +55,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     <Button
                         variant="plain"
                         className="w-12 h-full flex items-center justify-center border-none outline-none"
-                        icon={<Minus size={18} className="text-gray-700" />}
+                        icon={<Minus size={20} className="text-gray-700" />}
                         onClick={(e) => {
                             e.stopPropagation()
                             updateQuantity(
@@ -70,7 +70,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     <Button
                         variant="plain"
                         className="w-12 h-full flex items-center justify-center border-none outline-none"
-                        icon={<Plus size={18} className="text-gray-700" />}
+                        icon={<Plus size={20} className="text-gray-700" />}
                         onClick={(e) => {
                             e.stopPropagation()
                             updateQuantity(
@@ -91,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 onClick={handleAddToCart}
             >
                 <span className="text-base font-medium flex items-center gap-2">
-                    в корзину <BasketSvg width={18} height={18} />
+                    в корзину <BasketSvg width={20} height={20} />
                 </span>
             </Button>
         )

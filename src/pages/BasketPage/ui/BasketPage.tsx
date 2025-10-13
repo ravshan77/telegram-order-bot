@@ -1,35 +1,11 @@
 import { Button } from '@/shared/ui/kit'
-// import { SingleValue } from 'react-select'
+import React, { useCallback } from 'react'
 import { Product } from '@/entities/product'
 import { GoBack } from '@/shared/ui/kit-pro'
-// import { Input } from '@/shared/ui/kit/Input'
 import { useNavigate } from 'react-router-dom'
-// import { Select } from '@/shared/ui/kit/Select'
-// import { Drawer } from '@/shared/ui/kit/Drawer'
-import { getCheckoutPath, getProductPath } from '@/shared/config'
 import { Minus, Plus, Trash2 } from 'lucide-react'
-import React, { useCallback } from 'react'
-// import { Form, FormItem } from '@/shared/ui/kit/Form'
-// import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
-// import { SheetDemo } from './SheetDriver'
-
-// const paymentOptions: Option[] = [
-//     { value: 'cash', label: 'Наличные' },
-//     { value: 'card', label: 'Карта' },
-//     { value: 'transfer', label: 'Перевод' },
-// ]
-
-// type Option = {
-//     value: string
-//     label: string
-// }
-
-// interface FormDataType {
-//     paymentType: Option | null
-//     orderDate: Date | null
-//     additionalInfo: string | null
-// }
+import { getCheckoutPath, getProductPath } from '@/shared/config'
 
 export const BasketPage: React.FC = () => {
     const cart = useCartStore((state) => state.cart)
@@ -38,13 +14,6 @@ export const BasketPage: React.FC = () => {
     const updateQuantity = useCartStore((state) => state.updateQuantity)
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
-
-    // const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    // const [formData, setFormData] = useState<FormDataType>({
-    //     paymentType: null as Option | null,
-    //     orderDate: null,
-    //     additionalInfo: '',
-    // })
 
     const goShowProduct = useCallback(
         (product: Product) => {
@@ -55,20 +24,6 @@ export const BasketPage: React.FC = () => {
     )
 
     const goToCheckOut = () => navigate(getCheckoutPath())
-
-    // const handleCloseDrawer = () => {
-    //     setIsDrawerOpen(false)
-    // }
-
-    // const handleSubmitOrder = () => {
-    //     console.log('Order submitted:', {
-    //         cart,
-    //         totalPrice: getTotalPrice(),
-    //         ...formData,
-    //     })
-    //     // Здесь можно добавить логику отправки заказа
-    //     handleCloseDrawer()
-    // }
 
     if (cart.length === 0) {
         return (
@@ -84,19 +39,12 @@ export const BasketPage: React.FC = () => {
         )
     }
 
-    // const totalAmount = getTotalPrice()
-    // const uzsAmount = `${totalAmount.toLocaleString()} сум`
-    // const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
-
     return (
         <div className="pb-16">
-            {/* <SheetDemo open={isDrawerOpen} setOpen={setIsDrawerOpen} /> */}
-            {/* Header */}
             <div className="bg-white w-full">
                 <GoBack />
             </div>
 
-            {/* Cart Items */}
             <div className="flex-1 overflow-y-auto">
                 <div className="py-2 space-y-3">
                     {cart.map((item) => (
@@ -205,90 +153,6 @@ export const BasketPage: React.FC = () => {
                     Оформление заказ
                 </Button>
             </div>
-
-            {/* Order Form Drawer */}
-            {/* <Drawer
-                isOpen={isDrawerOpen}
-                placement="bottom"
-                height="auto"
-                closable={true}
-                title="Оформление заказа"
-                bodyClass="pb-6"
-                headerClass="border-b"
-                onClose={handleCloseDrawer}
-            >
-                <div className="space-y-4">
-                    <Form>
-                        <FormItem asterisk label="Выберите тип оплаты">
-                            <Select
-                                placeholder="Выберите"
-                                options={paymentOptions}
-                                isSearchable={false}
-                                value={formData.paymentType}
-                                onChange={(option: SingleValue<Option>) =>
-                                    setFormData({
-                                        ...formData,
-                                        paymentType: option,
-                                    })
-                                }
-                            />
-                        </FormItem>
-
-                        <FormItem asterisk label="Дата заказа">
-                            <DatePicker
-                                placeholder="Выберите"
-                                value={formData.orderDate}
-                                onChange={(date) =>
-                                    setFormData({
-                                        ...formData,
-                                        orderDate: date,
-                                    })
-                                }
-                            />
-                        </FormItem>
-
-                        <FormItem label="Дополнительная информация">
-                            <Input
-                                textArea
-                                rows={4}
-                                placeholder="Введите дополнительную информацию"
-                                value={formData.additionalInfo}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        additionalInfo: e.target.value,
-                                    })
-                                }
-                            />
-                        </FormItem>
-                    </Form>
-
-                    <div className="border-t pt-4 space-y-2">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-600">
-                                Общая сумма:
-                            </span>
-                            <div className="text-right">
-                                <p className="text-base font-bold text-primary">
-                                    {usdAmount}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                    {uzsAmount}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <Button
-                        variant="solid"
-                        className="w-full rounded-lg font-medium"
-                        disabled={!formData.paymentType || !formData.orderDate}
-                        onClick={handleSubmitOrder}
-                    >
-                        Оформить
-                    </Button>
-                </div>
-            </Drawer> */}
         </div>
     )
 }

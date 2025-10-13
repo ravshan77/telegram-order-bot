@@ -158,11 +158,11 @@ export const ProductPage: React.FC = () => {
                             <span className="text-gray-600">Описание: </span>
                             <span className="font-medium">Не указано</span>
                         </div>
-                        <div className="flex p-4 rounded-md justify-between bg-cyan-50 ">
+                        <div className="flex p-4 rounded-md justify-between bg-primary-subtle ">
                             <span className="text-gray-600">
                                 Цена продажи:{' '}
                             </span>
-                            <span className="text-base text-cyan-500 font-bold">
+                            <span className="text-base text-primary font-bold">
                                 {selectedProduct.price.toLocaleString()} UZS
                             </span>
                         </div>
@@ -187,7 +187,7 @@ export const ProductPage: React.FC = () => {
             {/* Bottom fixed bar */}
             <div className="header-wrapper fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 bg-white border-t">
                 <div>
-                    <p className="text-cyan-500 font-bold">
+                    <p className="text-primary font-bold">
                         {selectedProduct.price.toLocaleString()} UZS
                     </p>
                     <p className="text-xs font-light">Цена продажи</p>

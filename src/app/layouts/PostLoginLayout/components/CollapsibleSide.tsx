@@ -61,7 +61,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                         >
                                             <ShoppingCart size={24} />
                                             {totalItems > 0 && (
-                                                <span className="absolute top-0 right-0 bg-cyan-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                                <span className="absolute top-0 right-0 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                                                     {totalItems}
                                                 </span>
                                             )}
