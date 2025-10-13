@@ -60,7 +60,7 @@ export const CheckoutPage = () => {
                         заказа
                     </p>
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 overflow-y-auto">
                     <Form onSubmit={handleSubmitOrder}>
                         <FormItem label="Выберите тип оплаты">
                             <Select
@@ -106,8 +106,8 @@ export const CheckoutPage = () => {
                         </FormItem>
                     </Form>
                 </div>
-                <div className="border flex-1 border-red-500">
-                    <div className="border border-red-500 w-full py-4">
+                <div className="border fixed bottom-0 left-0 w-full border-red-500">
+                    <div className="border border-red-500 p-4">
                         <div className="border-t py-2">
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-gray-600">
