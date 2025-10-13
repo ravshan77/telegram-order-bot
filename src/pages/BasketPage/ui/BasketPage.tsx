@@ -6,13 +6,13 @@ import { GoBack } from '@/shared/ui/kit-pro'
 import { useNavigate } from 'react-router-dom'
 // import { Select } from '@/shared/ui/kit/Select'
 // import { Drawer } from '@/shared/ui/kit/Drawer'
-import { getProductPath } from '@/shared/config'
+import { getCheckoutPath, getProductPath } from '@/shared/config'
 import { Minus, Plus, Trash2 } from 'lucide-react'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 // import { Form, FormItem } from '@/shared/ui/kit/Form'
 // import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { SheetDemo } from './SheetDriver'
+// import { SheetDemo } from './SheetDriver'
 
 // const paymentOptions: Option[] = [
 //     { value: 'cash', label: 'Наличные' },
@@ -39,7 +39,7 @@ export const BasketPage: React.FC = () => {
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
 
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    // const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     // const [formData, setFormData] = useState<FormDataType>({
     //     paymentType: null as Option | null,
     //     orderDate: null,
@@ -54,9 +54,7 @@ export const BasketPage: React.FC = () => {
         [navigate, setSelectedProduct],
     )
 
-    const handleOpenDrawer = () => {
-        setIsDrawerOpen(true)
-    }
+    const goToCheckOut = () => navigate(getCheckoutPath())
 
     // const handleCloseDrawer = () => {
     //     setIsDrawerOpen(false)
@@ -92,7 +90,7 @@ export const BasketPage: React.FC = () => {
 
     return (
         <div className="pb-16">
-            <SheetDemo open={isDrawerOpen} setOpen={setIsDrawerOpen} />
+            {/* <SheetDemo open={isDrawerOpen} setOpen={setIsDrawerOpen} /> */}
             {/* Header */}
             <div className="bg-white w-full">
                 <GoBack />
@@ -202,7 +200,7 @@ export const BasketPage: React.FC = () => {
                 <Button
                     variant="solid"
                     className="w-auto min-w-32 rounded-lg font-medium"
-                    onClick={handleOpenDrawer}
+                    onClick={goToCheckOut}
                 >
                     Оформление заказ
                 </Button>
