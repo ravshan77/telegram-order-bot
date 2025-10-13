@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Dot } from 'lucide-react'
 import { Button } from '@/shared/ui/kit'
-import { PaymentViewDrawer } from './PaymentViewDrawer'
+import { PaymentViewBottomSheet } from './PaymentViewBottomSheet'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
 export const PaymentsPage = () => {
@@ -51,9 +51,9 @@ export const PaymentsPage = () => {
 
     return (
         <div className="pb-32">
-            <PaymentViewDrawer
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
+            <PaymentViewBottomSheet
+                isOpen={isDrawerOpen}
+                setIsOpen={setIsDrawerOpen}
             />
             <div>
                 <div className="flex items-center justify-between mb-3">

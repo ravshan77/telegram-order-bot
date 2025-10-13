@@ -14,7 +14,6 @@ import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
-import useFixDrawerKeyboard from '@/shared/ui/kit/hooks/useFixDrawerKeyboard'
 // import useFixDrawerKeyboard from '@/shared/ui/kit/hooks/useFixDrawerKeyboard'
 
 const paymentOptions: Option[] = [
@@ -40,7 +39,7 @@ interface BottomSheetProps {
 }
 
 export function SheetDemo({ open, setOpen }: BottomSheetProps) {
-    useFixDrawerKeyboard()
+    // useFixDrawerKeyboard()
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const cart = useCartStore((state) => state.cart)
 

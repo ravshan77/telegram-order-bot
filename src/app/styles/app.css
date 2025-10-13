@@ -18,16 +18,3 @@
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
 }
-
-[data-state='open'] .DrawerContent {
-    position: fixed !important;
-    bottom: 0 !important;
-    top: auto !important;
-    transform: translateY(0) !important;
-    transition: none !important;
-}
-
-/* DrawerContent balandligi uchun fix */
-.DrawerContent {
-    height: calc(var(--vh, 1vh) * 100);
-}
