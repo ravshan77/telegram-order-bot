@@ -60,7 +60,7 @@ export const CheckoutPage = () => {
                         заказа
                     </p>
                 </div>
-                <div className="mt-4 overflow-y-auto">
+                <div className="mt-4">
                     <Form onSubmit={handleSubmitOrder}>
                         <FormItem label="Выберите тип оплаты">
                             <Select
