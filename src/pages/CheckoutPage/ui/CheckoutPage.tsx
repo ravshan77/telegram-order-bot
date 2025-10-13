@@ -220,7 +220,7 @@ export const CheckoutPage = () => {
                 </Form>
             </div>
             <div>
-                <div className="flex-1 border border-red-500 w-full p-0 px-4">
+                <div className="fixed w-full p-0 left-0 h-32 bottom-0 px-4">
                     <div className="border-t pt-2">
                         <div className="flex justify-between items-center">
                             <span className="text-sm text-gray-600">
