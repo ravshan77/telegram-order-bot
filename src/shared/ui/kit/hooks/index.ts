@@ -1,6 +1,7 @@
 import useCallbackRef from './useCallbackRef'
 import useControllableState from './useControllableState'
 import useDidUpdate from './useDidUpdate'
+import useFixDrawerKeyboard from './useFixDrawerKeyboard'
 import useMergeRef from './useMergeRef'
 import useRootClose from './useRootClose'
 import useTimeout from './useTimeout'
@@ -18,6 +19,7 @@ const hooks = {
     useUncertainRef,
     useUniqueId,
     useWindowSize,
+    useFixDrawerKeyboard,
 }
 
 export default hooks
