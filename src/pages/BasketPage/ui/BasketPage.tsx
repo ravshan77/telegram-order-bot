@@ -195,7 +195,7 @@ export const BasketPage: React.FC = () => {
                     <p className="text-cyan-500 font-bold">
                         {getTotalPrice().toLocaleString()} UZS
                     </p>
-                    <p className="text-xs font-light">Цена продажи</p>
+                    <p className="text-xs font-light">Общая сумма:</p>
                 </div>
                 <Button
                     variant="solid"

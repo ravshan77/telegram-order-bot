@@ -29,17 +29,6 @@ export const CheckoutPage = () => {
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const cart = useCartStore((state) => state.cart)
 
-    const handleSubmit = () => {
-        // Ma'lumotlarni Telegram bot'ga yuborish
-        if (window.Telegram?.WebApp) {
-            const data = {
-                ...formData,
-            }
-
-            console.log(data)
-        }
-    }
-
     const [formData, setFormData] = useState<FormDataType>({
         paymentType: null as Option | null,
         orderDate: null,
@@ -61,7 +50,7 @@ export const CheckoutPage = () => {
 
     return (
         <div className="pb-16">
-            <div>
+            <div className="border flex flex-col justify-between border-red-500 h-full">
                 <div className="bg-white w-full">
                     <GoBack text={'Оформление заказа'} />
                 </div>
@@ -72,7 +61,7 @@ export const CheckoutPage = () => {
                     </p>
                 </div>
                 <div className="mt-4">
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleSubmitOrder}>
                         <FormItem label="Выберите тип оплаты">
                             <Select
                                 placeholder="Выберите"
@@ -117,9 +106,9 @@ export const CheckoutPage = () => {
                         </FormItem>
                     </Form>
                 </div>
-                <div className="border border-red-500">
-                    <div className="border border-red-500 fixed z-0 w-full p-0 left-0 h-32 bottom-0 px-4">
-                        <div className="border-t pt-2">
+                <div className="border flex-1 border-red-500">
+                    <div className="border border-red-500 w-full py-4">
+                        <div className="border-t py-2">
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-gray-600">
                                     Общая сумма:
