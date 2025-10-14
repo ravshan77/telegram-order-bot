@@ -137,7 +137,6 @@ export const BasketPage: React.FC = () => {
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         handleRemove(item.id)
-                                        // removeFromCart(item.id)
                                     }}
                                 >
                                     <Trash2 size={20} />

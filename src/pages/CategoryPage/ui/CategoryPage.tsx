@@ -1,13 +1,12 @@
-// import { ArrowLeft } from 'lucide-react'
-import { products } from '@/entities/product'
 import { Tabs } from '@/shared/ui/kit'
+import { GoBack } from '@/shared/ui/kit-pro'
+import { products } from '@/entities/product'
 import { useNavigate } from 'react-router-dom'
 import React, { useRef, useState } from 'react'
 import TabNav from '@/shared/ui/kit/Tabs/TabNav'
 import TabList from '@/shared/ui/kit/Tabs/TabList'
 import { ProductCard } from '@/widgets/ProductCard'
 import TabContent from '@/shared/ui/kit/Tabs/TabContent'
-import { GoBack } from '@/shared/ui/kit-pro'
 
 export const CategoryPage: React.FC = () => {
     const temporarily_category = 'Электроника'

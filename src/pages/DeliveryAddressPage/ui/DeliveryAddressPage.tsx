@@ -24,7 +24,6 @@ export const DeliveryAddressPage = () => {
     const [showMenu, setShowMenu] = useState<number | null>(null)
 
     const handleAddAddress = () => {
-        alert('Янги адрес қўшиш формаси очилади')
         navigate(getDeliveryAddressMapPath())
     }
 
@@ -50,6 +49,7 @@ export const DeliveryAddressPage = () => {
                         <div
                             key={address.id}
                             className="bg-white rounded-2xl gap-3 border py-4 px-4 flex items-start justify-between"
+                            onClick={() => goToMap(address.id)}
                         >
                             <div className="flex items-center min-h-10">
                                 <input

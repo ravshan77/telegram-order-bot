@@ -20,6 +20,9 @@ export const ProductPage: React.FC = () => {
         {
             src: selectedProduct.image,
         },
+        {
+            src: selectedProduct.image,
+        },
     ]
 
     const isSingle = slides.length === 1

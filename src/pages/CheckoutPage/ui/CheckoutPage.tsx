@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Dot } from 'lucide-react'
 import { Button } from '@/shared/ui/kit'
 import { SingleValue } from 'react-select'
 import { GoBack } from '@/shared/ui/kit-pro'
@@ -7,7 +8,6 @@ import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { Dot } from 'lucide-react'
 
 const paymentOptions: Option[] = [
     { value: 'cash', label: 'Наличные' },
