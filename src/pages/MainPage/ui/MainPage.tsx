@@ -15,7 +15,7 @@ export const MainPage: React.FC = () => {
                     <h2 className="text-lg font-semibold">Товары</h2>
                 </div>
 
-                <div className="flex gap-2 overflow-x-auto hide-scrollbar">
+                <div className="flex gap-2 overflow-x-auto">
                     {categories.map((cat) => (
                         <Link key={cat?.id} to={getCategoryPath(cat.id)}>
                             <Button
