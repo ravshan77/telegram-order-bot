@@ -131,7 +131,7 @@ export const ReconciliationActPage: React.FC = () => {
             </div>
 
             {/* Fixed Footer - Summary */}
-            <div className="fixed bottom-0 min-h-56 left-0 right-0 bg-white border-t shadow-2xl">
+            <div className="fixed -z-0 bottom-0 min-h-56 left-0 right-0 bg-white border-t shadow-2xl">
                 <div className="px-4 py-0 space-y-1">
                     {/* Starting Debt */}
                     <div className="flex items-center justify-between py-2 border-t ">
