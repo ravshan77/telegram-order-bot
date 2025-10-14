@@ -2,6 +2,7 @@ import { Check } from 'lucide-react'
 import { Button } from '@/shared/ui/kit'
 import { GoBack } from '@/shared/ui/kit-pro'
 import React, { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 // TypeScript interfaces
 interface LocationData {
@@ -17,6 +18,7 @@ declare global {
 }
 
 export const DeliveryAddressMapPage: React.FC = () => {
+    const navigate = useNavigate()
     const mapContainerRef = useRef<HTMLDivElement>(null)
     const mapInstanceRef = useRef<any>(null)
     const placemarkRef = useRef<any>(null)
@@ -229,9 +231,7 @@ export const DeliveryAddressMapPage: React.FC = () => {
                 JSON.stringify(savedAddresses),
             )
 
-            alert(
-                `✅ Адрес успешно сохранен!\n\n${selectedLocation.address}\n\nLat: ${selectedLocation.lat.toFixed(6)}\nLng: ${selectedLocation.lng.toFixed(6)}`,
-            )
+            navigate(-1)
         } catch (error) {
             console.error('LocalStorage error:', error)
         }

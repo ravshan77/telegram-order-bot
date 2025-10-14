@@ -1,65 +1,70 @@
+import dayjs from 'dayjs'
 import { useState } from 'react'
+import { Dot } from 'lucide-react'
 import { Button } from '@/shared/ui/kit'
 import { PayoutViewDrawer } from './PayoutViewDrawer'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
-import { Dot } from 'lucide-react'
+
+const payments = [
+    {
+        id: 1,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        debtPayment: '3 250 000 сум',
+        debtPaymentUsd: '100$',
+        closedDebt: '5 500 000 сум',
+    },
+    {
+        id: 2,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        debtPayment: '2 250 000 сум',
+        closedDebtUsd: '100$',
+        closedDebt: '5 500 000 сум',
+    },
+    {
+        id: 3,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        debtPayment: '3 250 000 сум',
+        debtPaymentUsd: '100$',
+        closedDebt: '5 500 000 сум',
+    },
+    {
+        id: 4,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        debtPayment: '3 250 000 сум',
+        debtPaymentUsd: '100$',
+        closedDebt: '5 500 000 сум',
+    },
+    {
+        id: 5,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        debtPayment: '3 250 000 сум',
+        debtPaymentUsd: '100$',
+        closedDebt: '5 500 000 сум',
+    },
+]
 
 export const PayoutsPage = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const payments = [
-        {
-            id: 1,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            debtPayment: '3 250 000 сум',
-            debtPaymentUsd: '100$',
-            closedDebt: '5 500 000 сум',
-        },
-        {
-            id: 2,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            debtPayment: '2 250 000 сум',
-            closedDebtUsd: '100$',
-            closedDebt: '5 500 000 сум',
-        },
-        {
-            id: 3,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            debtPayment: '3 250 000 сум',
-            debtPaymentUsd: '100$',
-            closedDebt: '5 500 000 сум',
-        },
-        {
-            id: 4,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            debtPayment: '3 250 000 сум',
-            debtPaymentUsd: '100$',
-            closedDebt: '5 500 000 сум',
-        },
-        {
-            id: 5,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            debtPayment: '3 250 000 сум',
-            debtPaymentUsd: '100$',
-            closedDebt: '5 500 000 сум',
-        },
-    ]
+
+    const today = dayjs().toDate()
+    const deafult_value: [Date, Date] = [today, today]
 
     return (
         <div className="pb-32">
             <PayoutViewDrawer
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
+                isOpen={isDrawerOpen}
+                setIsOpen={setIsDrawerOpen}
             />
             <div>
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-lg font-semibold">Выплаты</h2>
                     <div className="flex items-center gap-2 text-sm">
-                        <DatePickerRange />
+                        <DatePickerRange defaultValue={deafult_value} />
                     </div>
                 </div>
                 <div className="space-y-4 mb-4 overflow-y-auto">

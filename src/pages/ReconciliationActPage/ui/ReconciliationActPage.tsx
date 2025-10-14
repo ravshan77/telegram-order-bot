@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
@@ -12,6 +13,8 @@ interface Transaction {
 }
 
 export const ReconciliationActPage: React.FC = () => {
+    const today = dayjs().toDate()
+    const deafult_value: [Date, Date] = [today, today]
     const [transactions] = useState<Transaction[]>([
         {
             id: 1,
@@ -70,7 +73,7 @@ export const ReconciliationActPage: React.FC = () => {
             <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold">АКТ сверка</h2>
                 <div className="flex items-center gap-2 text-sm">
-                    <DatePickerRange />
+                    <DatePickerRange defaultValue={deafult_value} />
                 </div>
             </div>
 

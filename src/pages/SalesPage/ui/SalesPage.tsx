@@ -1,44 +1,48 @@
-import { getSaleDetailPath } from '@/shared/config'
-import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
+import dayjs from 'dayjs'
 import { Dot } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { getSaleDetailPath } from '@/shared/config'
+import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
+
+const sales = [
+    {
+        id: 1,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        totalAmount: '500 000 сум',
+        paidAmount: '300 000 сум',
+        debt: '- 200 000 сум',
+    },
+    {
+        id: 2,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        totalAmount: '500 000 сум',
+        paidAmount: '300 000 сум',
+        debt: '- 200 000 сум',
+    },
+    {
+        id: 3,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        totalAmount: '500 000 сум',
+        paidAmount: '300 000 сум',
+        debt: '- 200 000 сум',
+    },
+    {
+        id: 4,
+        number: '№ 1654872',
+        date: '15.09.2025',
+        totalAmount: '500 000 сум',
+        paidAmount: '300 000 сум',
+        debt: '- 200 000 сум',
+    },
+]
 
 export const SalesPage = () => {
     const navigate = useNavigate()
-    const sales = [
-        {
-            id: 1,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            totalAmount: '500 000 сум',
-            paidAmount: '300 000 сум',
-            debt: '- 200 000 сум',
-        },
-        {
-            id: 2,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            totalAmount: '500 000 сум',
-            paidAmount: '300 000 сум',
-            debt: '- 200 000 сум',
-        },
-        {
-            id: 3,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            totalAmount: '500 000 сум',
-            paidAmount: '300 000 сум',
-            debt: '- 200 000 сум',
-        },
-        {
-            id: 4,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            totalAmount: '500 000 сум',
-            paidAmount: '300 000 сум',
-            debt: '- 200 000 сум',
-        },
-    ]
+    const today = dayjs().toDate()
+    const deafult_value: [Date, Date] = [today, today]
 
     const goToSaleDetail = (saleId: string | number) =>
         navigate(getSaleDetailPath(saleId))
@@ -49,7 +53,7 @@ export const SalesPage = () => {
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-lg font-semibold">Продажи</h2>
                     <div className="flex items-center gap-2 text-sm">
-                        <DatePickerRange />
+                        <DatePickerRange defaultValue={deafult_value} />
                     </div>
                 </div>
 

@@ -25,6 +25,7 @@ export const DeliveryAddressPage = () => {
 
     const handleAddAddress = () => {
         alert('Янги адрес қўшиш формаси очилади')
+        navigate(getDeliveryAddressMapPath())
     }
 
     const toggleMenu = (id: number | null) => {
@@ -45,11 +46,18 @@ export const DeliveryAddressPage = () => {
 
                 {/* Address List */}
                 <div className="space-y-3">
-                    {addresses.map((address) => (
+                    {addresses.map((address, index) => (
                         <div
                             key={address.id}
-                            className="bg-white rounded-2xl border py-4 px-4 flex items-start justify-between"
+                            className="bg-white rounded-2xl gap-3 border py-4 px-4 flex items-start justify-between"
                         >
+                            <div className="flex items-center min-h-10">
+                                <input
+                                    defaultChecked={index === 0}
+                                    type="checkbox"
+                                    className="w-5 h-5 rounded border-gray-300"
+                                />
+                            </div>
                             <div className="flex-1">
                                 <p className="text-gray-900 font-medium">
                                     {address.city}, {address.street},{' '}

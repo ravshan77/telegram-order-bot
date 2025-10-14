@@ -25,6 +25,16 @@ export const BasketPage: React.FC = () => {
 
     const goToCheckOut = () => navigate(getCheckoutPath())
 
+    const handleRemove = (product_id: number) => {
+        const is_confirm = confirm(
+            'Вы действительно собираетесь удалить этот продукт?',
+        )
+
+        if (is_confirm) {
+            removeFromCart(product_id)
+        }
+    }
+
     if (cart.length === 0) {
         return (
             <div className="h-full">
@@ -126,7 +136,8 @@ export const BasketPage: React.FC = () => {
                                     className="p-2 text-gray-400 hover:text-red-500"
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        removeFromCart(item.id)
+                                        handleRemove(item.id)
+                                        // removeFromCart(item.id)
                                     }}
                                 >
                                     <Trash2 size={20} />
