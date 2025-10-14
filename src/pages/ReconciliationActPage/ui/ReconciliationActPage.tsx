@@ -68,7 +68,7 @@ export const ReconciliationActPage: React.FC = () => {
     }
 
     return (
-        <div className="pb-16">
+        <div className="pb-52">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold">АКТ сверка</h2>

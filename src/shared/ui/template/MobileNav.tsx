@@ -11,6 +11,7 @@ import appConfig from '@/app/config/app.config'
 import { useThemeStore } from '@/shared/model/themeStore'
 import { useRouteKeyStore } from '@/shared/model/routeKeyStore'
 import { useSessionUser } from '@/shared/model/authStore'
+import Loading from '../kit-pro/Loading'
 
 const VerticalMenuContent = lazy(
     () => import('@/shared/ui/template/VerticalMenuContent'),
@@ -69,7 +70,9 @@ const MobileNav = ({
                 onClose={handleDrawerClose}
                 onRequestClose={handleDrawerClose}
             >
-                <Suspense fallback={<>Loading ...</>}>
+                <Suspense
+                    fallback={<Loading loading={true} className="w-full" />}
+                >
                     {isOpen && (
                         <VerticalMenuContent
                             collapsed={false}
