@@ -56,7 +56,7 @@ export const CheckoutPage = () => {
     const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
 
     return (
-        <div className="pb-16 h-full relative">
+        <div className="pb-32 h-full relative">
             <div>
                 <div className="">
                     <GoBack text={'Оформление заказа'} />
