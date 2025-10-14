@@ -148,7 +148,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
     //     subMenu: [],
     // }
 
-    const dd = () => {
+    const handleNavigatePath = () => {
         navigate(getDeliveryAddressPath())
         handleLinkClick()
     }
@@ -165,10 +165,10 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
         >
             {renderNavigation(navigationTree, 0)}
             <AuthorityCheck userAuthority={userAuthority} authority={[]}>
-                <div className="fixed w-[200px] bottom-6">
+                <div className="fixed w-[300px] bottom-6">
                     <div
                         className="bg-gray-100 p-3 flex flex-col items-start rounded-lg overflow-hidden"
-                        onClick={dd}
+                        onClick={handleNavigatePath}
                     >
                         <div className="w-full flex justify-between items-center">
                             <span>Адрес доставки</span>
