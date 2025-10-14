@@ -1,6 +1,10 @@
+import { getSaleDetailPath } from '@/shared/config'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
+import { Dot } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 export const SalesPage = () => {
+    const navigate = useNavigate()
     const sales = [
         {
             id: 1,
@@ -36,6 +40,9 @@ export const SalesPage = () => {
         },
     ]
 
+    const goToSaleDetail = (saleId: string | number) =>
+        navigate(getSaleDetailPath(saleId))
+
     return (
         <div className="pb-16">
             <div>
@@ -48,7 +55,11 @@ export const SalesPage = () => {
 
                 <div className="space-y-4 mb-4 overflow-y-auto">
                     {sales.map((sale) => (
-                        <div key={sale.id} className="border p-3 rounded-2xl">
+                        <div
+                            key={sale.id}
+                            className="border p-3 rounded-2xl"
+                            onClick={() => goToSaleDetail(sale.id)}
+                        >
                             <div className="flex justify-between items-start mb-4">
                                 <span className="text-sm text-gray-600">
                                     {sale.number}
@@ -87,6 +98,17 @@ export const SalesPage = () => {
                             </div>
                         </div>
                     ))}
+                </div>
+
+                <div className="w-full bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
+                    <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
+                        <span className="text-sm font-semibold">
+                            Общая разница:
+                        </span>
+                        <span className="text-sm font-semibold flex text-primary">
+                            100$ <Dot /> 1 250 000 cум
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

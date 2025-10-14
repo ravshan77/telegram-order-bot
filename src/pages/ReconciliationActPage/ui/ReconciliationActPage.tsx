@@ -1,90 +1,198 @@
-import React from 'react'
+import React, { useState } from 'react'
+import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
-export const ReconciliationActPage = () => {
-    const sales = [
+interface Transaction {
+    id: number
+    company: string
+    date: string
+    time: string
+    type: 'Продажа' | 'Оплата'
+    uzs: number
+    usd: number
+}
+
+export const ReconciliationActPage: React.FC = () => {
+    const [transactions] = useState<Transaction[]>([
         {
             id: 1,
-            number: '№ 1654872',
+            company: 'Hippo uz',
             date: '15.09.2025',
-            totalAmount: '500 000 сум',
-            paidAmount: '300 000 сум',
-            debt: '- 200 000 сум',
+            time: '16:07',
+            type: 'Продажа',
+            uzs: 1600000,
+            usd: 200,
         },
         {
             id: 2,
-            number: '№ 1654872',
+            company: 'Hippo uz',
             date: '15.09.2025',
-            totalAmount: '500 000 сум',
-            paidAmount: '300 000 сум',
-            debt: '- 200 000 сум',
+            time: '16:07',
+            type: 'Оплата',
+            uzs: 1600000,
+            usd: 100,
         },
         {
             id: 3,
-            number: '№ 1654872',
+            company: 'Hippo uz',
             date: '15.09.2025',
-            totalAmount: '500 000 сум',
-            paidAmount: '300 000 сум',
-            debt: '- 200 000 сум',
+            time: '16:07',
+            type: 'Оплата',
+            uzs: 1600000,
+            usd: 200,
         },
         {
             id: 4,
-            number: '№ 1654872',
-            date: '15.09.2025',
-            totalAmount: '500 000 сум',
-            paidAmount: '300 000 сум',
-            debt: '- 200 000 сум',
+            company: 'Hippo uz',
+            date: '14.09.2025',
+            time: '14:30',
+            type: 'Продажа',
+            uzs: 2500000,
+            usd: 250,
         },
-    ]
+        {
+            id: 5,
+            company: 'Hippo uz',
+            date: '14.09.2025',
+            time: '12:15',
+            type: 'Оплата',
+            uzs: 800000,
+            usd: 80,
+        },
+    ])
+
+    const formatNumber = (num: number) => {
+        return num.toLocaleString('en-US').replace(/,/g, ' ')
+    }
+
     return (
         <div className="pb-16">
-            <div>
-                <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-lg font-semibold">АКТ сверка</h2>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-semibold">АКТ сверка</h2>
+                <div className="flex items-center gap-2 text-sm">
+                    <DatePickerRange />
                 </div>
+            </div>
 
-                <div className="space-y-4 mb-4 overflow-y-auto">
-                    {sales.map((sale) => (
-                        <div key={sale.id} className="border p-3 rounded-2xl">
-                            <div className="flex justify-between items-start mb-4">
-                                <span className="text-sm text-gray-600">
-                                    {sale.number}
-                                </span>
-                                <span className="text-sm text-gray-600">
-                                    {sale.date}
-                                </span>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4 mb-3">
-                                <div>
-                                    <span className="text-xs text-gray-500 block mb-1">
-                                        Сумма
-                                    </span>
-                                    <span className="text-base font-bold text-gray-600">
-                                        {sale.totalAmount}
-                                    </span>
-                                </div>
-                                <div>
-                                    <span className="text-xs text-gray-500 block mb-1">
-                                        Оплата
-                                    </span>
-                                    <span className="text-base font-bold text-gray-600">
-                                        {sale.paidAmount}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="flex justify-between items-center pt-3 border-t">
-                                <span className="text-sm text-gray-600">
-                                    В долг:
-                                </span>
-                                <span className="text-base font-bold text-red-500">
-                                    {sale.debt}
-                                </span>
-                            </div>
+            {/* Transaction Cards - Scrollable */}
+            <div className="px-0 py-4 space-y-3">
+                {transactions.map((transaction) => (
+                    <div
+                        key={transaction.id}
+                        className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
+                    >
+                        {/* Company and DateTime */}
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="text-sm font-medium text-gray-700">
+                                {transaction.company}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                                {transaction.date} · {transaction.time}
+                            </span>
                         </div>
-                    ))}
+
+                        {/* Transaction Type */}
+                        <div className="mb-3">
+                            <span className="text-base text-gray-900">
+                                {transaction.type}
+                            </span>
+                        </div>
+
+                        {/* Amounts */}
+                        <div className="flex items-center justify-between">
+                            <span
+                                className={`text-lg font-semibold ${
+                                    transaction.type === 'Продажа'
+                                        ? 'text-red-500'
+                                        : 'text-blue-500'
+                                }`}
+                            >
+                                {transaction.type === 'Продажа'
+                                    ? formatNumber(transaction.uzs)
+                                    : `${transaction.usd}$`}
+                            </span>
+                            <span
+                                className={`text-lg font-semibold ${
+                                    transaction.type === 'Продажа'
+                                        ? 'text-red-500'
+                                        : 'text-blue-500'
+                                }`}
+                            >
+                                {transaction.type === 'Продажа'
+                                    ? `${transaction.usd}$`
+                                    : `${formatNumber(transaction.uzs)} UZS`}
+                            </span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Fixed Footer - Summary */}
+            <div className="fixed bottom-0 min-h-56 left-0 right-0 bg-white border-t shadow-2xl">
+                <div className="px-4 py-0 space-y-1">
+                    {/* Starting Debt */}
+                    <div className="flex items-center justify-between py-2 border-t ">
+                        <span className="w-32 text-sm text-gray-600">
+                            Начальная задолженность:
+                        </span>
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm font-semibold text-gray-900">
+                                100$
+                            </span>
+                            <span className="text-sm font-semibold text-gray-900">
+                                175 250 000 сум
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Total */}
+                    <div className="flex items-center justify-between py-2 border-t ">
+                        <span className="w-32 text-sm text-gray-600">
+                            Итого:
+                        </span>
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm font-semibold text-gray-900">
+                                100$
+                            </span>
+                            <span className="text-sm font-semibold text-gray-900">
+                                213 000 000 сум
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Difference */}
+                    <div className="flex items-center justify-between py-2 border-t ">
+                        <span className="w-32 text-sm text-gray-600">
+                            Общая разница:
+                        </span>
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm font-semibold text-gray-900">
+                                100$
+                            </span>
+                            <span className="text-sm font-semibold text-gray-900">
+                                72 500 000 сум
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Final Debt */}
+                    <div className="flex items-center justify-between py-2 border-t ">
+                        <span className="w-32 text-sm text-gray-600">
+                            Конечная задолженность:
+                        </span>
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm font-semibold text-gray-900">
+                                100$
+                            </span>
+                            <span className="text-sm font-semibold text-gray-900">
+                                20 000 000 сум
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     )
 }
+
+export default ReconciliationActPage

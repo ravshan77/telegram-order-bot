@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button, Input } from '@/shared/ui/kit'
 import Header from '@/shared/ui/template/Header'
-import { getBasketPath } from '@/shared/config'
+import { getBasketPath, getProfilePath } from '@/shared/config'
 import SideNav from '@/shared/ui/template/SideNav'
 import type { CommonProps } from '@/@types/common'
 import { Search, ShoppingCart } from 'lucide-react'
@@ -15,9 +15,7 @@ import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constan
 const CollapsibleSide = ({ children }: CommonProps) => {
     const { larger, smaller } = useResponsive()
 
-    const totalItems = useCartStore((state) =>
-        state.cart,
-    )
+    const totalItems = useCartStore((state) => state.cart.length)
 
     return (
         <LayoutBase
@@ -67,9 +65,11 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                             )}
                                         </Button>
                                     </Link>
-                                    <div className="w-8 h-8 flex justify-center items-center text-base rounded-full bg-gray-300">
-                                        RF
-                                    </div>
+                                    <Link to={getProfilePath()}>
+                                        <div className="w-8 h-8 flex justify-center items-center text-base rounded-full bg-gray-300">
+                                            RF
+                                        </div>
+                                    </Link>
                                 </div>
                             </>
                         }

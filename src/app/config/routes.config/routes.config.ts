@@ -15,7 +15,9 @@ import {
     getPaymentsPath,
     getPayoutsPath,
     getProductPath,
+    getProfilePath,
     getReconciliationActPath,
+    getSaleDetailPath,
     getSalesPath,
 } from '@/shared/config'
 
@@ -32,6 +34,18 @@ export const protectedRoutes: Routes = [
         key: 'sales',
         path: getSalesPath(),
         component: lazy(() => import('@/pages/SalesPage')),
+        authority: [],
+    },
+    {
+        key: 'sales-detail',
+        path: getSaleDetailPath(),
+        component: lazy(() => import('@/pages/SalesPage/ui/SalesViewPage')),
+        authority: [],
+    },
+    {
+        key: 'profile',
+        path: getProfilePath(),
+        component: lazy(() => import('@/pages/ProfilePage/index')),
         authority: [],
     },
     {

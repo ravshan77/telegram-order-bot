@@ -4,6 +4,9 @@ export const getOrderDetailsPath = (orderId: number | string = ':orderId') =>
     `/order/order-details/${orderId}`
 
 export const getSalesPath = () => '/sales'
+export const getProfilePath = () => '/profile'
+export const getSaleDetailPath = (saleId: number | string = ':saleId') =>
+    `/sale/${saleId}`
 export const getPaymentsPath = () => '/payments'
 export const getPayoutsPath = () => '/payouts'
 export const getDebtPath = () => '/debt'

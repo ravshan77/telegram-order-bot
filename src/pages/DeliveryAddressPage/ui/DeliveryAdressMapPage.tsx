@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react'
 import { Button } from '@/shared/ui/kit'
-import React, { useEffect, useRef, useState } from 'react'
 import { GoBack } from '@/shared/ui/kit-pro'
+import React, { useEffect, useRef, useState } from 'react'
 
 // TypeScript interfaces
 interface LocationData {
@@ -30,7 +30,7 @@ export const DeliveryAddressMapPage: React.FC = () => {
     const [loading, setLoading] = useState(false)
     const [isMapReady, setIsMapReady] = useState(false)
 
-    const API_KEY = '76b31853-7efc-4276-8ade-b32eadec4571'
+    const API_KEY = '76b31853-7efc-4276-8ade-b32eadec4571' //!
 
     // Initialize Yandex Maps
     useEffect(() => {
@@ -244,7 +244,6 @@ export const DeliveryAddressMapPage: React.FC = () => {
                     <GoBack text="Выберите адрес доставки" />
                 </div>
 
-                {/* <div className="flex flex-col justify-between "> */}
                 {/* Map Container */}
                 <div className="relative flex-1 mt-3">
                     <div
@@ -268,7 +267,7 @@ export const DeliveryAddressMapPage: React.FC = () => {
                     {/* Current location button */}
                     <Button
                         disabled={loading || !isMapReady}
-                        className="absolute bottom-40 right-4 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all hover:bg-gray-50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                        className="absolute bottom-12 right-4 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all hover:bg-gray-50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed z-10"
                         title="Моё местоположение"
                         onClick={handleCurrentLocation}
                     >
@@ -278,7 +277,6 @@ export const DeliveryAddressMapPage: React.FC = () => {
                     </Button>
                 </div>
 
-                {/* Address Info Card */}
                 {/* Confirm Button */}
                 <div className="py-2 px-4 bg-white fixed bottom-0 left-0 right-0 w-full border-t h-[160px]">
                     <div className="flex-1 min-w-0 mb-2">
@@ -301,7 +299,6 @@ export const DeliveryAddressMapPage: React.FC = () => {
                     </Button>
                 </div>
             </div>
-            {/* </div> */}
         </div>
     )
 }

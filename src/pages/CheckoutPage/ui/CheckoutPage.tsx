@@ -7,11 +7,17 @@ import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { Dot } from 'lucide-react'
 
 const paymentOptions: Option[] = [
     { value: 'cash', label: 'Наличные' },
     { value: 'card', label: 'Карта' },
     { value: 'transfer', label: 'Перевод' },
+]
+
+const locationOptions: Option[] = [
+    { value: 'map_1', label: 'Ташкент город, проспект мустакиллик, 17 дом' },
+    { value: 'map_2', label: 'Самарканд город, проспект мустакиллик, 17 дом' },
 ]
 
 type Option = {
@@ -21,6 +27,7 @@ type Option = {
 
 interface FormDataType {
     paymentType: Option | null
+    locationType: Option | null
     orderDate: Date | null
     additionalInfo: string | null
 }
@@ -30,6 +37,7 @@ export const CheckoutPage = () => {
     const cart = useCartStore((state) => state.cart)
     const [formData, setFormData] = useState<FormDataType>({
         paymentType: null as Option | null,
+        locationType: null,
         orderDate: null,
         additionalInfo: '',
     })
@@ -89,6 +97,21 @@ export const CheckoutPage = () => {
                             />
                         </FormItem>
 
+                        <FormItem label="Локация">
+                            <Select
+                                placeholder="Выберите"
+                                options={locationOptions}
+                                isSearchable={false}
+                                value={formData.locationType}
+                                onChange={(option: SingleValue<Option>) =>
+                                    setFormData({
+                                        ...formData,
+                                        locationType: option,
+                                    })
+                                }
+                            />
+                        </FormItem>
+
                         <FormItem label="Дополнительная информация">
                             <Input
                                 textArea
@@ -105,7 +128,7 @@ export const CheckoutPage = () => {
                         </FormItem>
                     </Form>
                 </div>
-                <div
+                {/* <div
                     className={`w-full absolute bg-white bottom-0 pt-0 left-0`}
                 >
                     <div className="border-t py-1">
@@ -124,6 +147,27 @@ export const CheckoutPage = () => {
                         </div>
                     </div>
 
+                    <Button
+                        variant="solid"
+                        className="w-full mt-2 rounded-lg font-medium"
+                        disabled={!formData.paymentType || !formData.orderDate}
+                        onClick={handleSubmitOrder}
+                    >
+                        Оформить
+                    </Button>
+                </div> */}
+
+                <div className="w-full bg-white absolute flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-0 border-t">
+                    <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
+                        <span className="text-sm text-gray-600">
+                            Общая сумма:
+                        </span>
+                        <div className="text-right">
+                            <p className=" font-bold flex text-primary">
+                                {usdAmount} <Dot /> {uzsAmount}
+                            </p>
+                        </div>
+                    </div>
                     <Button
                         variant="solid"
                         className="w-full mt-2 rounded-lg font-medium"
