@@ -9,6 +9,9 @@ export const getPayoutsPath = () => '/payouts'
 export const getDebtPath = () => '/debt'
 export const getReconciliationActPath = () => '/reconciliation-act'
 export const getDeliveryAddressPath = () => '/delivery-address'
+export const getDeliveryAddressMapPath = (
+    addressId: number | string = ':addressId',
+) => `/delivery-address/${addressId}`
 export const getBasketPath = () => '/basket'
 export const getCategoryPath = (categoryId: number | string = ':categoryId') =>
     `/category/${categoryId}`

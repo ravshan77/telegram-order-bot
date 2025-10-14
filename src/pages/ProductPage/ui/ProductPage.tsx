@@ -185,7 +185,7 @@ export const ProductPage: React.FC = () => {
             </div>
 
             {/* Bottom fixed bar */}
-            <div className="header-wrapper fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 bg-white border-t">
+            <div className="fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
                 <div>
                     <p className="text-primary font-bold">
                         {selectedProduct.price.toLocaleString()} UZS

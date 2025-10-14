@@ -9,7 +9,7 @@ import { ProductCard } from '@/widgets/ProductCard'
 
 export const MainPage: React.FC = () => {
     return (
-        <div className="pb-16">
+        <div className="pb-0">
             <div>
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-lg font-semibold">Товары</h2>
@@ -28,7 +28,6 @@ export const MainPage: React.FC = () => {
                         </Link>
                     ))}
                 </div>
-
                 <div className="flex items-center justify-between mb-3">
                     <h3 className="text-base font-semibold">Рекомендуем</h3>
                     <Button
@@ -38,11 +37,30 @@ export const MainPage: React.FC = () => {
                         Всё <ChevronRight size={16} />
                     </Button>
                 </div>
-
                 <div className="flex gap-3 mb-6 overflow-x-auto">
-                    {products.map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                    ))}
+                    {products
+                        .sort(() => Math.random() - 0.5)
+                        .map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))}
+                </div>
+                <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-base font-semibold">
+                        Скидки на смартфоны
+                    </h3>
+                    <Button
+                        variant="plain"
+                        className="text-sm text-gray-600 flex items-center gap-1"
+                    >
+                        Всё <ChevronRight size={16} />
+                    </Button>
+                </div>
+                <div className="flex gap-3 mb-6 overflow-x-auto">
+                    {products
+                        .sort(() => Math.random() - 0.5)
+                        .map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))}
                 </div>
 
                 <div className="flex items-center justify-between mb-3">
@@ -56,11 +74,12 @@ export const MainPage: React.FC = () => {
                         Всё <ChevronRight size={16} />
                     </Button>
                 </div>
-
                 <div className="flex gap-3 mb-6 overflow-x-auto">
-                    {products.slice(2).map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                    ))}
+                    {products
+                        .sort(() => Math.random() - 0.5)
+                        .map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))}
                 </div>
             </div>
         </div>

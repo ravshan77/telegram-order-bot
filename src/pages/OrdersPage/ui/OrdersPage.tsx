@@ -124,7 +124,7 @@ export const OrdersPage = () => {
                     ))}
                 </div>
 
-                <div className="header-wrapper fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 bg-white border-t">
+                <div className="px-4 fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 bg-white border-t">
                     <div className="w-full flex justify-between items-center">
                         <span className="text-gray-700 font-medium">
                             Общая сумма:
