@@ -125,7 +125,7 @@ const PageContainer = (props: PageContainerProps) => {
 
     const defaultClass = 'h-full flex flex-auto flex-col justify-between'
     const pageContainerDefaultClass =
-        'page-container relative h-full flex flex-auto flex-col px-4 sm:px-6 py-4 sm:py-6 md:px-8'
+        'page-container h-full flex flex-auto flex-col px-4 sm:px-6 py-4 sm:py-6 md:px-8'
     const pageContainerGutterClass = `${PAGE_CONTAINER_GUTTER_X} ${PAGE_CONTAINER_GUTTER_Y}`
 
     return (
