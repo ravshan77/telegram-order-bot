@@ -100,7 +100,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     return (
         <div
             ref={cardRef}
-            className="rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
+            className="min-w-48 rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
             onClick={goShowProduct}
         >
             <div className="relative">

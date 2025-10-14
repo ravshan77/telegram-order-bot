@@ -137,16 +137,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
         )
     }
 
-    // const adresNav = {
-    //     key: 'delivery-address',
-    //     path: getDeliveryAddressPath(),
-    //     title: 'Адрес доставки',
-    //     translateKey: 'nav.main.incoming',
-    //     icon: 'managementsBranches',
-    //     type: 'item',
-    //     authority: [],
-    //     subMenu: [],
-    // }
+    /// Custom Menu-Item (delivery-address)
 
     const handleNavigatePath = () => {
         navigate(getDeliveryAddressPath())

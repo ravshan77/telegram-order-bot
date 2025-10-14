@@ -8,8 +8,6 @@ import { getCategoryPath } from '@/shared/config'
 import { ProductCard } from '@/widgets/ProductCard'
 
 export const MainPage: React.FC = () => {
-    console.log('MainPage')
-
     return (
         <div className="pb-16">
             <div>
@@ -41,8 +39,8 @@ export const MainPage: React.FC = () => {
                     </Button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                    {products.slice(0, 2).map((product) => (
+                <div className="flex gap-3 mb-6 overflow-x-auto">
+                    {products.map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
@@ -59,7 +57,7 @@ export const MainPage: React.FC = () => {
                     </Button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="flex gap-3 mb-6 overflow-x-auto">
                     {products.slice(2).map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}
