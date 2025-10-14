@@ -176,10 +176,9 @@ export const ProductPage: React.FC = () => {
                     <h3 className="text-black font-semibold text-base my-4">
                         Похожие товары
                     </h3>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="flex gap-3 overflow-x-auto">
                         {products
                             .filter((p) => p.id !== selectedProduct.id)
-                            .slice(0, 2)
                             .map((p) => (
                                 <ProductCard key={p.id} product={p} />
                             ))}

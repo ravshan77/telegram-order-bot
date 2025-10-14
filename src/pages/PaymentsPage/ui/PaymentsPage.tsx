@@ -12,6 +12,7 @@ const payments = [
         date: '15.09.2025',
         debtPayment: '3 250 000 сум',
         debtPaymentUsd: '100$',
+        closedDebtUsd: '100$',
         closedDebt: '5 500 000 сум',
     },
     {
@@ -28,6 +29,7 @@ const payments = [
         date: '15.09.2025',
         debtPayment: '3 250 000 сум',
         debtPaymentUsd: '100$',
+        closedDebtUsd: '100$',
         closedDebt: '5 500 000 сум',
     },
     {
@@ -37,6 +39,7 @@ const payments = [
         debtPayment: '3 250 000 сум',
         debtPaymentUsd: '100$',
         closedDebt: '5 500 000 сум',
+        closedDebtUsd: '100$',
     },
     {
         id: 5,
@@ -44,6 +47,7 @@ const payments = [
         date: '15.09.2025',
         debtPayment: '3 250 000 сум',
         debtPaymentUsd: '100$',
+        closedDebtUsd: '100$',
         closedDebt: '5 500 000 сум',
     },
 ]
@@ -107,17 +111,17 @@ export const PaymentsPage = () => {
                                     <span className="text-sm text-gray-600">
                                         Закрытая задолженность:
                                     </span>
-                                    <div className="flex items-center gap-1">
+                                    <div className="gap-1">
+                                        <p className="text-sm font-medium text-end">
+                                            {payment.closedDebt}
+                                        </p>
                                         {payment.closedDebtUsd && (
                                             <>
-                                                <span className="text-sm font-medium text-black">
+                                                <p className="text-sm font-medium text-end">
                                                     {payment.closedDebtUsd}
-                                                </span>
+                                                </p>
                                             </>
                                         )}
-                                        <span className="text-sm font-medium text-black">
-                                            {payment.closedDebt}
-                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +130,7 @@ export const PaymentsPage = () => {
                 </div>
 
                 {!isDrawerOpen && (
-                    <div className="w-full bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
+                    <div className="w-full bg-white fixed z-0 flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
                         <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
                             <span className="text-sm font-semibold">
                                 Общая разница:

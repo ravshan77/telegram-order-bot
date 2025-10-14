@@ -105,17 +105,17 @@ export const PayoutsPage = () => {
                                     <span className="text-sm text-gray-600">
                                         Закрытая задолженность:
                                     </span>
-                                    <div className="flex items-center gap-1">
+                                    <div className="gap-1">
+                                        <p className="text-sm font-medium text-end">
+                                            {payment.closedDebt}
+                                        </p>
                                         {payment.closedDebtUsd && (
                                             <>
-                                                <span className="text-sm font-medium text-black">
+                                                <p className="text-sm font-medium text-end">
                                                     {payment.closedDebtUsd}
-                                                </span>
+                                                </p>
                                             </>
                                         )}
-                                        <span className="text-sm font-medium text-black">
-                                            {payment.closedDebt}
-                                        </span>
                                     </div>
                                 </div>
                             </div>
