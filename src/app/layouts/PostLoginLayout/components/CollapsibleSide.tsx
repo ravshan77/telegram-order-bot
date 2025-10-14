@@ -16,7 +16,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
     const { larger, smaller } = useResponsive()
 
     const totalItems = useCartStore((state) =>
-        state.cart.reduce((sum, item) => sum + item.quantity, 0),
+        state.cart,
     )
 
     return (

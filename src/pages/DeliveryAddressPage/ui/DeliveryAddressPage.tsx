@@ -96,3 +96,5 @@ export const DeliveryAddressPage = () => {
         </div>
     )
 }
+
+export default DeliveryAddressPage
