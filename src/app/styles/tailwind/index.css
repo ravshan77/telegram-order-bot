@@ -68,14 +68,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         overscroll-behavior: none;
-        -webkit-overflow-scrolling: auto;
-    }
-
-    html,
-    body {
-        /* overflow: hidden; */
-        height: 100%;
-        touch-action: none;
+        -webkit-overflow-scrolling: touch;
     }
 
     h1,
