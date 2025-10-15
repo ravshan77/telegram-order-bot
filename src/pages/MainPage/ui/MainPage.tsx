@@ -1,13 +1,46 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Button } from '@/shared/ui/kit'
+import { Alert, Button, Spinner } from '@/shared/ui/kit'
 import { ChevronRight } from 'lucide-react'
-import { products } from '@/entities/product'
+// import { products } from '@/entities/product'
 import { categories } from '@/entities/category'
 import { getCategoryPath } from '@/shared/config'
 import { ProductCard } from '@/widgets/ProductCard'
+import { useProducts } from '@/entities/product'
+import { transformProductToView } from '@/entities/product/model/types'
 
 export const MainPage: React.FC = () => {
+    // Fetch products
+    const {
+        data: products,
+        isLoading: isLoadingProducts,
+        isError: isErrorProducts,
+        error: productsError,
+    } = useProducts()
+
+    // Loading state
+    if (isLoadingProducts) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Spinner size={40} />
+            </div>
+        )
+    }
+
+    // Error state
+    if (isErrorProducts) {
+        return (
+            <div className="p-4">
+                <Alert showIcon type="danger">
+                    Mahsulotlarni yuklashda xatolik: {productsError?.message}
+                </Alert>
+            </div>
+        )
+    }
+
+    // Transform products to view format
+    const productViews = products?.map(transformProductToView) || []
+
     return (
         <div className="pb-0">
             <div>
@@ -38,11 +71,9 @@ export const MainPage: React.FC = () => {
                     </Button>
                 </div>
                 <div className="flex gap-3 mb-6 overflow-x-auto">
-                    {products
-                        .sort(() => Math.random() - 0.5)
-                        .map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
+                    {productViews.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
                 </div>
                 <div className="flex items-center justify-between mb-3">
                     <h3 className="text-base font-semibold">
@@ -56,11 +87,9 @@ export const MainPage: React.FC = () => {
                     </Button>
                 </div>
                 <div className="flex gap-3 mb-6 overflow-x-auto">
-                    {products
-                        .sort(() => Math.random() - 0.5)
-                        .map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
+                    {productViews.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
                 </div>
 
                 <div className="flex items-center justify-between mb-3">
@@ -75,7 +104,7 @@ export const MainPage: React.FC = () => {
                     </Button>
                 </div>
                 <div className="flex gap-3 mb-6 overflow-x-auto">
-                    {products
+                    {productViews
                         .sort(() => Math.random() - 0.5)
                         .map((product) => (
                             <ProductCard key={product.id} product={product} />

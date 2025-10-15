@@ -1,6 +1,6 @@
 import React from 'react'
+import { GoBack } from '@/shared/ui/kit-pro'
 import { useTelegram } from '@/shared/lib/hooks'
-import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
 import { Settings, MessageCircle, User } from 'lucide-react'
 
 export const ProfilePage: React.FC = () => {
@@ -34,20 +34,12 @@ export const ProfilePage: React.FC = () => {
                 <div className="flex items-center gap-4 mb-8">
                     <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-200 flex-shrink-0">
                         {photo_url ? (
-                            <ImageGallery
-                                index={-1}
-                                slides={[
-                                    {
-                                        src: photo_url,
-                                    },
-                                ]}
+                            <img
+                                src={photo_url}
+                                alt={username}
+                                className="w-full h-full object-cover"
                             />
                         ) : (
-                            // <img
-                            //     src={photo_url}
-                            //     alt={username}
-                            //     className="w-full h-full object-cover"
-                            // />
                             <User size={80} />
                         )}
                     </div>
@@ -55,7 +47,7 @@ export const ProfilePage: React.FC = () => {
                         <h2 className="text-xl font-semibold text-gray-900 mb-1">
                             {first_name} {last_name}
                         </h2>
-                        <p className="text-sm text-gray-600">@{username}</p>
+                        <p className="text-sm text-gray-600">{username}</p>
                     </div>
                 </div>
 

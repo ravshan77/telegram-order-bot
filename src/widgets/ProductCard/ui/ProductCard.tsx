@@ -4,14 +4,15 @@ import { Minus, Plus } from 'lucide-react'
 import { Pagination } from 'swiper/modules'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
-import type { Product } from '@/entities/product'
+// import type { Product } from '@/entities/product'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { useFlyToCart } from '@/shared/lib/hooks'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { ProductView } from '@/entities/product/model/types'
 
 interface ProductCardProps {
-    product: Product
+    product: ProductView
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -41,7 +42,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         }
     }
 
-    const take = () => {
+    const renderActionButton = () => {
         // Товар нет в наличии
         if (product?.not_available) {
             return (
@@ -99,17 +100,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )
     }
 
-    const images = [
-        {
-            src: product.image,
-        },
-        {
-            src: 'https://images.uzum.uz/d2tlntl2llnd6jul0kog/t_product_540_high.jpg',
-        },
-        {
-            src: 'https://images.uzum.uz/d2tlntl2llnd6jul0kog/t_product_540_high.jpg',
-        },
-    ]
+    const images = product.images.map((img) => ({ src: img }))
 
     return (
         <div
@@ -136,11 +127,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         </SwiperSlide>
                     ))}
                 </Swiper>
-                {/* <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-48 object-cover"
-                /> */}
                 {product.discount && (
                     <div className="absolute bottom-0 left-0 bg-red-500 text-white px-2 py-1 rounded-se-lg text-xs font-bold">
                         -{product.discount}%
@@ -161,7 +147,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     <BoxSvg width={18} height={18} />
                     <span>24</span>
                 </div>
-                <div className="mt-3">{take()}</div>
+                <div className="mt-3">{renderActionButton()}</div>
             </div>
         </div>
     )

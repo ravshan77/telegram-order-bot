@@ -1,29 +1,25 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Product } from '@/entities/product'
+// import type { Product } from '@/entities/product'
+import { ProductView } from '@/entities/product/model/types'
 
-export interface CartItem extends Product {
+export interface CartItem extends Omit<ProductView, 'stock'> {
     quantity: number
 }
-
-export type PageType = 'main' | 'category' | 'product' | 'cart' | 'checkout'
 
 interface CartStore {
     // State
     cart: CartItem[]
-    page: PageType
     selectedCategory: string | null
-    selectedProduct: Product | null
+    selectedProduct: ProductView | null
     menuOpen: boolean
 
-    // Actions
-    setPage: (page: PageType) => void
     setSelectedCategory: (category: string | null) => void
-    setSelectedProduct: (product: Product | null) => void
+    setSelectedProduct: (product: ProductView | null) => void
     setMenuOpen: (open: boolean) => void
-    addToCart: (product: Product) => void
-    removeFromCart: (id: number) => void
-    updateQuantity: (id: number, quantity: number) => void
+    addToCart: (product: ProductView) => void
+    removeFromCart: (id: string) => void
+    updateQuantity: (id: string, quantity: string | number) => void
     clearCart: () => void
     getTotalPrice: () => number
 }
@@ -37,9 +33,6 @@ export const useCartStore = create<CartStore>()(
             selectedCategory: null,
             selectedProduct: null,
             menuOpen: false,
-
-            // Actions
-            setPage: (page) => set({ page }),
 
             setSelectedCategory: (category) =>
                 set({ selectedCategory: category }),
