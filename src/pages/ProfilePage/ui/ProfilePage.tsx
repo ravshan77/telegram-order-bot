@@ -1,19 +1,16 @@
 import React from 'react'
 import { GoBack } from '@/shared/ui/kit-pro'
-import { Settings, MessageCircle } from 'lucide-react'
-
-interface ProfileData {
-    name: string
-    phone: string
-    avatar: string
-}
+import { useTelegram } from '@/shared/lib/hooks'
+import { Settings, MessageCircle, User } from 'lucide-react'
 
 export const ProfilePage: React.FC = () => {
-    const profileData: ProfileData = {
-        name: 'Muhammadjon Abdullayev',
-        phone: '+998 99 165 32 45',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
-    }
+    const tg = useTelegram()
+    const tg_user = tg?.initDataUnsafe?.user
+
+    const last_name = tg_user?.last_name ? tg_user?.last_name : ''
+    const photo_url = tg_user?.photo_url ? tg_user?.photo_url : null
+    const username = tg_user?.username ? tg_user?.username : ''
+    const first_name = tg_user?.first_name ? tg_user?.first_name : "Noma'lum"
 
     const handleSettings = () => {
         console.log('Navigate to settings')
@@ -36,19 +33,21 @@ export const ProfilePage: React.FC = () => {
             <div className="py-4">
                 <div className="flex items-center gap-4 mb-8">
                     <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-200 flex-shrink-0">
-                        <img
-                            src={profileData.avatar}
-                            alt={profileData.name}
-                            className="w-full h-full object-cover"
-                        />
+                        {photo_url ? (
+                            <img
+                                src={photo_url}
+                                alt={username}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <User size={80} />
+                        )}
                     </div>
                     <div className="flex-1">
                         <h2 className="text-xl font-semibold text-gray-900 mb-1">
-                            {profileData.name}
+                            {first_name} {last_name}
                         </h2>
-                        <p className="text-sm text-gray-600">
-                            {profileData.phone}
-                        </p>
+                        <p className="text-sm text-gray-600">{username}</p>
                     </div>
                 </div>
 

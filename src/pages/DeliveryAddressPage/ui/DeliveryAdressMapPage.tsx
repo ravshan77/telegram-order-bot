@@ -1,8 +1,8 @@
 import { Check } from 'lucide-react'
 import { Button } from '@/shared/ui/kit'
 import { GoBack } from '@/shared/ui/kit-pro'
-import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
 
 // TypeScript interfaces
 interface LocationData {

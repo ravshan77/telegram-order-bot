@@ -1,13 +1,15 @@
+import dayjs from 'dayjs'
 import { useState } from 'react'
-import { Dot } from 'lucide-react'
 import { Button } from '@/shared/ui/kit'
 import { SingleValue } from 'react-select'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { Input } from '@/shared/ui/kit/Input'
+import { Dot, MapPinPlus } from 'lucide-react'
 import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
-import { DatePicker } from '@/shared/ui/kit/DatePicker'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { Link } from 'react-router-dom'
+import { getDeliveryAddressPath } from '@/shared/config'
 
 const paymentOptions: Option[] = [
     { value: 'cash', label: 'Наличные' },
@@ -28,17 +30,19 @@ type Option = {
 interface FormDataType {
     paymentType: Option | null
     locationType: Option | null
-    orderDate: Date | null
+    orderDate: string | null
     additionalInfo: string | null
 }
 
 export const CheckoutPage = () => {
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const cart = useCartStore((state) => state.cart)
+    const today = dayjs().format('YYYY-MM-DD')
+
     const [formData, setFormData] = useState<FormDataType>({
         paymentType: null as Option | null,
-        locationType: null,
-        orderDate: null,
+        locationType: locationOptions[0],
+        orderDate: today,
         additionalInfo: '',
     })
 
@@ -85,31 +89,41 @@ export const CheckoutPage = () => {
                         </FormItem>
 
                         <FormItem label="Дата заказа">
-                            <DatePicker
-                                placeholder="Выберите"
-                                value={formData.orderDate}
-                                onChange={(date) =>
+                            <Input
+                                type="date"
+                                placeholder="Введите"
+                                value={
+                                    formData.orderDate
+                                        ? String(formData.orderDate)
+                                        : null
+                                }
+                                onChange={(e) =>
                                     setFormData({
                                         ...formData,
-                                        orderDate: date,
+                                        additionalInfo: e.target.value,
                                     })
                                 }
                             />
                         </FormItem>
 
                         <FormItem label="Локация">
-                            <Select
-                                placeholder="Выберите"
-                                options={locationOptions}
-                                isSearchable={false}
-                                value={formData.locationType}
-                                onChange={(option: SingleValue<Option>) =>
-                                    setFormData({
-                                        ...formData,
-                                        locationType: option,
-                                    })
-                                }
-                            />
+                            <div className="flex gap-1">
+                                <Select
+                                    placeholder="Выберите"
+                                    options={locationOptions}
+                                    isSearchable={false}
+                                    value={formData.locationType}
+                                    onChange={(option: SingleValue<Option>) =>
+                                        setFormData({
+                                            ...formData,
+                                            locationType: option,
+                                        })
+                                    }
+                                />
+                                <Link to={getDeliveryAddressPath()}>
+                                    <Button icon={<MapPinPlus />} />
+                                </Link>
+                            </div>
                         </FormItem>
 
                         <FormItem label="Дополнительная информация">

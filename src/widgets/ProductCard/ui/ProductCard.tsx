@@ -1,9 +1,11 @@
 import React, { useRef } from 'react'
 import { Button } from '@/shared/ui/kit'
 import { Minus, Plus } from 'lucide-react'
+import { Pagination } from 'swiper/modules'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
 import type { Product } from '@/entities/product'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import { useFlyToCart } from '@/shared/lib/hooks'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
@@ -97,18 +99,48 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )
     }
 
+    const images = [
+        {
+            src: product.image,
+        },
+        {
+            src: 'https://images.uzum.uz/d2tlntl2llnd6jul0kog/t_product_540_high.jpg',
+        },
+        {
+            src: 'https://images.uzum.uz/d2tlntl2llnd6jul0kog/t_product_540_high.jpg',
+        },
+    ]
+
     return (
         <div
             ref={cardRef}
             className="min-w-48 rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
-            onClick={goShowProduct}
         >
             <div className="relative">
-                <img
+                <Swiper
+                    modules={[Pagination]}
+                    pagination={images.length > 1 ? { clickable: true } : false}
+                    loop={images.length > 1}
+                    className="product-card-swiper"
+                    onClick={(swiper, event) => {
+                        event.stopPropagation()
+                    }}
+                >
+                    {images.map((image, index) => (
+                        <SwiperSlide key={index}>
+                            <img
+                                src={image.src}
+                                alt={`${product.name} - ${index + 1}`}
+                                className="w-full h-48 object-cover"
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+                {/* <img
                     src={product.image}
                     alt={product.name}
                     className="w-full h-48 object-cover"
-                />
+                /> */}
                 {product.discount && (
                     <div className="absolute bottom-0 left-0 bg-red-500 text-white px-2 py-1 rounded-se-lg text-xs font-bold">
                         -{product.discount}%
@@ -119,7 +151,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <div className="text-primary font-bold text-sm">
                     {product.price.toLocaleString()} UZS
                 </div>
-                <div className="text-sm text-black mt-2 line-clamp-2">
+                <div
+                    className="text-sm text-black mt-2 line-clamp-2"
+                    onClick={goShowProduct}
+                >
                     {product.name}
                 </div>
                 <div className="w-14 mt-2 border flex justify-between items-center rounded-xl py-0 px-2">

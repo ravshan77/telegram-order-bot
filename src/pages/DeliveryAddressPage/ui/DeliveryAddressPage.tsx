@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
+import { GoBack } from '@/shared/ui/kit-pro'
 import { useNavigate } from 'react-router-dom'
 import { MoreVertical, Plus } from 'lucide-react'
 import { getDeliveryAddressMapPath } from '@/shared/config'
@@ -39,12 +40,12 @@ export const DeliveryAddressPage = () => {
         <div className="">
             <div>
                 {/* Header */}
-                <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-lg font-semibold">Адрес</h2>
+                <div>
+                    <GoBack text="Адрес" />
                 </div>
 
                 {/* Address List */}
-                <div className="space-y-3">
+                <div className="space-y-3 mt-2">
                     {addresses.map((address, index) => (
                         <div
                             key={address.id}

@@ -1,18 +1,20 @@
 import { Link } from 'react-router-dom'
 import { Button, Input } from '@/shared/ui/kit'
 import Header from '@/shared/ui/template/Header'
-import { getBasketPath, getProfilePath } from '@/shared/config'
+import { useTelegram } from '@/shared/lib/hooks'
 import SideNav from '@/shared/ui/template/SideNav'
 import type { CommonProps } from '@/@types/common'
-import { Search, ShoppingCart } from 'lucide-react'
 import MobileNav from '@/shared/ui/template/MobileNav'
 import LayoutBase from '@/shared/ui/template/LayoutBase'
+import { Search, ShoppingCart, User } from 'lucide-react'
 import { useCartStore } from '@/shared/store/useCartStore'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
+import { getBasketPath, getProfilePath } from '@/shared/config'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
+    const tg = useTelegram()
     const { larger, smaller } = useResponsive()
 
     const totalItems = useCartStore((state) => state.cart.length)
@@ -66,8 +68,19 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                         </Button>
                                     </Link>
                                     <Link to={getProfilePath()}>
-                                        <div className="w-8 h-8 flex justify-center items-center text-base rounded-full bg-gray-300">
-                                            RF
+                                        <div className="w-8 h-8 flex justify-center items-center text-base rounded-full overflow-hidden bg-gray-300">
+                                            {tg?.initDataUnsafe?.user
+                                                ?.photo_url ? (
+                                                <img
+                                                    loading="lazy"
+                                                    src={
+                                                        tg?.initDataUnsafe?.user
+                                                            ?.photo_url
+                                                    }
+                                                />
+                                            ) : (
+                                                <User />
+                                            )}
                                         </div>
                                     </Link>
                                 </div>
