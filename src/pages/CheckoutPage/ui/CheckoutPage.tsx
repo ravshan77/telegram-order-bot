@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/shared/ui/kit'
 import { SingleValue } from 'react-select'
 import { GoBack } from '@/shared/ui/kit-pro'
@@ -7,9 +8,9 @@ import { Input } from '@/shared/ui/kit/Input'
 import { Dot, MapPinPlus } from 'lucide-react'
 import { Select } from '@/shared/ui/kit/Select'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
-import { useCartStore } from '@/shared/store/useCartStore'
-import { Link } from 'react-router-dom'
 import { getDeliveryAddressPath } from '@/shared/config'
+import { useCartStore } from '@/shared/store/useCartStore'
+import AsyncSelect from 'react-select/async'
 
 const paymentOptions: Option[] = [
     { value: 'cash', label: 'Наличные' },
@@ -59,6 +60,28 @@ export const CheckoutPage = () => {
     const uzsAmount = `${totalAmount.toLocaleString()} сум`
     const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
 
+    // DeliveryAddressdan get all qilib barcha locationlarni olib kelishi kerak loadOptions
+    const loadOptions = async (inputValue: string): Promise<Option[]> => {
+        if (!inputValue) return []
+
+        try {
+            // API ga request yuborish
+            const response = await fetch(
+                `/api/search?q=${encodeURIComponent(inputValue)}`,
+            )
+            const data = await response.json()
+
+            // Data ni Select formatiga o'tkazish
+            return data.map((item: any) => ({
+                value: item.id,
+                label: item.name,
+            }))
+        } catch (error) {
+            console.error('Xato:', error)
+            return []
+        }
+    }
+
     return (
         <div className="pb-32 h-full relative">
             <div>
@@ -106,7 +129,29 @@ export const CheckoutPage = () => {
                             />
                         </FormItem>
 
-                        <FormItem label="Локация">
+                        <FormItem label="Локация async">
+                            <div className="flex gap-1">
+                                <Select
+                                    componentAs={AsyncSelect}
+                                    loadOptions={loadOptions}
+                                    value={formData.locationType}
+                                    placeholder="Izlang..."
+                                    // isSearchable
+                                    // isClearable
+                                    onChange={(option: SingleValue<Option>) =>
+                                        setFormData({
+                                            ...formData,
+                                            locationType: option,
+                                        })
+                                    }
+                                />
+                                <Link to={getDeliveryAddressPath()}>
+                                    <Button icon={<MapPinPlus />} />
+                                </Link>
+                            </div>
+                        </FormItem>
+
+                        {/* <FormItem label="Локация">
                             <div className="flex gap-1">
                                 <Select
                                     placeholder="Выберите"
@@ -124,7 +169,7 @@ export const CheckoutPage = () => {
                                     <Button icon={<MapPinPlus />} />
                                 </Link>
                             </div>
-                        </FormItem>
+                        </FormItem> */}
 
                         <FormItem label="Дополнительная информация">
                             <Input

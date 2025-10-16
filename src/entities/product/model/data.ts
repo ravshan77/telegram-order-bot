@@ -1,4 +1,4 @@
-import type { Product } from './types'
+import type { ProductView } from './types'
 
 // const product = {
 //     item: {
@@ -111,4 +111,4 @@ import type { Product } from './types'
 //     ],
 // }
 
-export const products: Product[] = []
+export const products: ProductView[] = []

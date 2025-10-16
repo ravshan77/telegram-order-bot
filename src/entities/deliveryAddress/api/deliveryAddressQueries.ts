@@ -146,7 +146,12 @@ export const useCreateDeliveryAddress = () => {
 export const useUpdateDeliveryAddress = () => {
     const queryClient = useQueryClient()
 
-    return useMutation<LocationResponse, Error, UpdateLocationVariables>({
+    return useMutation<
+        LocationResponse,
+        Error,
+        UpdateLocationVariables,
+        { previousLocation?: Location }
+    >({
         mutationFn: ({ id, data }) =>
             deliveryAddressApi.updateLocation(id, data),
 
@@ -225,17 +230,30 @@ export const useUpdateDeliveryAddress = () => {
  * Delete delivery address
  * @example
  * const deleteLocation = useDeleteDeliveryAddress()
- * deleteLocation.mutate('123', {
- *   onSuccess: () => toast.success('Location deleted!'),
- * })
+ * deleteLocation.mutate(
+ *   {
+ *     id: '123',
+ *     data: { name: 'Deleted Name', longitude: 69.28, latitude: 41.31 }
+ *   },
+ *   {
+ *     onSuccess: () => toast.success('Location deleted!'),
+ *   }
+ * )
  */
+
 export const useDeleteDeliveryAddress = () => {
     const queryClient = useQueryClient()
 
-    return useMutation<void, Error, string>({
-        mutationFn: (id) => deliveryAddressApi.deleteLocation(id),
+    return useMutation<
+        LocationResponse,
+        Error,
+        UpdateLocationVariables,
+        { previousLocation?: Location; previousLocations?: Location[] }
+    >({
+        mutationFn: ({ id, data }) =>
+            deliveryAddressApi.deleteLocation(id, data),
 
-        onMutate: async (id) => {
+        onMutate: async ({ id }) => {
             // Cancel queries
             await queryClient.cancelQueries({
                 queryKey: DELIVERY_ADDRESS_KEYS.location(id),
@@ -266,7 +284,7 @@ export const useDeleteDeliveryAddress = () => {
             return { previousLocation, previousLocations }
         },
 
-        onError: (_error, id, context) => {
+        onError: (_error, { id }, context) => {
             // Rollback
             if (context?.previousLocation) {
                 queryClient.setQueryData(
@@ -282,7 +300,7 @@ export const useDeleteDeliveryAddress = () => {
             }
         },
 
-        onSuccess: (_data, id) => {
+        onSuccess: (response, { id }) => {
             // Remove from cache
             queryClient.removeQueries({
                 queryKey: DELIVERY_ADDRESS_KEYS.location(id),
@@ -296,10 +314,15 @@ export const useDeleteDeliveryAddress = () => {
                 queryKey: DELIVERY_ADDRESS_KEYS.locations(),
             })
         },
+
+        onSettled: (_data, _error, { id }) => {
+            // Always refetch
+            queryClient.invalidateQueries({
+                queryKey: DELIVERY_ADDRESS_KEYS.location(id),
+            })
+        },
     })
 }
-
-// ============ PREFETCH ============
 
 /**
  * Prefetch delivery address

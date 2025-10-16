@@ -24,6 +24,8 @@ class DeliveryAddressApi extends BaseRestClient {
      */
     async getAllLocations(): Promise<Location[]> {
         const contractor = await this.getContractor()
+        console.log(contractor)
+
         return contractor.locations
     }
 
@@ -81,9 +83,25 @@ class DeliveryAddressApi extends BaseRestClient {
     /**
      * Delete location
      */
-    async deleteLocation(id: string): Promise<void> {
-        return this.post<void>(API_ENDPOINTS.deliveryAddress.delete(id))
+    async deleteLocation(
+        id: string,
+        data: LocationFormData,
+    ): Promise<LocationResponse> {
+        // Convert string to number if needed
+        const payload = {
+            name: data.name,
+            longitude: Number(data.longitude),
+            latitude: Number(data.latitude),
+        }
+
+        return this.post<LocationResponse>(
+            API_ENDPOINTS.deliveryAddress.delete(id),
+            payload,
+        )
     }
+    // async deleteLocation(id: string): Promise<void> {
+    //     return this.post<void>(API_ENDPOINTS.deliveryAddress.delete(id))
+    // }
 }
 
 export const deliveryAddressApi = new DeliveryAddressApi()

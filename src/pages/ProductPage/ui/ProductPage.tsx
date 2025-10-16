@@ -127,13 +127,13 @@ export const ProductPage: React.FC = () => {
                                 </span>
                             </div>
                         )}
-                        {selectedProduct.barcode && (
+                        {selectedProduct.barcodes && (
                             <div className="flex justify-between">
                                 <span className="text-gray-600">
                                     Штрих-код:
                                 </span>
                                 <span className="font-medium">
-                                    {selectedProduct.barcode}
+                                    {selectedProduct.barcodes}
                                 </span>
                             </div>
                         )}
@@ -177,11 +177,9 @@ export const ProductPage: React.FC = () => {
                         Похожие товары
                     </h3>
                     <div className="flex gap-3 overflow-x-auto">
-                        {products
-                            .filter((p) => p.id !== selectedProduct.id)
-                            .map((p) => (
-                                <ProductCard key={p.id} product={p} />
-                            ))}
+                        {products.map((p) => (
+                            <ProductCard key={p.id} product={p} />
+                        ))}
                     </div>
                 </div>
             </div>

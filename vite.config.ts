@@ -15,7 +15,7 @@ export default defineConfig({
     },
     server: {
         host: '0.0.0.0',
-        port: 5174, // Asosiy port
+        port: 3000, // Asosiy port
         strictPort: false, // false => band bo'lsa boshqa bo'sh portga o'tqazadi
         proxy: {
             '/api': {

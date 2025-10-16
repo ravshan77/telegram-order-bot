@@ -16,10 +16,10 @@ export const API_ENDPOINTS = {
         delete: (id: number | string) => `/categories/${id}`,
     },
     deliveryAddress: {
-        getAll: '/web-app/get-contractor', // Gets contractor with locations
-        create: '/web-app/contractor/location/register',
-        update: (id: string) => `/web-app/contractor/location/update/${id}`,
-        delete: (id: string) => `/web-app/contractor/location/delete/${id}`,
+        getAll: '/get-contractor', // Gets contractor with locations
+        create: '/contractor/location/register',
+        update: (id: string) => `/contractor/location/update/${id}`,
+        delete: (id: string) => `/contractor/location/delete/${id}`,
     },
 
     cart: {
@@ -55,4 +55,5 @@ export const API_ENDPOINTS = {
     },
 } as const
 
-export const API_BASE_URL = 'https://staging.hippo.uz/telegram-order-bot'
+export const API_BASE_URL =
+    'https://staging.hippo.uz/telegram-order-bot/web-app/'

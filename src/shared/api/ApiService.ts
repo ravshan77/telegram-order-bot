@@ -113,14 +113,15 @@ export class BaseRestClient {
         config?: AxiosRequestConfig,
     ): Promise<T> {
         try {
-            const response: AxiosResponse<BaseResponse<T>> =
-                await this.axiosInstance.request({
+            const response: AxiosResponse<T> = await this.axiosInstance.request(
+                {
                     url,
                     method,
                     data,
                     ...config,
-                })
-            return response.data.data
+                },
+            )
+            return response.data
         } catch (error) {
             this.handleError(error)
         }

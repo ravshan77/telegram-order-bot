@@ -55,7 +55,6 @@ export const MainPage: React.FC = () => {
                                 variant="plain"
                                 className="flex items-center gap-2 px-3 mb-3 bg-white rounded-2xl border border-gray-200 whitespace-nowrap hover:border-primary shadow-md"
                             >
-                                <span>{cat.icon}</span>
                                 <span className="text-sm">{cat.name}</span>
                             </Button>
                         </Link>
