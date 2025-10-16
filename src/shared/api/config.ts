@@ -1,6 +1,6 @@
 export const API_ENDPOINTS = {
     products: {
-        getAll: '/items/get',
+        getAll: '/item/get',
         getById: (id: number | string) => `/item/get/${id}`,
         search: '/products/search',
         byCategory: '/products/by-category',
@@ -9,8 +9,8 @@ export const API_ENDPOINTS = {
         delete: (id: number | string) => `/products/${id}`,
     },
     categories: {
-        getAll: '/categories',
-        getById: (id: number | string) => `/categories/${id}`,
+        getAll: '/item-category/get',
+        getById: (id: string) => `/item-category/get/${id}`,
         create: '/categories',
         update: (id: number | string) => `/categories/${id}`,
         delete: (id: number | string) => `/categories/${id}`,
@@ -30,10 +30,9 @@ export const API_ENDPOINTS = {
         clear: '/cart/clear',
     },
     orders: {
-        getAll: '/orders',
-        getById: (id: number | string) => `/orders/${id}`,
-        create: '/orders',
-        update: (id: number | string) => `/orders/${id}`,
+        register: '/order/register', // POST
+        getAll: '/orders', // GET (if available)
+        getById: (id: string) => `/order/${id}`, // GET (if available)
     },
     sales: {
         getAll: '/sales',

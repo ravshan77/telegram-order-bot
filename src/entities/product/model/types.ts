@@ -7,7 +7,7 @@ export interface ProductItem {
     is_deleted: boolean
     name: string
     measurement: number
-    package_measurements: any[]
+    package_measurements: Package_measurements[]
     code: string | null
     sku: string | null
     barcodes: string[]
@@ -43,7 +43,7 @@ export interface ProductPrice {
         id: number
         created_at: string
         updated_at: string
-        mount: number
+        amount: number
         currency: {
             id: number
             global_currency_id: number
@@ -69,6 +69,11 @@ export interface ProductPrice {
     global_account_id: any | null
 }
 
+interface Package_measurements {
+    name: string
+    quantity: number
+}
+
 export interface WarehouseState {
     id: string
     name: string
@@ -77,7 +82,7 @@ export interface WarehouseState {
         id: number
         name: string
         state: number
-        alert_on: any | null
+        alert_on: number | null
         purchase_price: any | null
     }[]
 }
@@ -111,7 +116,7 @@ export interface BranchState {
 export interface Product {
     item: ProductItem
     price: ProductPrice
-    warehouse_states: WarehouseState[]
+    warehouse_states: WarehouseState
     branch_states: BranchState[]
 }
 
@@ -132,7 +137,7 @@ export interface ProductView {
     code: string | null
     sku: string | null
     barcodes: string[]
-    package?: string
+    package: Package_measurements[]
     nds?: number
     not_available: boolean
     is_favorite: boolean
@@ -144,21 +149,17 @@ export interface ProductView {
 
 // Product ni ProductView ga o'zgartirish helper function
 export const transformProductToView = (product: Product): ProductView => {
-    const totalStock = product.warehouse_states.reduce((sum, warehouse) => {
-        return (
-            sum +
-            warehouse.warehouse_items.reduce(
-                (itemSum, item) => itemSum + item.state,
-                0,
-            )
-        )
-    }, 0)
+    const totalStock = product?.warehouse_states?.warehouse_items.reduce(
+        (itemSum, item) => itemSum + item?.state,
+        0,
+    )
 
     return {
         id: product.item.id,
         name: product.item.name,
-        price: product.price.common_price.mount,
+        price: product.price.common_price.amount,
         currency: product.price.common_price.currency.name,
+        package: product.item.package_measurements,
         image: product.item.images[0] || '/placeholder.png',
         images: product.item.images || [],
         category: product.item.category?.name || null,
@@ -166,30 +167,41 @@ export const transformProductToView = (product: Product): ProductView => {
         code: product.item.code,
         sku: product.item.sku,
         barcodes: product.item.barcodes,
-        not_available: totalStock === 0,
+        not_available: true, // custom add
         is_favorite: product.item.is_favorite,
         stock: totalStock,
         measurement: product.item.measurement,
         created_at: product.item.created_at,
         updated_at: product.item.updated_at,
-        nds: product.item.tax.tax_rate || 0,
+        // nds: product.item.code || 0,
     }
 }
 
-// export interface Product {
-//     id: number
-//     name: string
-//     price: number
-//     oldPrice?: number
-//     discount?: number
-//     image: string
-//     category: string
-//     description?: string
-//     brand?: string
-//     article?: string
-//     color?: string
-//     package?: string
-//     barcode?: string
-//     nds?: number
-//     not_available?: boolean
-// }
+export type Categories = {
+    id: string
+    image: string | null
+    name: string
+    organization_id: string
+    parent_id: string | null
+}
+
+export type CategoriesTree = {
+    childs: []
+    id: string
+    image: {
+        id: string
+        name: string
+        path: string
+    }
+    name: string
+    organization_id: string
+    parent_id: string
+}
+
+export type BaseProducts = {
+    categories: Categories[]
+    categoriesTree: CategoriesTree[]
+    data: Product[]
+    filtered_count: number
+    total_count: number
+}

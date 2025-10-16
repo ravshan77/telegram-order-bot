@@ -1,12 +1,11 @@
 import React, { useRef } from 'react'
 import { Button } from '@/shared/ui/kit'
-import { Minus, Plus } from 'lucide-react'
 import { Pagination } from 'swiper/modules'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
-// import type { Product } from '@/entities/product'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import { useFlyToCart } from '@/shared/lib/hooks'
+import { Image, Minus, Plus } from 'lucide-react'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { ProductView } from '@/entities/product/model/types'
@@ -100,7 +99,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )
     }
 
-    const images = product.images.map((img) => ({ src: img }))
+    const images = product.images
 
     return (
         <div
@@ -108,25 +107,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             className="min-w-48 rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
         >
             <div className="relative">
-                <Swiper
-                    modules={[Pagination]}
-                    pagination={images.length > 1 ? { clickable: true } : false}
-                    loop={images.length > 1}
-                    className="product-card-swiper"
-                    onClick={(swiper, event) => {
-                        event.stopPropagation()
-                    }}
-                >
-                    {images.map((image, index) => (
-                        <SwiperSlide key={index}>
-                            <img
-                                src={image.src}
-                                alt={`${product.name} - ${index + 1}`}
-                                className="w-full h-48 object-cover"
-                            />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                {images.length > 0 ? (
+                    <Swiper
+                        modules={[Pagination]}
+                        pagination={
+                            images.length > 1 ? { clickable: true } : false
+                        }
+                        loop={images.length > 1}
+                        className="product-card-swiper"
+                        onClick={(_, event) => {
+                            event.stopPropagation()
+                        }}
+                    >
+                        {images.map((image, index) => (
+                            <SwiperSlide key={index}>
+                                <img
+                                    src={image}
+                                    loading="lazy"
+                                    alt={`${product.name} - ${index + 1}`}
+                                    className="w-full h-48 object-cover"
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <div className="w-full h-48 flex items-center justify-center bg-gray-100">
+                        <Image size={40} className="text-gray-400" />
+                    </div>
+                )}
                 {product.discount && (
                     <div className="absolute bottom-0 left-0 bg-red-500 text-white px-2 py-1 rounded-se-lg text-xs font-bold">
                         -{product.discount}%
@@ -138,14 +146,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     {product.price.toLocaleString()} UZS
                 </div>
                 <div
-                    className="text-sm text-black mt-2 line-clamp-2"
+                    className="text-sm text-black mt-2 line-clamp-2 h-11"
                     onClick={goShowProduct}
                 >
                     {product.name}
                 </div>
-                <div className="w-14 mt-2 border flex justify-between items-center rounded-xl py-0 px-2">
-                    <BoxSvg width={18} height={18} />
-                    <span>24</span>
+                <div className="flex gap-1">
+                    {product.package?.map((pkg) => (
+                        <div
+                            key={pkg.name}
+                            className="w-14 mt-2 border flex justify-between items-center rounded-xl py-0 px-2"
+                        >
+                            <BoxSvg width={18} height={18} />
+                            <span>{pkg.quantity}</span>
+                        </div>
+                    ))}
                 </div>
                 <div className="mt-3">{renderActionButton()}</div>
             </div>

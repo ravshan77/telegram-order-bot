@@ -1,6 +1,10 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { categoryApi } from './categoryApi'
-import type { Category } from '../model/types'
+import type {
+    CategoriesResponse,
+    Category,
+    CategoryResponse,
+} from '../model/types'
 
 // ============ QUERY KEYS ============
 
@@ -19,9 +23,12 @@ export const CATEGORY_KEYS = {
  * const { data: categories, isLoading } = useCategories()
  */
 export const useCategories = (
-    options?: Omit<UseQueryOptions<Category[], Error>, 'queryKey' | 'queryFn'>,
+    options?: Omit<
+        UseQueryOptions<CategoriesResponse, Error>,
+        'queryKey' | 'queryFn'
+    >,
 ) => {
-    return useQuery<Category[], Error>({
+    return useQuery<CategoriesResponse, Error>({
         queryKey: CATEGORY_KEYS.lists(),
         queryFn: () => categoryApi.getAllCategories(),
         staleTime: 10 * 60 * 1000, // 10 minutes (categories rarely change)
@@ -35,10 +42,13 @@ export const useCategories = (
  * const { data: category } = useCategory('123')
  */
 export const useCategory = (
-    id: number | string,
-    options?: Omit<UseQueryOptions<Category, Error>, 'queryKey' | 'queryFn'>,
+    id: string,
+    options?: Omit<
+        UseQueryOptions<CategoryResponse, Error>,
+        'queryKey' | 'queryFn'
+    >,
 ) => {
-    return useQuery<Category, Error>({
+    return useQuery<CategoryResponse, Error>({
         queryKey: CATEGORY_KEYS.detail(id),
         queryFn: () => categoryApi.getCategoryById(id),
         enabled: !!id,

@@ -8,7 +8,7 @@ import {
     type ProductFilters,
     type PaginatedResponse,
 } from './productApi'
-import type { Product } from '../model/types'
+import type { BaseProducts, Product } from '../model/types'
 
 // Query Keys
 export const PRODUCT_KEYS = {
@@ -30,11 +30,16 @@ export const PRODUCT_KEYS = {
 
 export const useProducts = (
     filters?: ProductFilters,
-    options?: Omit<UseQueryOptions<Product[], Error>, 'queryKey' | 'queryFn'>,
+    options?: Omit<
+        UseQueryOptions<BaseProducts, Error>,
+        'queryKey' | 'queryFn'
+    >,
 ) => {
-    return useQuery<Product[], Error>({
+    return useQuery<BaseProducts, Error>({
         queryKey: PRODUCT_KEYS.list(filters),
-        queryFn: () => productApi.getAllProducts(filters),
+        queryFn: () => {
+            return productApi.getAllProducts(filters)
+        },
         staleTime: 5 * 60 * 1000,
         ...options,
     })

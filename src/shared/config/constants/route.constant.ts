@@ -16,7 +16,7 @@ export const getDeliveryAddressMapPath = (
     addressId: number | string = ':addressId',
 ) => `/delivery-address/${addressId}`
 export const getBasketPath = () => '/basket'
-export const getCategoryPath = (categoryId: number | string = ':categoryId') =>
+export const getCategoryPath = (categoryId: string = ':categoryId') =>
     `/category/${categoryId}`
 export const getCheckoutPath = () => '/checkout'
 export const getProductPath = (productId: number | string = ':productId') =>

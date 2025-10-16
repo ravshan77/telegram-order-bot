@@ -1,145 +1,109 @@
-import { Tabs } from '@/shared/ui/kit'
+import React, { useState } from 'react'
 import { GoBack } from '@/shared/ui/kit-pro'
-import { products } from '@/entities/product'
-import { useNavigate } from 'react-router-dom'
-import React, { useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useProducts } from '@/entities/product'
 import TabNav from '@/shared/ui/kit/Tabs/TabNav'
+import { useCategory } from '@/entities/category'
 import TabList from '@/shared/ui/kit/Tabs/TabList'
 import { ProductCard } from '@/widgets/ProductCard'
+import { Alert, Spinner, Tabs } from '@/shared/ui/kit'
 import TabContent from '@/shared/ui/kit/Tabs/TabContent'
+import { transformProductToView } from '@/entities/product/model/types'
 
 export const CategoryPage: React.FC = () => {
-    const temporarily_category = 'Электроника'
-    const [currentTab, setCurrentTab] = useState(temporarily_category)
+    const { categoryId } = useParams<{ categoryId: string }>()
+    const [currentTab, setCurrentTab] = useState(categoryId)
 
-    const subCategoryTabFilter = () =>
-        products.filter((p) => p.category === currentTab)
+    const {
+        data: category,
+        isLoading: isLoadingCategory,
+        isError: isErrorCategory,
+        error: categoryError,
+    } = useCategory(categoryId!)
 
-    const navigate = useNavigate()
-    const goBack = () => navigate(-1)
+    const {
+        data: products,
+        isLoading: isLoadingProducts,
+        isError: isErrorProducts,
+        error: productsError,
+    } = useProducts({
+        limit: 20,
+        skip: 1,
+        category_id: currentTab,
+    })
 
-    const touchStartX = useRef<number | null>(null)
-    const touchEndX = useRef<number | null>(null)
-
-    const handleTouchStart = (e: React.TouchEvent) => {
-        touchStartX.current = e.touches[0].clientX
+    if (isLoadingCategory || isLoadingProducts) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Spinner size={40} />
+            </div>
+        )
     }
 
-    const handleTouchMove = (e: React.TouchEvent) => {
-        touchEndX.current = e.touches[0].clientX
+    if (isErrorCategory || isErrorProducts) {
+        return (
+            <div className="p-4">
+                <Alert showIcon type="danger">
+                    {categoryError?.message}
+                    {productsError?.message}
+                </Alert>
+            </div>
+        )
     }
 
-    const handleTouchEnd = () => {
-        if (touchStartX.current !== null && touchEndX.current !== null) {
-            const diff = touchEndX.current - touchStartX.current
+    const categoryChilds = category?.childs ?? []
+    const productViews = products?.data.map(transformProductToView) || []
 
-            // 👇 Faqat chapdan o‘ngga harakat bo‘lsa
-            if (diff > 80) {
-                goBack() // ortga qaytish
-            }
-        }
-
-        // qiymatlarni tozalash
-        touchStartX.current = null
-        touchEndX.current = null
-    }
+    console.log(productViews)
 
     return (
-        <div
-            className="pb-16"
-            onTouchEnd={handleTouchEnd}
-            onTouchMove={handleTouchMove}
-            onTouchStart={handleTouchStart}
-        >
+        <div className="pb-16">
             <div>
                 <div className="bg-white w-full">
-                    <GoBack text={temporarily_category} />
+                    <GoBack text={category?.name} />
                 </div>
 
-                <div className="">
-                    <Tabs value={currentTab} onChange={setCurrentTab}>
+                <div>
+                    <Tabs
+                        value={category?.id}
+                        defaultValue={category?.id}
+                        onChange={setCurrentTab}
+                    >
                         <TabList>
-                            <TabNav value="Электроника" className="min-w-max">
-                                Все товары
-                            </TabNav>
-                            <TabNav value="Смартфоны" className="min-w-max">
-                                Смартфоны
-                            </TabNav>
-                            <TabNav value="Гаджеты" className="min-w-max">
-                                Телевизор
-                            </TabNav>
-                            <TabNav value="Аксессуары" className="min-w-max">
-                                Aксессуары
-                            </TabNav>
                             <TabNav
-                                value="Компьютерные аксессуары"
+                                key={category?.id}
+                                value={String(category?.id)}
                                 className="min-w-max"
                             >
-                                Компьютерные аксессуары
+                                Все товары
                             </TabNav>
-                            <TabNav value="Игры">Игры</TabNav>
+                            {categoryChilds?.map((child) => {
+                                return (
+                                    <TabNav
+                                        key={child.id}
+                                        value={child.id}
+                                        className="min-w-max"
+                                    >
+                                        {child.name}
+                                    </TabNav>
+                                )
+                            })}
                         </TabList>
                         <div className="py-4">
-                            <TabContent value="Электроника">
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    {subCategoryTabFilter().map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                        />
-                                    ))}
-                                </div>
-                            </TabContent>
-                            <TabContent value="Смартфоны">
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    {subCategoryTabFilter().map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                        />
-                                    ))}
-                                </div>
-                            </TabContent>
-                            <TabContent value="Гаджеты">
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    {subCategoryTabFilter().map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                        />
-                                    ))}
-                                </div>
-                            </TabContent>
-                            <TabContent value="Аксессуары">
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    {subCategoryTabFilter().map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                        />
-                                    ))}
-                                </div>
-                            </TabContent>
-                            <TabContent value="Компьютерные аксессуары">
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    {subCategoryTabFilter().map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                        />
-                                    ))}
-                                </div>
-                            </TabContent>
-                            <TabContent value="Игры">
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    {subCategoryTabFilter().map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                        />
-                                    ))}
-                                </div>
-                            </TabContent>
+                            {categoryChilds.map((child) => {
+                                return (
+                                    <TabContent key={child.id} value={child.id}>
+                                        <div className="grid grid-cols-2 gap-3 mb-6">
+                                            {productViews.map((product) => (
+                                                <ProductCard
+                                                    key={product.id}
+                                                    product={product}
+                                                />
+                                            ))}
+                                        </div>
+                                    </TabContent>
+                                )
+                            })}
                         </div>
                     </Tabs>
                 </div>

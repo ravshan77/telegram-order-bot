@@ -1,17 +1,39 @@
 import { BaseRestClient } from '@/shared/api/ApiService'
 import { API_ENDPOINTS, API_BASE_URL } from '@/shared/api/config'
-import type { Product } from '../model/types'
+import type { BaseProducts, Product } from '../model/types'
 
 export interface ProductFilters {
-    search?: string
-    categoryId?: string
-    minPrice?: number
-    maxPrice?: number
-    available?: boolean
-    is_favorite?: boolean
-    warehouse_id?: string
-    branch_id?: string
+    // search?: string
+    // categoryId?: string
+    // minPrice?: number
+    // maxPrice?: number
+    // available?: boolean
+    // is_favorite?: boolean
+    // warehouse_id?: string
+    // branch_id?: string
+
+    contractorId?: string
+    name?: string
+    sku?: string
+    category_id?: string
+    measurment?: string
+    desc?: boolean
+    sort?: string
+    skip?: number
+    limit?: number
 }
+
+// type GetItemsFilterModel struct {
+//   ContractorID string `form:"contractorId"`
+//   Name         string `form:"name"`
+//   Sku          string `form:"sku"`
+//   CategoryID   string `form:"category_id"`
+//   Measurment   string `form:"measurment"`
+//   Desc         bool   `form:"desc"`
+//   Sort         string `form:"sort"`
+//   Skip         int    `form:"skip"`
+//   Limit        int    `form:"limit"`
+// }
 
 export interface PaginatedResponse<T> {
     data: T[]
@@ -27,8 +49,8 @@ class ProductApi extends BaseRestClient {
     }
 
     // Get all products with filters
-    async getAllProducts(filters?: ProductFilters): Promise<Product[]> {
-        return this.get<Product[]>(API_ENDPOINTS.products.getAll, {
+    async getAllProducts(filters?: ProductFilters): Promise<BaseProducts> {
+        return this.get<BaseProducts>(API_ENDPOINTS.products.getAll, {
             params: filters,
         })
     }
