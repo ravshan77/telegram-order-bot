@@ -122,6 +122,7 @@ export interface ProductFilters {
     sort?: string
     skip?: number
     limit?: number
+    is_favorite?: boolean
 }
 
 export interface PaginatedResponse<T> {

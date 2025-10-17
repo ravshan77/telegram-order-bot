@@ -1,22 +1,24 @@
 import { Menu } from '@/shared/ui/kit'
+import { Direction } from '@/@types/theme'
+import type { TraslationFn } from '@/@types/common'
+import { ChevronRight, Loader } from 'lucide-react'
+import { useTranslation } from '@/shared/lib/hooks'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect, Fragment } from 'react'
-import VerticalSingleMenuItem from './VerticalSingleMenuItem'
-import VerticalCollapsedMenuItem from './VerticalCollapsedMenuItem'
-import AuthorityCheck from '@/shared/ui/kit-pro/AuthorityCheck'
 import { themeConfig } from '@/app/config/theme.config'
+import { getDeliveryAddressPath } from '@/shared/config'
+import type { NavigationTree } from '@/@types/navigation'
+import useMenuActive from '@/shared/lib/hooks/useMenuActive'
+import VerticalSingleMenuItem from './VerticalSingleMenuItem'
+import AuthorityCheck from '@/shared/ui/kit-pro/AuthorityCheck'
+import { useDeliveryAddresses } from '@/entities/deliveryAddress'
+import VerticalCollapsedMenuItem from './VerticalCollapsedMenuItem'
 import {
     NAV_ITEM_TYPE_TITLE,
     NAV_ITEM_TYPE_COLLAPSE,
     NAV_ITEM_TYPE_ITEM,
 } from '@/shared/config/constants/navigation.constant'
-import useMenuActive from '@/shared/lib/hooks/useMenuActive'
-import { useTranslation } from '@/shared/lib/hooks'
-import { Direction } from '@/@types/theme'
-import type { NavigationTree } from '@/@types/navigation'
-import type { TraslationFn } from '@/@types/common'
-import { getDeliveryAddressPath } from '@/shared/config'
-import { ChevronRight } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import useResponsive from '@/shared/lib/hooks/useResponsive'
 
 export interface VerticalMenuContentProps {
     collapsed?: boolean
@@ -41,11 +43,13 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
         userAuthority,
     } = props
 
+    const { data: addresses, isLoading } = useDeliveryAddresses()
+    const { larger } = useResponsive()
+
     const { t } = useTranslation(!translationSetup)
     const navigate = useNavigate()
 
     const [defaulExpandKey, setDefaulExpandKey] = useState<string[]>([])
-
     const { activedRoute } = useMenuActive(navigationTree, routeKey)
 
     useEffect(() => {
@@ -144,6 +148,8 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
         handleLinkClick()
     }
 
+    const address = addresses?.locations?.find((adrss) => adrss.is_default)
+
     return (
         <Menu
             className="px-4 pb-4 relative"
@@ -156,20 +162,27 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
         >
             {renderNavigation(navigationTree, 0)}
             <AuthorityCheck userAuthority={userAuthority} authority={[]}>
-                <div className="fixed w-[300px] bottom-6">
-                    <div
-                        className="bg-gray-100 p-3 flex flex-col items-start rounded-lg overflow-hidden"
-                        onClick={handleNavigatePath}
-                    >
-                        <div className="w-full flex justify-between items-center">
-                            <span>Адрес доставки</span>
-                            <ChevronRight size={24} />
+                <div
+                    className={`fixed ${larger?.lg ? 'w-[260px]' : 'w-[300px]'} bottom-6`}
+                >
+                    {isLoading ? (
+                        <Loader />
+                    ) : (
+                        <div
+                            className="bg-gray-100 p-3 flex flex-col items-start rounded-lg overflow-hidden"
+                            onClick={handleNavigatePath}
+                        >
+                            <div className="w-full flex justify-between items-center">
+                                <span>Адрес доставки</span>
+                                <ChevronRight size={24} />
+                            </div>
+                            <p className="pt-1 text-base text-black line-clamp-2">
+                                {address?.name
+                                    ? address?.name
+                                    : 'Введите ваш основной адрес доставки'}
+                            </p>
                         </div>
-                        <p className="pt-1 text-base text-black line-clamp-2">
-                            Ташкент город, проспект мустакиллик, 17 дом
-                            dsdsfsdfsdfsdfsd sdfsdf
-                        </p>
-                    </div>
+                    )}
                     <div className="pt-4">
                         <span>Разработка: &ensp; </span>
                         <Link

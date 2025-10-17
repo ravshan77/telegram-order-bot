@@ -1,14 +1,19 @@
 import React from 'react'
-import { Alert, Button, Spinner } from '@/shared/ui/kit'
 import { ChevronRight } from 'lucide-react'
 import { ProductCard } from '@/widgets/ProductCard'
+import { Alert, Button, Spinner } from '@/shared/ui/kit'
 import { transformProductToView, useProducts } from '@/entities/product'
+import { ProductFilters } from '@/entities/product/model/types'
 
 interface ProductSectionProps {
     title: string
+    filters?: ProductFilters
 }
 
-export const ProductSection: React.FC<ProductSectionProps> = ({ title }) => {
+export const ProductSection: React.FC<ProductSectionProps> = ({
+    title,
+    filters,
+}) => {
     // Fetch products
     const {
         data,
@@ -16,8 +21,9 @@ export const ProductSection: React.FC<ProductSectionProps> = ({ title }) => {
         isError: isErrorProducts,
         error: productsError,
     } = useProducts({
-        limit: 900,
+        limit: 30,
         skip: 1,
+        ...filters,
     })
 
     // Loading state

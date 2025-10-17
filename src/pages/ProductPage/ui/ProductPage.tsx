@@ -139,10 +139,15 @@ export const ProductPage: React.FC = () => {
 
                         <div className="flex justify-between">
                             <span className="text-gray-600">Упаковка</span>
-                            <span className="font-medium">
+                            <span className="font-medium space-x-2">
                                 {selectedProduct?.package_measurements.length
-                                    ? selectedProduct.package_measurements.join(
-                                          ', ',
+                                    ? selectedProduct.package_measurements.map(
+                                          (pkg, ind) => (
+                                              <span key={`${pkg}-${ind}`}>
+                                                  {`${pkg.name}=${pkg.quantity}`}
+                                                  .{' '}
+                                              </span>
+                                          ),
                                       )
                                     : 'Нет'}
                             </span>

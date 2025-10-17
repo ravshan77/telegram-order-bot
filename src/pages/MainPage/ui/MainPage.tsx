@@ -10,7 +10,10 @@ export const MainPage: React.FC = () => {
                     <h2 className="text-lg font-semibold">Товары</h2>
                 </div>
                 <CategoriesList />
-                <ProductSection title="Рекомендуем" />
+                <ProductSection
+                    title="Рекомендуем"
+                    filters={{ is_favorite: true }}
+                />
                 <ProductSection title="Скидки на смартфоны" />
                 <ProductSection title="Скидки на смартфоны" />
             </div>

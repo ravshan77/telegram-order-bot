@@ -2,7 +2,7 @@ export type {
     Location,
     Contact,
     Debt,
-    Contractor,
+    // Contractor,
     LocationFormData,
     LocationResponse,
     LocationView,

@@ -15,13 +15,19 @@ export const API_ENDPOINTS = {
         update: (id: number | string) => `/categories/${id}`,
         delete: (id: number | string) => `/categories/${id}`,
     },
+    // deliveryAddress: {
+    //     getAll: '/get-contractor', // Gets contractor with locations
+    //     create: '/contractor/location/register',
+    //     update: (id: string) => `/contractor/location/update/${id}`,
+    //     delete: (id: string) => `/contractor/location/delete/${id}`,
+    // },
     deliveryAddress: {
-        getAll: '/get-contractor', // Gets contractor with locations
+        getAll: '/get-contractor',
         create: '/contractor/location/register',
         update: (id: string) => `/contractor/location/update/${id}`,
         delete: (id: string) => `/contractor/location/delete/${id}`,
+        setDefault: (id: string) => `/contractor/location/set-default/${id}`,
     },
-
     cart: {
         get: '/cart',
         addItem: '/cart/items',
