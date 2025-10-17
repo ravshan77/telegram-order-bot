@@ -1,10 +1,10 @@
+import React from 'react'
 import { Button } from '@/shared/ui/kit'
-import React, { useCallback } from 'react'
-import { Product } from '@/entities/product'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useNavigate } from 'react-router-dom'
 import { Minus, Plus, Trash2 } from 'lucide-react'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { ProductView } from '@/entities/product/model/types'
 import { getCheckoutPath, getProductPath } from '@/shared/config'
 
 export const BasketPage: React.FC = () => {
@@ -15,17 +15,13 @@ export const BasketPage: React.FC = () => {
     const getTotalPrice = useCartStore((state) => state.getTotalPrice)
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
 
-    const goShowProduct = useCallback(
-        (product: Product) => {
-            setSelectedProduct(product)
-            navigate(getProductPath(product.id))
-        },
-        [navigate, setSelectedProduct],
-    )
-
+    const goShowProduct = (product: ProductView) => {
+        setSelectedProduct(product)
+        navigate(getProductPath(product.id))
+    }
     const goToCheckOut = () => navigate(getCheckoutPath())
 
-    const handleRemove = (product_id: number) => {
+    const handleRemove = (product_id: string) => {
         const is_confirm = confirm(
             'Вы действительно собираетесь удалить этот продукт?',
         )
@@ -33,6 +29,15 @@ export const BasketPage: React.FC = () => {
         if (is_confirm) {
             removeFromCart(product_id)
         }
+    }
+
+    const handleUpdateQuantity = (product_id: string, quantity: number) => {
+        if (quantity === 0) {
+            handleRemove(product_id)
+            return
+        }
+
+        updateQuantity(product_id, quantity)
     }
 
     if (cart.length === 0) {
@@ -68,7 +73,7 @@ export const BasketPage: React.FC = () => {
                             >
                                 {/* Product Image */}
                                 <img
-                                    src={item.image}
+                                    // src={item?.image}
                                     alt={item.name}
                                     className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
                                 />
@@ -101,9 +106,9 @@ export const BasketPage: React.FC = () => {
                                         className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            updateQuantity(
+                                            handleUpdateQuantity(
                                                 item.id,
-                                                item.quantity - 1,
+                                                item?.quantity - 1,
                                             )
                                         }}
                                     >
@@ -119,9 +124,9 @@ export const BasketPage: React.FC = () => {
                                         className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            updateQuantity(
+                                            handleUpdateQuantity(
                                                 item.id,
-                                                item.quantity + 1,
+                                                item?.quantity + 1,
                                             )
                                         }}
                                     >

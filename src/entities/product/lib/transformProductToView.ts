@@ -9,7 +9,7 @@ export const transformProductToView = (product: Items): ProductView => {
 
     return {
         ...product.item,
-        price: product.price.common_price.amount,
+        price: product?.price?.common_price?.amount,
         stock: totalStock,
     }
 }

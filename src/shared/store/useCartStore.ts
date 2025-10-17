@@ -1,25 +1,19 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-// import type { Product } from '@/entities/product'
 import { ProductView } from '@/entities/product/model/types'
 
-export interface CartItem extends Omit<ProductView, 'stock'> {
+export interface CartItem extends ProductView {
     quantity: number
 }
 
 interface CartStore {
     // State
     cart: CartItem[]
-    selectedCategory: string | null
     selectedProduct: ProductView | null
-    menuOpen: boolean
-
-    setSelectedCategory: (category: string | null) => void
     setSelectedProduct: (product: ProductView | null) => void
-    setMenuOpen: (open: boolean) => void
     addToCart: (product: ProductView) => void
     removeFromCart: (id: string) => void
-    updateQuantity: (id: string, quantity: string | number) => void
+    updateQuantity: (id: string, quantity: number) => void
     clearCart: () => void
     getTotalPrice: () => number
 }
@@ -29,18 +23,8 @@ export const useCartStore = create<CartStore>()(
         (set, get) => ({
             // Initial State
             cart: [],
-            page: 'main',
-            selectedCategory: null,
             selectedProduct: null,
-            menuOpen: false,
-
-            setSelectedCategory: (category) =>
-                set({ selectedCategory: category }),
-
             setSelectedProduct: (product) => set({ selectedProduct: product }),
-
-            setMenuOpen: (open) => set({ menuOpen: open }),
-
             addToCart: (product) =>
                 set((state) => {
                     const existingItem = state.cart.find(

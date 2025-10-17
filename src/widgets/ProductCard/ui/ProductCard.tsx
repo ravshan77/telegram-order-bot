@@ -21,7 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
     const updateQuantity = useCartStore((state) => state.updateQuantity)
     const isExistInCart = useCartStore((state) =>
-        state.cart.find((item) => item.id === product.id),
+        state.cart?.find((item) => item?.id === product?.id),
     )
 
     const cardRef = useRef<HTMLDivElement>(null)
@@ -125,7 +125,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                                 src={images[0]}
                                 loading="lazy"
                                 alt={`${product.name}-1`}
-                                className="w-full h-48 border border-green-500 object-cover"
+                                className="w-full h-48 object-cover"
                             />
                         ) : (
                             images.map((image, index) => (
