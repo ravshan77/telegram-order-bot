@@ -102,6 +102,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     const images = product.images.map((img) => `${APP_CDN}${img.path}`)
 
+    console.log(images)
+
     return (
         <div
             ref={cardRef}
@@ -121,12 +123,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         }}
                     >
                         {images.length === 1 ? (
-                            <img
-                                src={images[0]}
-                                loading="lazy"
-                                alt={`${product.name}-1`}
-                                className="w-full h-48 object-cover"
-                            />
+                            <SwiperSlide key={'0'}>
+                                <img
+                                    src={images[0]}
+                                    loading="lazy"
+                                    alt={`${product.name}-1`}
+                                    className="w-full h-48 object-cover"
+                                />
+                            </SwiperSlide>
                         ) : (
                             images.map((image, index) => (
                                 <SwiperSlide key={index}>

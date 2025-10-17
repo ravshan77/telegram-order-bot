@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@/shared/ui/kit'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useNavigate } from 'react-router-dom'
-import { Minus, Plus, Trash2 } from 'lucide-react'
+import { Image, Minus, Plus, Trash2 } from 'lucide-react'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { ProductView } from '@/entities/product/model/types'
 import { getCheckoutPath, getProductPath } from '@/shared/config'
@@ -72,11 +72,18 @@ export const BasketPage: React.FC = () => {
                                 onClick={() => goShowProduct(item)}
                             >
                                 {/* Product Image */}
-                                <img
-                                    // src={item?.image}
-                                    alt={item.name}
-                                    className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
-                                />
+                                {item.images.length > 0 ? (
+                                    <img
+                                        src={item?.images[0]?.path}
+                                        alt={item.name}
+                                        className="w-20 h-20 object-cover rounded-lg flex-shrink-0 border overflow-hidden"
+                                    />
+                                ) : (
+                                    <Image
+                                        size={40}
+                                        className="w-20 h-20 border rounded-lg flex-shrink-0"
+                                    />
+                                )}
 
                                 {/* Product Info */}
                                 <div className="flex-1 min-w-0">
@@ -93,14 +100,17 @@ export const BasketPage: React.FC = () => {
                             </div>
 
                             {/* Quantity Controls & Delete */}
-                            <div className="flex items-center justify-between mt-4">
-                                <div className="flex items-start pt-1">
-                                    <input
-                                        defaultChecked
-                                        type="checkbox"
-                                        className="w-5 h-5 rounded border-gray-300"
-                                    />
-                                </div>
+                            <div className="flex items-center justify-evenly mt-4">
+                                <button
+                                    className="p-2 text-gray-400 hover:text-red-500"
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleRemove(item.id)
+                                    }}
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+
                                 <div className="flex items-center gap-3">
                                     <Button
                                         className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
@@ -136,16 +146,6 @@ export const BasketPage: React.FC = () => {
                                         />
                                     </Button>
                                 </div>
-
-                                <button
-                                    className="p-2 text-gray-400 hover:text-red-500"
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleRemove(item.id)
-                                    }}
-                                >
-                                    <Trash2 size={20} />
-                                </button>
                             </div>
                         </div>
                     ))}
