@@ -1,12 +1,14 @@
+import { Image } from 'lucide-react'
 import React, { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
 import { BoxSvg } from '@/shared/ui/svg'
-import { products } from '@/entities/product'
 import { useNavigate } from 'react-router-dom'
 import { getBasketPath } from '@/shared/config'
-import { ProductCard } from '@/widgets/ProductCard'
 import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { ProductSection } from '@/features/ProductSection'
+
+const APP_CDN = import.meta.env.VITE_APP_CDN
 
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
@@ -14,18 +16,9 @@ export const ProductPage: React.FC = () => {
     const addToCart = useCartStore((state) => state.addToCart)
     const navigate = useNavigate()
 
+    const images = selectedProduct?.images.map((img) => `${APP_CDN}${img.path}`)
+
     if (!selectedProduct) return null
-
-    const slides = [
-        {
-            src: selectedProduct.image,
-        },
-        {
-            src: selectedProduct.image,
-        },
-    ]
-
-    const isSingle = slides.length === 1
 
     return (
         <div className="pb-16">
@@ -36,39 +29,50 @@ export const ProductPage: React.FC = () => {
 
             {/* Image gallery */}
             <div className="bg-white mt-4">
-                <ImageGallery
-                    index={currentIndex}
-                    slides={slides.map((img) => ({ src: img.src }))}
-                    onClose={() => setCurrentIndex(-1)}
-                >
-                    {isSingle ? (
-                        <div className="w-full flex justify-center">
-                            <img
-                                src={slides[0].src}
-                                alt="product"
-                                className={`rounded-xl h-96 object-cover cursor-pointer 
-                                    w-full sm:w-80 transition-all duration-300`}
-                                onClick={() => setCurrentIndex(0)}
-                            />
-                        </div>
-                    ) : (
+                {images?.length === 0 ? (
+                    <div className="w-full flex justify-center">
+                        <Image
+                            size={40}
+                            className="h-96 object-cover rounded-xl cursor-pointer 
+                                    w-full sm:w-80 transition-all duration-300 border"
+                        />
+                    </div>
+                ) : (
+                    <ImageGallery
+                        index={currentIndex}
+                        onClose={() => setCurrentIndex(-1)}
+                    >
                         <div className="flex overflow-x-auto gap-3">
-                            {slides.map((img, index) => (
+                            {images?.length === 1 ? (
                                 <div
-                                    key={`${img.src}-${index}`}
-                                    className="flex-shrink-0 cursor-pointer"
-                                    onClick={() => setCurrentIndex(index)}
+                                    key={`${images[0]}-0`}
+                                    className="flex-shrink-0 cursor-pointer w-full flex justify-center"
+                                    onClick={() => setCurrentIndex(0)}
                                 >
                                     <img
-                                        src={img.src}
-                                        alt={`product-${index}`}
-                                        className="rounded-xl h-96 w-80 object-cover"
+                                        src={images[0]}
+                                        alt={`product-0`}
+                                        className="rounded-xl h-96 object-cover border-red-500"
                                     />
                                 </div>
-                            ))}
+                            ) : (
+                                images?.map((img, index) => (
+                                    <div
+                                        key={`${img}-${index}`}
+                                        className="flex-shrink-0 cursor-pointer"
+                                        onClick={() => setCurrentIndex(index)}
+                                    >
+                                        <img
+                                            src={img}
+                                            alt={`product-${index}`}
+                                            className="rounded-xl h-96 w-80 object-cover border"
+                                        />
+                                    </div>
+                                ))
+                            )}
                         </div>
-                    )}
-                </ImageGallery>
+                    </ImageGallery>
+                )}
 
                 {/* Product info */}
                 <div className="py-4">
@@ -76,14 +80,27 @@ export const ProductPage: React.FC = () => {
                         {selectedProduct.name}
                     </h1>
                     <div className="flex gap-2 mb-4">
-                        <div className="w-14 border flex justify-between items-center rounded-xl py-0 px-2">
-                            <BoxSvg width={18} height={18} />
-                            <span className="text-xs text-gray-500">24</span>
-                        </div>
-                        <div className="w-12 max-w-16 py-0 px-2 flex justify-between items-center rounded-xl bg-red-100 text-red-600">
-                            <span className="text-xs">
-                                -{selectedProduct.discount}%
-                            </span>
+                        {selectedProduct.discount && (
+                            <div className="w-12 max-w-16 py-0 px-2 flex justify-between items-center rounded-xl bg-red-100 text-red-600">
+                                <span className="text-xs">
+                                    -{selectedProduct.discount}%
+                                </span>
+                            </div>
+                        )}
+                        <div className="flex gap-1">
+                            {selectedProduct.package_measurements?.map(
+                                (pkg) => (
+                                    <div
+                                        key={pkg?.name}
+                                        className="w-14 border flex justify-between items-center rounded-xl py-0 px-2"
+                                    >
+                                        <BoxSvg width={18} height={18} />
+                                        <span className="text-xs text-gray-500">
+                                            {pkg?.quantity}
+                                        </span>
+                                    </div>
+                                ),
+                            )}
                         </div>
                     </div>
 
@@ -97,69 +114,55 @@ export const ProductPage: React.FC = () => {
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">
-                                Складовый учёт товара:
-                            </span>
-                            <span className="font-medium">Нет</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-600">
                                 Единица измерения:
                             </span>
-                            <span className="font-medium">Килограм</span>
+                            <span className="font-medium">
+                                {selectedProduct.measurement}
+                            </span>
                         </div>
-                        {selectedProduct.article && (
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">Артикул:</span>
-                                <span className="font-medium">
-                                    {selectedProduct.article}
-                                </span>
-                            </div>
-                        )}
+                        <div className="flex justify-between">
+                            <span className="text-gray-600">Артикул:</span>
+                            <span className="font-medium">
+                                {selectedProduct.sku
+                                    ? selectedProduct.sku
+                                    : 'Нет'}
+                            </span>
+                        </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">Код:</span>
-                            <span className="font-medium">#859086</span>
-                        </div>
-                        {selectedProduct.package && (
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">Упаковка</span>
-                                <span className="font-medium">
-                                    {selectedProduct.package}
-                                </span>
-                            </div>
-                        )}
-                        {selectedProduct.barcodes && (
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                    Штрих-код:
-                                </span>
-                                <span className="font-medium">
-                                    {selectedProduct.barcodes}
-                                </span>
-                            </div>
-                        )}
-                        <div className="flex justify-between">
-                            <span className="text-gray-600">
-                                Единица измерения:
-                            </span>
-                            <span className="font-medium">194765</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-600">ИКПУ:</span>
                             <span className="font-medium">
-                                пачка=1000 грамм
+                                {selectedProduct?.code
+                                    ? selectedProduct?.code
+                                    : 'Нет'}
                             </span>
                         </div>
-                        {selectedProduct.nds && (
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">НДС:</span>
-                                <span className="font-medium">
-                                    {selectedProduct.nds}
-                                </span>
-                            </div>
-                        )}
+
+                        <div className="flex justify-between">
+                            <span className="text-gray-600">Упаковка</span>
+                            <span className="font-medium">
+                                {selectedProduct?.package_measurements.length
+                                    ? selectedProduct.package_measurements.join(
+                                          ', ',
+                                      )
+                                    : 'Нет'}
+                            </span>
+                        </div>
+
+                        <div className="flex justify-between">
+                            <span className="text-gray-600">Штрих-код:</span>
+                            <span className="font-medium">
+                                {selectedProduct?.barcodes.length === 0
+                                    ? selectedProduct?.barcodes.join(', ')
+                                    : 'Нет'}
+                            </span>
+                        </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">Описание: </span>
-                            <span className="font-medium">Не указано</span>
+                            <span className="font-medium whitespace-pre-line pl-2">
+                                {selectedProduct.description
+                                    ? selectedProduct.description
+                                    : 'Нет'}
+                            </span>
                         </div>
                         <div className="flex p-4 rounded-md justify-between bg-primary-subtle ">
                             <span className="text-gray-600">
@@ -173,14 +176,7 @@ export const ProductPage: React.FC = () => {
 
                     <hr />
 
-                    <h3 className="text-black font-semibold text-base my-4">
-                        Похожие товары
-                    </h3>
-                    <div className="flex gap-3 overflow-x-auto">
-                        {products.map((p) => (
-                            <ProductCard key={p.id} product={p} />
-                        ))}
-                    </div>
+                    <ProductSection title="Похожие товары" />
                 </div>
             </div>
 

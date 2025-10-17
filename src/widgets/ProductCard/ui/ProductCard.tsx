@@ -13,6 +13,7 @@ import { ProductView } from '@/entities/product/model/types'
 interface ProductCardProps {
     product: ProductView
 }
+const APP_CDN = import.meta.env.VITE_APP_CDN
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const navigate = useNavigate()
@@ -43,7 +44,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     const renderActionButton = () => {
         // Товар нет в наличии
-        if (product?.not_available) {
+        if (product?.stock === 0) {
             return (
                 <p className="w-full justify-center flex items-center h-10 text-red-400 text-xs italic">
                     Товар нет в наличии
@@ -99,7 +100,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )
     }
 
-    const images = product.images
+    const images = product.images.map((img) => `${APP_CDN}${img.path}`)
 
     return (
         <div
@@ -119,16 +120,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                             event.stopPropagation()
                         }}
                     >
-                        {images.map((image, index) => (
-                            <SwiperSlide key={index}>
-                                <img
-                                    src={image}
-                                    loading="lazy"
-                                    alt={`${product.name} - ${index + 1}`}
-                                    className="w-full h-48 object-cover"
-                                />
-                            </SwiperSlide>
-                        ))}
+                        {images.length === 1 ? (
+                            <img
+                                src={images[0]}
+                                loading="lazy"
+                                alt={`${product.name}-1`}
+                                className="w-full h-48 border border-green-500 object-cover"
+                            />
+                        ) : (
+                            images.map((image, index) => (
+                                <SwiperSlide key={index}>
+                                    <img
+                                        src={image}
+                                        loading="lazy"
+                                        alt={`${product.name} - ${index + 1}`}
+                                        className="w-full h-48 object-cover"
+                                    />
+                                </SwiperSlide>
+                            ))
+                        )}
                     </Swiper>
                 ) : (
                     <div className="w-full h-48 flex items-center justify-center bg-gray-100">
@@ -152,7 +162,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     {product.name}
                 </div>
                 <div className="flex gap-1">
-                    {product.package?.map((pkg) => (
+                    {product.package_measurements?.map((pkg) => (
                         <div
                             key={pkg.name}
                             className="w-14 mt-2 border flex justify-between items-center rounded-xl py-0 px-2"

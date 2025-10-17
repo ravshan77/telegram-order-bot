@@ -4,10 +4,6 @@ export interface Category {
     image: string | null
     parent_id: string | null
     organization_id: string
-    is_deleted: boolean
-    created_at: string
-    updated_at: string
-    deleted_at: string | null
 }
 
 export interface CategoryTree extends Category {

@@ -4,6 +4,7 @@ export interface Location {
     name: string
     longitude: number
     latitude: number
+    is_default: boolean
 }
 
 // Contact
@@ -24,28 +25,29 @@ export interface Debt {
 }
 
 // Contractor (User profile with locations)
-export interface Contractor {
-    id: string
-    name: string
-    inn: string | null
-    contacts: Contact[]
-    organization_id: string
-    debts: Debt[]
-    locations: Location[]
-}
+// export interface Contractor {
+//     id: string
+//     name: string
+//     inn: string | null
+//     contacts: Contact[]
+//     organization_id: string
+//     debts: Debt[]
+//     locations: Location[]
+// }
 
 // Create/Update Location Data
 export interface LocationFormData {
     name: string
     longitude: number | string
     latitude: number | string
+    is_default: boolean
 }
 
 // Response when creating/updating location
-export interface LocationResponse {
-    contractor: Contractor
-    location: Location
-}
+// export interface LocationResponse {
+//     contractor: Contractor
+//     location: Location
+// }
 
 // Simplified view for UI
 export interface LocationView {
@@ -54,4 +56,14 @@ export interface LocationView {
     longitude: number
     latitude: number
     address?: string // Yandex Maps API dan olingan address
+}
+
+export interface LocationResponse {
+    id: string
+    name: string
+    inn: string | null
+    contacts: Contact[]
+    organization_id: string
+    debts: Debt[]
+    locations: Location[]
 }

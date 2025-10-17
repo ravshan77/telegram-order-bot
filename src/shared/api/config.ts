@@ -54,5 +54,4 @@ export const API_ENDPOINTS = {
     },
 } as const
 
-export const API_BASE_URL =
-    'https://staging.hippo.uz/telegram-order-bot/web-app/'
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL

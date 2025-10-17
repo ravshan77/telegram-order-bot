@@ -9,12 +9,14 @@ import {
     useCreateDeliveryAddress,
     useUpdateDeliveryAddress,
     useDeliveryAddress,
+    LocationFormData,
 } from '@/entities/deliveryAddress'
 
 interface LocationData {
     lat: number
     lng: number
     address: string
+    is_default: boolean
 }
 
 declare global {
@@ -48,9 +50,11 @@ export const DeliveryAddressMapPage: React.FC = () => {
         address: existingLocation?.name
             ? existingLocation?.name
             : 'Выберите адрес на карте',
+        is_default: existingLocation?.is_default
+            ? existingLocation?.is_default
+            : false,
     })
 
-    // const [locationName, setLocationName] = useState('')
     const [loading, setLoading] = useState(false)
     const [isMapReady, setIsMapReady] = useState(false)
 
@@ -145,18 +149,20 @@ export const DeliveryAddressMapPage: React.FC = () => {
                 const address = firstGeoObject
                     ? firstGeoObject.getAddressLine()
                     : `Координаты: ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}`
-                console.log(address)
+                // console.log(address)
 
                 setSelectedLocation({
                     lat: coords[0],
                     lng: coords[1],
                     address: address,
+                    is_default: selectedLocation.is_default,
                 })
             } catch (error) {
                 console.error('Geocoding error:', error)
                 setSelectedLocation({
                     lat: coords[0],
                     lng: coords[1],
+                    is_default: selectedLocation.is_default,
                     address: `Координаты: ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}`,
                 })
             } finally {
@@ -211,6 +217,7 @@ export const DeliveryAddressMapPage: React.FC = () => {
                         lat: coords[0],
                         lng: coords[1],
                         address: address,
+                        is_default: true,
                     })
                 } catch (error) {
                     console.error('Geocoding error:', error)
@@ -233,10 +240,11 @@ export const DeliveryAddressMapPage: React.FC = () => {
             return
         }
 
-        const locationData = {
+        const locationData: LocationFormData = {
             name: selectedLocation.address,
             latitude: selectedLocation.lat,
             longitude: selectedLocation.lng,
+            is_default: selectedLocation.is_default,
         }
 
         if (isEditMode) {

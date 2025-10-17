@@ -1,11 +1,11 @@
 import { lazy, Suspense } from 'react'
 import {
     LAYOUT_COLLAPSIBLE_SIDE,
-    LAYOUT_STACKED_SIDE,
-    LAYOUT_TOP_BAR_CLASSIC,
-    LAYOUT_FRAMELESS_SIDE,
-    LAYOUT_CONTENT_OVERLAY,
-    LAYOUT_BLANK,
+    // LAYOUT_STACKED_SIDE,
+    // LAYOUT_TOP_BAR_CLASSIC,
+    // LAYOUT_FRAMELESS_SIDE,
+    // LAYOUT_CONTENT_OVERLAY,
+    // LAYOUT_BLANK,
 } from '@/shared/config/constants/theme.constant'
 import Loading from '@/shared/ui/kit-pro/Loading'
 import type { CommonProps } from '@/@types/common'
@@ -23,12 +23,14 @@ interface PostLoginLayoutProps extends CommonProps {
 }
 
 const layouts: Layouts = {
-    [LAYOUT_COLLAPSIBLE_SIDE]: lazy(() => import('./components/CollapsibleSide')),
-    [LAYOUT_STACKED_SIDE]: lazy(() => import('./components/StackedSide')),
-    [LAYOUT_TOP_BAR_CLASSIC]: lazy(() => import('./components/TopBarClassic')),
-    [LAYOUT_FRAMELESS_SIDE]: lazy(() => import('./components/FrameLessSide')),
-    [LAYOUT_CONTENT_OVERLAY]: lazy(() => import('./components/ContentOverlay')),
-    [LAYOUT_BLANK]: lazy(() => import('./components/Blank')),
+    [LAYOUT_COLLAPSIBLE_SIDE]: lazy(
+        () => import('./components/CollapsibleSide'),
+    ),
+    // [LAYOUT_STACKED_SIDE]: lazy(() => import('./components/StackedSide')),
+    // [LAYOUT_TOP_BAR_CLASSIC]: lazy(() => import('./components/TopBarClassic')),
+    // [LAYOUT_FRAMELESS_SIDE]: lazy(() => import('./components/FrameLessSide')),
+    // [LAYOUT_CONTENT_OVERLAY]: lazy(() => import('./components/ContentOverlay')),
+    // [LAYOUT_BLANK]: lazy(() => import('./components/Blank')),
 }
 
 const PostLoginLayout = ({ layoutType, children }: PostLoginLayoutProps) => {

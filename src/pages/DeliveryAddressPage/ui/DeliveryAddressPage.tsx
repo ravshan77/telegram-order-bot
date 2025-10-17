@@ -34,6 +34,7 @@ export const DeliveryAddressPage = () => {
 
     const handleDelete = (address: Location) => {
         if (window.confirm('Вы действительно хотите удалить этот адрес?')) {
+            // console.log(address)
             deleteLocation.mutate(
                 {
                     id: address.id!,
@@ -81,8 +82,8 @@ export const DeliveryAddressPage = () => {
 
                 {/* Address List */}
                 <div className="space-y-3 mt-2">
-                    {addresses && addresses.length > 0 ? (
-                        addresses.map((address, index) => (
+                    {addresses && addresses.locations.length > 0 ? (
+                        addresses.locations.map((address, index) => (
                             <div
                                 key={address.id}
                                 className="bg-white rounded-2xl gap-3 border py-4 px-4 flex items-center justify-between"

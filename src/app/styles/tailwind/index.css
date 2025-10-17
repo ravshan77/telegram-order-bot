@@ -69,6 +69,7 @@
         -moz-osx-font-smoothing: grayscale;
         overscroll-behavior: none;
         -webkit-overflow-scrolling: touch;
+        border: '1px solid red';
     }
 
     h1,

@@ -1,7 +1,7 @@
 import { BaseRestClient } from '@/shared/api/ApiService'
 import { API_ENDPOINTS, API_BASE_URL } from '@/shared/api/config'
 import type {
-    Contractor,
+    // Contractor,
     LocationFormData,
     LocationResponse,
     Location,
@@ -13,27 +13,21 @@ class DeliveryAddressApi extends BaseRestClient {
     }
 
     /**
-     * Get contractor with all locations
-     */
-    async getContractor(): Promise<Contractor> {
-        return this.get<Contractor>(API_ENDPOINTS.deliveryAddress.getAll)
-    }
-
-    /**
      * Get all delivery addresses
      */
-    async getAllLocations(): Promise<Location[]> {
-        const contractor = await this.getContractor()
-        console.log(contractor)
+    async getAllLocations(): Promise<LocationResponse> {
+        const contractor = await this.get<LocationResponse>(
+            API_ENDPOINTS.deliveryAddress.getAll,
+        )
 
-        return contractor.locations
+        return contractor
     }
 
     /**
      * Get single location by ID
      */
     async getLocationById(id: string): Promise<Location> {
-        const contractor = await this.getContractor()
+        const contractor = await this.getAllLocations()
         const location = contractor.locations.find((loc) => loc.id === id)
 
         if (!location) {
@@ -88,6 +82,9 @@ class DeliveryAddressApi extends BaseRestClient {
         data: LocationFormData,
     ): Promise<LocationResponse> {
         // Convert string to number if needed
+
+        console.log({ id, data })
+
         const payload = {
             name: data.name,
             longitude: Number(data.longitude),
@@ -99,9 +96,6 @@ class DeliveryAddressApi extends BaseRestClient {
             payload,
         )
     }
-    // async deleteLocation(id: string): Promise<void> {
-    //     return this.post<void>(API_ENDPOINTS.deliveryAddress.delete(id))
-    // }
 }
 
 export const deliveryAddressApi = new DeliveryAddressApi()

@@ -6,7 +6,6 @@ import {
 } from '@tanstack/react-query'
 import { deliveryAddressApi } from './deliveryAddressApi'
 import type {
-    Contractor,
     Location,
     LocationFormData,
     LocationResponse,
@@ -34,30 +33,17 @@ type UpdateLocationVariables = {
 // ============ QUERIES ============
 
 /**
- * Get contractor (with locations)
- * @example
- * const { data: contractor } = useContractor()
- */
-export const useContractor = (
-    options?: Omit<UseQueryOptions<Contractor, Error>, 'queryKey' | 'queryFn'>,
-) => {
-    return useQuery<Contractor, Error>({
-        queryKey: DELIVERY_ADDRESS_KEYS.contractor(),
-        queryFn: () => deliveryAddressApi.getContractor(),
-        staleTime: 5 * 60 * 1000, // 5 minutes
-        ...options,
-    })
-}
-
-/**
  * Get all delivery addresses (locations)
  * @example
  * const { data: locations } = useDeliveryAddresses()
  */
 export const useDeliveryAddresses = (
-    options?: Omit<UseQueryOptions<Location[], Error>, 'queryKey' | 'queryFn'>,
+    options?: Omit<
+        UseQueryOptions<LocationResponse, Error>,
+        'queryKey' | 'queryFn'
+    >,
 ) => {
-    return useQuery<Location[], Error>({
+    return useQuery<LocationResponse, Error>({
         queryKey: DELIVERY_ADDRESS_KEYS.locations(),
         queryFn: () => deliveryAddressApi.getAllLocations(),
         staleTime: 5 * 60 * 1000,
@@ -106,19 +92,19 @@ export const useCreateDeliveryAddress = () => {
             // Update contractor cache
             queryClient.setQueryData(
                 DELIVERY_ADDRESS_KEYS.contractor(),
-                response.contractor,
+                response,
             )
 
             // Update locations cache
             queryClient.setQueryData(
                 DELIVERY_ADDRESS_KEYS.locations(),
-                response.contractor.locations,
+                response.locations,
             )
 
             // Add individual location to cache
             queryClient.setQueryData(
-                DELIVERY_ADDRESS_KEYS.location(response.location.id),
-                response.location,
+                DELIVERY_ADDRESS_KEYS.location(response.id),
+                response,
             )
 
             // Invalidate to refetch
@@ -196,19 +182,19 @@ export const useUpdateDeliveryAddress = () => {
             // Update contractor cache
             queryClient.setQueryData(
                 DELIVERY_ADDRESS_KEYS.contractor(),
-                response.contractor,
+                response,
             )
 
             // Update locations cache
             queryClient.setQueryData(
                 DELIVERY_ADDRESS_KEYS.locations(),
-                response.contractor.locations,
+                response.locations,
             )
 
             // Update individual location cache
             queryClient.setQueryData(
                 DELIVERY_ADDRESS_KEYS.location(id),
-                response.location,
+                response.id,
             )
 
             // Invalidate to refetch
@@ -250,8 +236,11 @@ export const useDeleteDeliveryAddress = () => {
         UpdateLocationVariables,
         { previousLocation?: Location; previousLocations?: Location[] }
     >({
-        mutationFn: ({ id, data }) =>
-            deliveryAddressApi.deleteLocation(id, data),
+        mutationFn: ({ id, data }) => {
+            console.log({ id, data })
+
+            return deliveryAddressApi.deleteLocation(id, data)
+        },
 
         onMutate: async ({ id }) => {
             // Cancel queries
@@ -322,19 +311,4 @@ export const useDeleteDeliveryAddress = () => {
             })
         },
     })
-}
-
-/**
- * Prefetch delivery address
- */
-export const usePrefetchDeliveryAddress = () => {
-    const queryClient = useQueryClient()
-
-    return (id: string) => {
-        queryClient.prefetchQuery({
-            queryKey: DELIVERY_ADDRESS_KEYS.location(id),
-            queryFn: () => deliveryAddressApi.getLocationById(id),
-            staleTime: 5 * 60 * 1000,
-        })
-    }
 }

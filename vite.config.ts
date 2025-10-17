@@ -26,6 +26,9 @@ export default defineConfig({
             },
         },
     },
+    optimizeDeps: {
+        force: false,
+    },
     build: {
         outDir: 'build',
         sourcemap: true,

@@ -1,72 +1,61 @@
+import { Category } from '@/entities/category'
+import { CategoryTree } from '@/entities/category/model/types'
+
 // API dan keladigan ma'lumotlar
 export interface ProductItem {
-    id: string
-    created_at: string
-    updated_at: string
-    deleted_at: string | null
-    is_deleted: boolean
-    name: string
-    measurement: number
-    package_measurements: Package_measurements[]
-    code: string | null
-    sku: string | null
     barcodes: string[]
-    is_state_controlled: boolean
-    is_favorite: boolean
-    category: any | null
-    tax: {
-        measurement: any | null
-        catalog: any | null
-        benefit: any | null
-        tax_rate: any | null
-        origin: any | null
-    }
-    images: any[]
+    category: string | null
+    code: string | null
     description: string
-    organization_id: string
-    tasnif_info: any | null
     description_attributes: any[]
+    id: string
+    images: ProductImages[]
+    is_favorite: boolean
     legal_type: number
+    measurement: number
+    name: string
+    organization_id: string
+    package_measurements: Package_measurements[]
+    sku: string | null
 }
 
-export interface ProductPrice {
-    id: number
+interface ProductPrice {
+    bulk_price: Price
+    common_price: Price
+    contractor: null | string | number | object // agar contractor keyingi bosqichlarda object bo‘lishi mumkin bo‘lsa
+}
+
+interface WarehouseState {
+    id: string
+    name: string
+    organization_id: string
+    warehouse_items: WarehouseItem[]
+}
+
+interface BranchState {
+    code: string
     created_at: string
+    deleted_at: string | null
+    id: string
+    is_deleted: boolean
+    name: string
+    owner: BranchOwner
+    roaming_address: string | null
+    roaming_branch: RoamingBranch
+    state: number
     updated_at: string
-    is_active: boolean
-    item: {
-        id: number
-        global_item_id: string
-        global_organization_id: string
-    }
-    common_price: {
-        id: number
-        created_at: string
-        updated_at: string
-        amount: number
-        currency: {
-            id: number
-            global_currency_id: number
-            name: string
-            global_organization_id: string
-            is_national: boolean
-        }
-    }
-    bulk_price: {
-        id: number
-        created_at: string
-        updated_at: string
-        amount: number
-        currency: {
-            id: number
-            global_currency_id: number
-            name: string
-            global_organization_id: string
-            is_national: boolean
-        }
-    }
-    contractor: any | null
-    global_account_id: any | null
+    warehouses: any[] // agar warehouse strukturasi aniq bo‘lsa, WarehouseItem[] deb yozish mumkin
+}
+
+interface Currency {
+    global_currency_id: number
+    is_national: boolean
+    name: string
+}
+
+interface Price {
+    amount: number
+    currency: Currency
 }
 
 interface Package_measurements {
@@ -74,134 +63,71 @@ interface Package_measurements {
     quantity: number
 }
 
-export interface WarehouseState {
+interface ProductImages {
     id: string
     name: string
-    organization_id: string
-    warehouse_items: {
-        id: number
-        name: string
-        state: number
-        alert_on: number | null
-        purchase_price: any | null
-    }[]
+    path: string
 }
 
-export interface BranchState {
-    id: string
-    created_at: string
-    updated_at: string
-    is_deleted: boolean
-    deleted_at: string | null
-    code: string
+interface WarehouseItem {
+    alert_on: string | null
+    id: number
     name: string
-    owner: {
-        id: string
-        inn: string | null
-        name: string
-    }
-    roaming_branch: {
-        branch_number: string
-        branch_name: string
-        address: string | null
-        longitude: number | null
-        latitude: number | null
-    }
-    roaming_address: string | null
-    warehouses: any[]
+    purchase_price: number | null
     state: number
 }
 
+interface BranchOwner {
+    id: string
+    inn: string | null
+    name: string
+}
+
+interface RoamingBranch {
+    address: string | null
+    branch_name: string
+    branch_number: string
+    latitude: number | null
+    longitude: number | null
+}
+
 // Asosiy Product interface
-export interface Product {
+export interface Items {
     item: ProductItem
     price: ProductPrice
     warehouse_states: WarehouseState
     branch_states: BranchState[]
 }
 
-// UI uchun soddalashtirilgan Product interface
-export interface ProductView {
-    id: string
-    name: string
+// UI uchun qo'shimcha propertylar Product interfacei
+export interface ProductView extends ProductItem {
     price: number
-    currency: string
-    oldPrice?: number
-    discount?: number
-    image: string
-    images: string[]
-    category: string | null
-    description: string
-    brand?: string
-    article?: string
-    code: string | null
-    sku: string | null
-    barcodes: string[]
-    package: Package_measurements[]
-    nds?: number
-    not_available: boolean
-    is_favorite: boolean
     stock: number
-    measurement: number
-    created_at: string
-    updated_at: string
+    discount?: number | string | null
 }
 
-// Product ni ProductView ga o'zgartirish helper function
-export const transformProductToView = (product: Product): ProductView => {
-    const totalStock = product?.warehouse_states?.warehouse_items.reduce(
-        (itemSum, item) => itemSum + item?.state,
-        0,
-    )
-
-    return {
-        id: product.item.id,
-        name: product.item.name,
-        price: product.price.common_price.amount,
-        currency: product.price.common_price.currency.name,
-        package: product.item.package_measurements,
-        image: product.item.images[0] || '/placeholder.png',
-        images: product.item.images || [],
-        category: product.item.category?.name || null,
-        description: product.item.description || '',
-        code: product.item.code,
-        sku: product.item.sku,
-        barcodes: product.item.barcodes,
-        not_available: true, // custom add
-        is_favorite: product.item.is_favorite,
-        stock: totalStock,
-        measurement: product.item.measurement,
-        created_at: product.item.created_at,
-        updated_at: product.item.updated_at,
-        // nds: product.item.code || 0,
-    }
+export interface ItemResponse {
+    categories: Category[]
+    categoriesTree: CategoryTree[]
+    data: Items[]
 }
 
-export type Categories = {
-    id: string
-    image: string | null
-    name: string
-    organization_id: string
-    parent_id: string | null
+export interface ProductFilters {
+    contractorId?: string
+    name?: string
+    sku?: string
+    category_id?: string
+    measurment?: string
+    desc?: boolean
+    sort?: string
+    skip?: number
+    limit?: number
 }
 
-export type CategoriesTree = {
-    childs: []
-    id: string
-    image: {
-        id: string
-        name: string
-        path: string
-    }
-    name: string
-    organization_id: string
-    parent_id: string
-}
-
-export type BaseProducts = {
-    categories: Categories[]
-    categoriesTree: CategoriesTree[]
-    data: Product[]
-    filtered_count: number
-    total_count: number
+export interface PaginatedResponse<T> {
+    data: T[]
+    total: number
+    page: number
+    limit: number
+    hasMore?: boolean
 }

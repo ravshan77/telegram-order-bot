@@ -3,12 +3,13 @@ import {
     useInfiniteQuery,
     type UseQueryOptions,
 } from '@tanstack/react-query'
-import {
-    productApi,
-    type ProductFilters,
-    type PaginatedResponse,
-} from './productApi'
-import type { BaseProducts, Product } from '../model/types'
+import { productApi } from './productApi'
+import type {
+    ItemResponse,
+    PaginatedResponse,
+    ProductFilters,
+    ProductItem,
+} from '../model/types'
 
 // Query Keys
 export const PRODUCT_KEYS = {
@@ -31,11 +32,11 @@ export const PRODUCT_KEYS = {
 export const useProducts = (
     filters?: ProductFilters,
     options?: Omit<
-        UseQueryOptions<BaseProducts, Error>,
+        UseQueryOptions<ItemResponse, Error>,
         'queryKey' | 'queryFn'
     >,
 ) => {
-    return useQuery<BaseProducts, Error>({
+    return useQuery<ItemResponse, Error>({
         queryKey: PRODUCT_KEYS.list(filters),
         queryFn: () => {
             return productApi.getAllProducts(filters)
@@ -47,49 +48,12 @@ export const useProducts = (
 
 export const useProduct = (
     id: string,
-    options?: Omit<UseQueryOptions<Product, Error>, 'queryKey' | 'queryFn'>,
+    options?: Omit<UseQueryOptions<ProductItem, Error>, 'queryKey' | 'queryFn'>,
 ) => {
-    return useQuery<Product, Error>({
+    return useQuery<ProductItem, Error>({
         queryKey: PRODUCT_KEYS.detail(id),
         queryFn: () => productApi.getProductById(id),
         enabled: !!id,
-        staleTime: 5 * 60 * 1000,
-        ...options,
-    })
-}
-
-export const useSearchProducts = (
-    query: string,
-    options?: Omit<UseQueryOptions<Product[], Error>, 'queryKey' | 'queryFn'>,
-) => {
-    return useQuery<Product[], Error>({
-        queryKey: PRODUCT_KEYS.search(query),
-        queryFn: () => productApi.searchProducts(query),
-        enabled: query.length > 2,
-        staleTime: 2 * 60 * 1000,
-        ...options,
-    })
-}
-
-export const useProductsByCategory = (
-    categoryId: string,
-    options?: Omit<UseQueryOptions<Product[], Error>, 'queryKey' | 'queryFn'>,
-) => {
-    return useQuery<Product[], Error>({
-        queryKey: PRODUCT_KEYS.byCategory(categoryId),
-        queryFn: () => productApi.getProductsByCategory(categoryId),
-        enabled: !!categoryId,
-        staleTime: 5 * 60 * 1000,
-        ...options,
-    })
-}
-
-export const useFavoriteProducts = (
-    options?: Omit<UseQueryOptions<Product[], Error>, 'queryKey' | 'queryFn'>,
-) => {
-    return useQuery<Product[], Error>({
-        queryKey: PRODUCT_KEYS.favorites(),
-        queryFn: () => productApi.getFavoriteProducts(),
         staleTime: 5 * 60 * 1000,
         ...options,
     })
@@ -107,7 +71,7 @@ export const useInfiniteProducts = (
                 limit,
                 filters,
             ),
-        getNextPageParam: (lastPage: PaginatedResponse<Product>) => {
+        getNextPageParam: (lastPage: PaginatedResponse<ProductItem>) => {
             if (lastPage.hasMore) {
                 return lastPage.page + 1
             }
