@@ -9,7 +9,7 @@ export interface ProductItem {
     description: string
     description_attributes: any[]
     id: string
-    images: ProductImages[]
+    images: Image[]
     is_favorite: boolean
     legal_type: number
     measurement: number
@@ -63,7 +63,7 @@ interface Package_measurements {
     quantity: number
 }
 
-interface ProductImages {
+export interface Image {
     id: string
     name: string
     path: string

@@ -2,8 +2,8 @@ import React from 'react'
 import { ChevronRight } from 'lucide-react'
 import { ProductCard } from '@/widgets/ProductCard'
 import { Alert, Button, Spinner } from '@/shared/ui/kit'
-import { transformProductToView, useProducts } from '@/entities/product'
 import { ProductFilters } from '@/entities/product/model/types'
+import { transformProductToView, useProducts } from '@/entities/product'
 
 interface ProductSectionProps {
     title: string

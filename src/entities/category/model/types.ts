@@ -1,7 +1,9 @@
+import { Image } from '@/entities/product/model/types'
+
 export interface Category {
     id: string
     name: string
-    image: string | null
+    image: Image
     parent_id: string | null
     organization_id: string
 }

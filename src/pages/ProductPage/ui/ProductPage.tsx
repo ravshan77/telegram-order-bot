@@ -52,7 +52,7 @@ export const ProductPage: React.FC = () => {
                                     <img
                                         src={images[0]}
                                         alt={`product-0`}
-                                        className="rounded-xl h-96 object-cover border-red-500"
+                                        className="rounded-xl h-96 object-cover overflow-hidden"
                                     />
                                 </div>
                             ) : (

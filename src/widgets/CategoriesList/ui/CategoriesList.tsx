@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom'
 import { getCategoryPath } from '@/shared/config'
 import { useCategories } from '@/entities/category'
 import { Alert, Button, Spinner } from '@/shared/ui/kit'
+import { capitalizeFirstLetter } from '@/shared/ui/kit/utils/capitalize'
+
+const APP_CDN = import.meta.env.VITE_APP_CDN
 
 export const CategoriesList = () => {
     const {
@@ -39,7 +42,17 @@ export const CategoriesList = () => {
                         variant="plain"
                         className="flex items-center gap-2 px-3 mb-3 bg-white rounded-2xl border border-gray-200 whitespace-nowrap hover:border-primary shadow-md"
                     >
-                        <span className="text-sm">{cat.name}</span>
+                        {cat?.image ? (
+                            <div className="w-5 h-5">
+                                <img
+                                    src={`${APP_CDN}${cat?.image?.path}`}
+                                    className="w-full h-full rounded"
+                                />
+                            </div>
+                        ) : null}
+                        <span className="text-sm text-center min-w-20">
+                            {capitalizeFirstLetter(cat?.name)}
+                        </span>
                     </Button>
                 </Link>
             ))}
