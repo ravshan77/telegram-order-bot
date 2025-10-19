@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from '@/shared/ui/kit'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useTelegram } from '@/shared/lib/hooks'
 import { Settings, MessageCircle, User } from 'lucide-react'
@@ -24,12 +25,10 @@ export const ProfilePage: React.FC = () => {
 
     return (
         <div className="">
-            {/* Header */}
             <div className="bg-white w-full">
                 <GoBack />
             </div>
 
-            {/* Profile Section */}
             <div className="py-4">
                 <div className="flex items-center gap-4 mb-8">
                     <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-200 flex-shrink-0">
@@ -51,11 +50,11 @@ export const ProfilePage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="grid grid-cols-2 gap-3">
-                    {/* Settings Button */}
-                    <button
-                        className="bg-white rounded-2xl p-6 flex flex-col items-center justify-center gap-3 shadow-sm border border-gray-100 hover:shadow-md transition-all active:scale-95"
+                    <Button
+                        variant="plain"
+                        shape="round"
+                        className="p-6 h-40 flex flex-col items-center justify-center gap-3 shadow-sm border"
                         onClick={handleSettings}
                     >
                         <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
@@ -64,11 +63,12 @@ export const ProfilePage: React.FC = () => {
                         <span className="text-sm font-medium text-gray-900">
                             Настройка
                         </span>
-                    </button>
+                    </Button>
 
-                    {/* Chat ID Button */}
-                    <button
-                        className="bg-white rounded-2xl p-6 flex flex-col items-center justify-center gap-3 shadow-sm border border-gray-100 hover:shadow-md transition-all active:scale-95"
+                    <Button
+                        variant="plain"
+                        shape="round"
+                        className="p-6 h-40 flex flex-col items-center justify-center gap-3 shadow-sm border"
                         onClick={handleChatId}
                     >
                         <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
@@ -80,7 +80,7 @@ export const ProfilePage: React.FC = () => {
                         <span className="text-sm font-medium text-gray-900">
                             Чат ID
                         </span>
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

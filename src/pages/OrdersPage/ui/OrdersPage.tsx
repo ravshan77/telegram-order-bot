@@ -1,10 +1,10 @@
-import { useCallback } from 'react'
-import { Button, Spinner, Alert } from '@/shared/ui/kit'
-import { useNavigate } from 'react-router-dom'
-import { MoreHorizontal } from 'lucide-react'
-import { getOrderDetailsPath } from '@/shared/config'
-import { useOrders } from '@/entities/order'
 import dayjs from 'dayjs'
+import { useCallback } from 'react'
+import { useOrders } from '@/entities/order'
+import { MoreHorizontal } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { getOrderDetailsPath } from '@/shared/config'
+import { Button, Spinner, Alert } from '@/shared/ui/kit'
 
 export const OrdersPage = () => {
     const navigate = useNavigate()

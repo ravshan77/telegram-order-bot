@@ -19,7 +19,6 @@ const APP_CDN = import.meta.env.VITE_APP_CDN
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
     const selectedProduct = useCartStore((state) => state.selectedProduct)
-    // const addToCart = useCartStore((state) => state.addToCart)
     const navigate = useNavigate()
 
     const { data: order } = useNotApprovedOrder()

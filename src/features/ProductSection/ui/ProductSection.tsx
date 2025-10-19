@@ -21,7 +21,7 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
         isError: isErrorProducts,
         error: productsError,
     } = useProducts({
-        limit: 30,
+        limit: 50,
         // skip: 1,
         ...filters,
     })

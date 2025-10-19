@@ -1,8 +1,8 @@
 import dayjs from 'dayjs'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useParams } from 'react-router-dom'
-import { Alert, Spinner } from '@/shared/ui/kit'
 import { useOrder } from '@/entities/order'
+import { Alert, Spinner } from '@/shared/ui/kit'
 
 export const OrderDetailsPage = () => {
     const { orderId } = useParams<{ orderId: string }>()

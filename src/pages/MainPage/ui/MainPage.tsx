@@ -1,8 +1,8 @@
-import React from 'react'
+import { FC } from 'react'
 import { ProductSection } from '@/features/ProductSection'
 import CategoriesList from '@/widgets/CategoriesList/ui/CategoriesList'
 
-export const MainPage: React.FC = () => {
+export const MainPage: FC = () => {
     return (
         <div className="pb-0">
             <div>
