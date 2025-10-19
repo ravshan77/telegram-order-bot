@@ -36,9 +36,16 @@ export const API_ENDPOINTS = {
         clear: '/cart/clear',
     },
     orders: {
-        register: '/order/register', // POST
-        getAll: '/orders', // GET (if available)
-        getById: (id: string) => `/order/${id}`, // GET (if available)
+        getAll: '/order/get',
+        getCount: '/order/get/count',
+        getNotApproved: '/order/get-not-approved',
+        getById: (id: string) => `/order/get/${id}`,
+        register: '/order/register',
+        addItem: '/order/add-item',
+        updateItem: '/order/update-item',
+        deleteItem: '/order/delete-item',
+        approve: '/order/approve',
+        delete: '/order/delete',
     },
     sales: {
         getAll: '/sales',

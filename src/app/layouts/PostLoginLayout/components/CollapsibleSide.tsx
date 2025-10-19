@@ -7,17 +7,21 @@ import type { CommonProps } from '@/@types/common'
 import MobileNav from '@/shared/ui/template/MobileNav'
 import LayoutBase from '@/shared/ui/template/LayoutBase'
 import { Search, ShoppingCart, User } from 'lucide-react'
-import { useCartStore } from '@/shared/store/useCartStore'
+// import { useCartStore } from '@/shared/store/useCartStore'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import { getBasketPath, getProfilePath } from '@/shared/config'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
+import { useNotApprovedOrder } from '@/entities/order'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
     const tg = useTelegram()
     const { larger, smaller } = useResponsive()
+    const { data: order } = useNotApprovedOrder()
+    const cart = order?.items || []
 
-    const totalItems = useCartStore((state) => state.cart.length)
+    // const totalItems = useCartStore((state) => state.cart)
+    const totalItems = cart?.length
 
     return (
         <LayoutBase
