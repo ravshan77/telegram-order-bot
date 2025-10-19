@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import { Image } from 'lucide-react'
 import React, { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
@@ -7,14 +8,51 @@ import { getBasketPath } from '@/shared/config'
 import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { ProductSection } from '@/features/ProductSection'
+import {
+    useAddOrderItem,
+    useNotApprovedOrder,
+    useRegisterOrder,
+} from '@/entities/order'
 
 const APP_CDN = import.meta.env.VITE_APP_CDN
 
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
     const selectedProduct = useCartStore((state) => state.selectedProduct)
-    const addToCart = useCartStore((state) => state.addToCart)
+    // const addToCart = useCartStore((state) => state.addToCart)
     const navigate = useNavigate()
+
+    const { data: order } = useNotApprovedOrder()
+    const registerOrder = useRegisterOrder()
+    const addItem = useAddOrderItem()
+
+    const handleAddToCart = async (
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+        e.stopPropagation()
+
+        try {
+            if (!order) {
+                // Create new order with this item
+                await registerOrder.mutateAsync({
+                    items: [
+                        { item_id: String(selectedProduct?.id), quantity: 1 },
+                    ],
+                })
+            } else {
+                // Add item to existing order
+                await addItem.mutateAsync({
+                    id: order.id,
+                    item: { item_id: String(selectedProduct?.id), quantity: 1 },
+                })
+            }
+
+            toast.success('Товар добавлен в корзину')
+            navigate(getBasketPath())
+        } catch (err: any) {
+            toast.error(err.message || 'Ошибка при добавлении в корзину')
+        }
+    }
 
     const images = selectedProduct?.images.map((img) => `${APP_CDN}${img.path}`)
 
@@ -196,10 +234,7 @@ export const ProductPage: React.FC = () => {
                 <Button
                     variant="solid"
                     className="w-auto min-w-32 rounded-lg font-medium"
-                    onClick={() => {
-                        addToCart(selectedProduct)
-                        navigate(getBasketPath())
-                    }}
+                    onClick={handleAddToCart}
                 >
                     в корзину
                 </Button>
