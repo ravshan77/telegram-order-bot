@@ -14,6 +14,7 @@ import type {
     ApproveOrderRequest,
     DeleteOrderRequest,
 } from '../model/types'
+import toast from 'react-hot-toast'
 
 // Query Keys
 export const ORDER_KEYS = {
@@ -68,6 +69,7 @@ export const useNotApprovedOrder = (
     return useQuery<Order | null, Error>({
         queryKey: ORDER_KEYS.notApproved(),
         queryFn: () => orderApi.getNotApprovedOrder(),
+        // staleTime: 0, // 1 minute
         staleTime: 1 * 60 * 1000, // 1 minute
         retry: 1, // Only retry once for 404 errors
         ...options,
@@ -103,11 +105,13 @@ export const useRegisterOrder = () => {
         onSuccess: (newOrder) => {
             // Update not approved order cache
             queryClient.setQueryData(ORDER_KEYS.notApproved(), newOrder)
-
-            // Invalidate orders list
             queryClient.invalidateQueries({
-                queryKey: ORDER_KEYS.lists(),
+                queryKey: ORDER_KEYS.notApproved(),
             })
+            toast.success('Товар добавлен в корзину')
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Ошибка при создании заказа')
         },
     })
 }
@@ -129,6 +133,13 @@ export const useAddOrderItem = () => {
                 ORDER_KEYS.detail(updatedOrder.id),
                 updatedOrder,
             )
+            queryClient.invalidateQueries({
+                queryKey: ORDER_KEYS.notApproved(),
+            })
+            toast.success('Товар добавлен в корзину')
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Ошибка при добавлении товара')
         },
     })
 }
@@ -150,6 +161,13 @@ export const useUpdateOrderItem = () => {
                 ORDER_KEYS.detail(updatedOrder.id),
                 updatedOrder,
             )
+            queryClient.invalidateQueries({
+                queryKey: ORDER_KEYS.notApproved(),
+            })
+            toast.success('Количество обновлено')
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Ошибка при обновлении товара')
         },
     })
 }
@@ -171,6 +189,13 @@ export const useDeleteOrderItem = () => {
                 ORDER_KEYS.detail(updatedOrder.id),
                 updatedOrder,
             )
+            queryClient.invalidateQueries({
+                queryKey: ORDER_KEYS.notApproved(),
+            })
+            toast.success('Товар удален из корзины')
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Ошибка при удалении товара')
         },
     })
 }
@@ -188,15 +213,22 @@ export const useApproveOrder = () => {
             queryClient.setQueryData(ORDER_KEYS.notApproved(), null)
 
             // Update orders list
-            queryClient.invalidateQueries({
-                queryKey: ORDER_KEYS.lists(),
-            })
+            // queryClient.invalidateQueries({
+            //     queryKey: ORDER_KEYS.lists(),
+            // })
 
             // Update specific order cache
             queryClient.setQueryData(
                 ORDER_KEYS.detail(approvedOrder.id),
                 approvedOrder,
             )
+            queryClient.invalidateQueries({
+                queryKey: ORDER_KEYS.notApproved(),
+            })
+            toast.success('Заказ успешно оформлен!')
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Ошибка при оформлении заказа')
         },
     })
 }
@@ -217,11 +249,18 @@ export const useDeleteOrder = () => {
             queryClient.invalidateQueries({
                 queryKey: ORDER_KEYS.lists(),
             })
+            queryClient.invalidateQueries({
+                queryKey: ORDER_KEYS.notApproved(),
+            })
 
             // Remove specific order cache
             queryClient.removeQueries({
                 queryKey: ORDER_KEYS.detail(variables.id),
             })
+            toast.success('Заказ удален')
+        },
+        onError: (error: any) => {
+            toast.error(error.message || 'Ошибка при удалении заказа')
         },
     })
 }

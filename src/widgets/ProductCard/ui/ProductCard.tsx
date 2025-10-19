@@ -29,7 +29,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
 
     // Get active order (cart)
-    const { data: order } = useNotApprovedOrder()
+    const { data: order, isPending } = useNotApprovedOrder()
 
     // Mutations
     const registerOrder = useRegisterOrder()
@@ -122,7 +122,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     const renderActionButton = () => {
         const isLoading =
-            registerOrder.isPending || addItem.isPending || updateItem.isPending
+            isPending ||
+            registerOrder.isPending ||
+            addItem.isPending ||
+            updateItem.isPending
 
         // Out of stock
         if (product?.stock === 0) {
@@ -142,6 +145,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         className="w-12 h-full flex items-center justify-center border-none outline-none"
                         icon={<Minus size={20} className="text-gray-700" />}
                         disabled={isLoading}
+                        // loading={isLoading}
                         onClick={(e) => {
                             e.stopPropagation()
                             handleUpdateQuantity(cartItem.quantity - 1)
@@ -172,7 +176,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 className="w-full h-10 flex items-center justify-center rounded border"
                 onClick={handleAddToCart}
                 disabled={isLoading}
-                loading={isLoading}
+                // loading={isLoading}
             >
                 <span className="text-base font-medium flex items-center gap-2">
                     в корзину <BasketSvg width={20} height={20} />

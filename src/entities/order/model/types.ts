@@ -123,6 +123,18 @@ export enum OrderErrorType {
     HasOrderAcceptanceTime = 'has_order_acceptance_time',
 }
 
+export interface OrderErrorResponse {
+    order_not_found?: string
+    bot_user_not_found?: string
+    bot_configuration_not_found?: string
+    script_not_found?: string
+    register_order_not_allowed?: string
+    allowed_contractors_only?: string
+    has_order_acceptance_time?: string
+    not_approved_order_exist?: string
+    enable_order_with_available_items?: string
+}
+
 // // Request types
 // export interface OrderItemRequest {
 //     item_id: string
@@ -215,17 +227,6 @@ export enum OrderErrorType {
 //     HasOrderAcceptanceTime = 'has_order_acceptance_time',
 //     NotApprovedOrderExist = 'not_approved_order_exist',
 //     EnableOrderWithAvailableItems = 'enable_order_with_available_items',
-// }
-
-// export interface OrderErrorResponse {
-//     bot_user_not_found?: string
-//     bot_configuration_not_found?: string
-//     script_not_found?: string
-//     register_order_not_allowed?: string
-//     allowed_contractors_only?: string
-//     has_order_acceptance_time?: string
-//     not_approved_order_exist?: string
-//     enable_order_with_available_items?: string
 // }
 
 // // UI types

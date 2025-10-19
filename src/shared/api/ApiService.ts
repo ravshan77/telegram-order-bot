@@ -128,14 +128,11 @@ export class BaseRestClient {
     }
 
     private handleError(error: unknown): never {
+        console.log(error)
+
         if (axios.isAxiosError(error)) {
-            const message = error.response
-                ? `HTTP Error: ${error.response.status} ${error.response.statusText}`
-                : 'Network Error'
-            throw new Error(
-                error?.response?.data.message ||
-                    `${message} - ${error.message}`,
-            )
+            // const err = error.response ? error : Error('Network Error')
+            throw error
         }
         throw new Error(`Unexpected Error: ${error}`)
     }

@@ -100,7 +100,7 @@ export const BasketPage: React.FC = () => {
         return (
             <div className="p-4">
                 <Alert showIcon type="danger">
-                    Ошибка загрузки корзины: {error?.message}
+                    {error?.message}
                 </Alert>
             </div>
         )
