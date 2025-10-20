@@ -91,8 +91,14 @@ export const OrdersPage = () => {
                     <div className="flex items-center gap-2 text-sm">
                         <DatePickerRange
                             value={[filters?.date_start, filters?.date_end]}
+                            closePickerOnChange={false} // End sana tanlanganda yopiladi
+                            singleDate={true}
                             onChange={(e) => {
-                                setFilters({ date_start: e[0], date_end: e[1] })
+                                setFilters((prev) => ({
+                                    ...prev,
+                                    date_start: e[0],
+                                    date_end: e[1],
+                                }))
                             }}
                         />
                     </div>

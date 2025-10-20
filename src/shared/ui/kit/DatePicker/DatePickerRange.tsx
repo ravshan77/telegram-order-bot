@@ -113,11 +113,17 @@ const DatePickerRange = (props: DatePickerRangeProps) => {
 
     const handleValueChange = (range: [Date, Date]) => {
         setValue(range)
-        if (closePickerOnChange && validationRule(range)) {
+
+        if (closePickerOnChange && validationRule(range) && range[1] !== null) {
             setDropdownOpened(false)
             onDropdownClose?.()
             window.setTimeout(() => inputRef.current?.focus(), 0)
         }
+        // if (closePickerOnChange && validationRule(range)) {
+        //     setDropdownOpened(false)
+        //     onDropdownClose?.()
+        //     window.setTimeout(() => inputRef.current?.focus(), 0)
+        // }
     }
 
     const valueValid = validationRule(_value)
@@ -168,29 +174,33 @@ const DatePickerRange = (props: DatePickerRangeProps) => {
             onDropdownOpen={onDropdownOpen}
             {...rest}
         >
-            <RangeCalendar
-                locale={finalLocale}
-                defaultMonth={(valueValid ? _value?.[0] : defaultMonth) as Date}
-                value={_value as [Date | null, Date | null]}
-                labelFormat={labelFormat}
-                dayClassName={dayClassName}
-                dayStyle={dayStyle}
-                disableOutOfMonth={disableOutOfMonth}
-                minDate={minDate}
-                maxDate={maxDate}
-                disableDate={disableDate}
-                firstDayOfWeek={firstDayOfWeek}
-                enableHeaderLabel={enableHeaderLabel}
-                singleDate={singleDate}
-                dateViewCount={dateViewCount}
-                defaultView={defaultView}
-                hideOutOfMonthDates={hideOutOfMonthDates}
-                hideWeekdays={hideWeekdays}
-                renderDay={renderDay}
-                weekendDays={weekendDays}
-                yearLabelFormat={yearLabelFormat}
-                onChange={(date) => handleValueChange(date as [Date, Date])}
-            />
+            <div onMouseDown={(e) => e.stopPropagation()}>
+                <RangeCalendar
+                    locale={finalLocale}
+                    defaultMonth={
+                        (valueValid ? _value?.[0] : defaultMonth) as Date
+                    }
+                    value={_value as [Date | null, Date | null]}
+                    labelFormat={labelFormat}
+                    dayClassName={dayClassName}
+                    dayStyle={dayStyle}
+                    disableOutOfMonth={disableOutOfMonth}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    disableDate={disableDate}
+                    firstDayOfWeek={firstDayOfWeek}
+                    enableHeaderLabel={enableHeaderLabel}
+                    singleDate={singleDate}
+                    dateViewCount={dateViewCount}
+                    defaultView={defaultView}
+                    hideOutOfMonthDates={hideOutOfMonthDates}
+                    hideWeekdays={hideWeekdays}
+                    renderDay={renderDay}
+                    weekendDays={weekendDays}
+                    yearLabelFormat={yearLabelFormat}
+                    onChange={(date) => handleValueChange(date as [Date, Date])}
+                />
+            </div>
         </BasePicker>
     )
 }
