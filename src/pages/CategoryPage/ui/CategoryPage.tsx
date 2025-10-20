@@ -1,5 +1,5 @@
 import { GoBack } from '@/shared/ui/kit-pro'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Alert, Tabs } from '@/shared/ui/kit'
 import TabNav from '@/shared/ui/kit/Tabs/TabNav'
 import { useCategory } from '@/entities/category'
@@ -9,9 +9,11 @@ import TabContent from '@/shared/ui/kit/Tabs/TabContent'
 import React, { useState, useCallback, useMemo } from 'react'
 import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
 import { transformProductToView, useProducts } from '@/entities/product'
+import { getCategoryPath } from '@/shared/config'
 
 export const CategoryPage: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>()
+    const navigate = useNavigate()
     const [currentTab, setCurrentTab] = useState<string>(categoryId || '')
     const [limit, setLimit] = useState(20)
 
@@ -51,6 +53,12 @@ export const CategoryPage: React.FC = () => {
     })
 
     const handleTabChange = (tabValue: string) => {
+        const dd = category?.childs.find((child) => child?.id === tabValue)
+
+        if (dd?.childs) {
+            navigate(getCategoryPath(dd.id))
+        }
+
         setCurrentTab(tabValue)
         setLimit(20)
     }
@@ -107,7 +115,7 @@ export const CategoryPage: React.FC = () => {
 
                 <div
                     ref={scrollContainerRef}
-                    className="py-4 overflow-y-auto scroll-smooth"
+                    className="py-4 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100"
                     style={{ maxHeight: 'calc(100vh - 200px)' }}
                 >
                     {isErrorProducts ? (
@@ -122,7 +130,7 @@ export const CategoryPage: React.FC = () => {
                         </div>
                     ) : (
                         <TabContent value={currentTab}>
-                            <div className="grid grid-cols-2 gap-3 mb-6">
+                            <div className="grid grid-cols-2 gap-2 mb-6">
                                 {productViews.map((product) => (
                                     <ProductCard
                                         key={product.id}

@@ -165,7 +165,7 @@ const _Search = ({ className }: { className?: string }) => {
                         </Button>
                     </div>
                     <div className="py-6 px-5">
-                        <ScrollBar className=" max-h-[350px] overflow-y-auto">
+                        <ScrollBar className=" max-h-[350px] -y-auto">
                             {searchResult.map((result) => (
                                 <div key={result.title} className="mb-4">
                                     <h6 className="mb-3">{result.title}</h6>

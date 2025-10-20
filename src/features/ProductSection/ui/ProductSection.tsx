@@ -75,7 +75,7 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
 
             <div
                 ref={scrollContainerRef}
-                className="flex gap-3 overflow-x-auto pb-3 scroll-smooth"
+                className="flex gap-3 overflow-x-auto pb-3 scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100"
                 onScroll={handleScroll}
             >
                 {productViews.length > 0 ? (

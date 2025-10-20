@@ -187,7 +187,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     return (
         <div
             ref={cardRef}
-            className="min-w-44 max-w-44 rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
+            className=" max-w-44 rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
         >
             <div className="relative">
                 <Swiper
