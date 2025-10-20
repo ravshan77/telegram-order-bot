@@ -18,32 +18,22 @@ export const OrdersPage = () => {
         date_start: today,
     })
 
-    const {
-        data: orders,
-        isLoading,
-        isError,
-        error,
-    } = useOrders({
-        date_start: dayjs(
-            filters?.date_start ? filters?.date_start : '',
-        ).format('YYYY-MM-DD'),
-        date_end: dayjs(filters?.date_end ? filters?.date_end : '').format(
-            'YYYY-MM-DD',
-        ),
-    })
+    const params: Record<string, string> = {}
+
+    if (filters?.date_start && dayjs(filters.date_start).isValid()) {
+        params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
+    }
+
+    if (filters?.date_end && dayjs(filters.date_end).isValid()) {
+        params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+    }
+
+    const { data: orders, isLoading, isError, error } = useOrders(params)
 
     const goToOrderDetails = useCallback(
         (orderId: string) => navigate(getOrderDetailsPath(orderId)),
         [navigate],
     )
-
-    if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <Spinner size={40} />
-            </div>
-        )
-    }
 
     if (isError) {
         return (
@@ -91,7 +81,6 @@ export const OrdersPage = () => {
                     <div className="flex items-center gap-2 text-sm">
                         <DatePickerRange
                             value={[filters?.date_start, filters?.date_end]}
-                            closePickerOnChange={false} // End sana tanlanganda yopiladi
                             singleDate={true}
                             onChange={(e) => {
                                 setFilters((prev) => ({
@@ -104,6 +93,11 @@ export const OrdersPage = () => {
                     </div>
                 </div>
                 <div className="space-y-4 mb-4 overflow-y-auto">
+                    {isLoading && (
+                        <div className="flex justify-center items-center">
+                            <Spinner size={40} />
+                        </div>
+                    )}
                     {orders?.length === 0 ? (
                         <div className="h-72 flex flex-col items-center justify-center">
                             <p className="text-gray-500">

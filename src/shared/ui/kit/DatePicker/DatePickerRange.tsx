@@ -114,11 +114,22 @@ const DatePickerRange = (props: DatePickerRangeProps) => {
     const handleValueChange = (range: [Date, Date]) => {
         setValue(range)
 
-        if (closePickerOnChange && validationRule(range) && range[1] !== null) {
+        if (
+            closePickerOnChange &&
+            validationRule(range) &&
+            range[0] !== null &&
+            range[1] !== null
+        ) {
             setDropdownOpened(false)
             onDropdownClose?.()
             window.setTimeout(() => inputRef.current?.focus(), 0)
         }
+
+        // if (closePickerOnChange && validationRule(range) && range[1] !== null) {
+        //     setDropdownOpened(false)
+        //     onDropdownClose?.()
+        //     window.setTimeout(() => inputRef.current?.focus(), 0)
+        // }
         // if (closePickerOnChange && validationRule(range)) {
         //     setDropdownOpened(false)
         //     onDropdownClose?.()

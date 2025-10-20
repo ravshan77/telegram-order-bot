@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { useEffect } from 'react'
 import { Dot } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getSaleDetailPath } from '@/shared/config'
@@ -43,6 +44,10 @@ export const SalesPage = () => {
     const navigate = useNavigate()
     const today = dayjs().toDate()
     const deafult_value: [Date, Date] = [today, today]
+
+    useEffect(() => {
+        fetch('')
+    }, [])
 
     const goToSaleDetail = (saleId: string | number) =>
         navigate(getSaleDetailPath(saleId))
