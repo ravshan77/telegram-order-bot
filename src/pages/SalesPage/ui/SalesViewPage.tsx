@@ -172,36 +172,44 @@ export const SalesViewPage: React.FC = () => {
 
                 {/* Fixed Footer - Summary */}
                 <div className="fixed bottom-0 h-40 left-0 right-0 bg-white border-t shadow-2xl">
-                    <div className="px-4 py-4 space-y-3">
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600">
-                                Общая сумма:
-                            </span>
-                            <span className="text-sm font-semibold">
-                                {formatNumber(orderData.summary.total)} UZS
-                            </span>
+                    <div className="m-4 px-4 py-4 space-y-3 rounded-md bg-primary-subtle">
+                        <div className="flex justify-between">
+                            <div className="flex flex-col items-start justify-between w-1/2">
+                                <span className="text-xs text-gray-600">
+                                    Общая сумма:
+                                </span>
+                                <span className="text-sm font-semibold text-primary">
+                                    {formatNumber(orderData.summary.total)} UZS
+                                </span>
+                            </div>
+                            <div className="flex flex-col items-start justify-between w-1/2">
+                                <span className="text-xs text-gray-600">
+                                    Скидка:
+                                </span>
+                                <span className="text-sm font-semibold text-primary">
+                                    {formatNumber(orderData.summary.discount)}{' '}
+                                    UZS
+                                </span>
+                            </div>
                         </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600">
-                                Скидка:
-                            </span>
-                            <span className="text-sm font-semibold">
-                                {formatNumber(orderData.summary.discount)} UZS
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600">
-                                Оплата:
-                            </span>
-                            <span className="text-sm font-semibold">
-                                {formatNumber(orderData.summary.payment)} UZS
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600">Долг:</span>
-                            <span className="text-sm font-semibold">
-                                {formatNumber(orderData.summary.debt)} UZS
-                            </span>
+                        <div className="flex justify-between">
+                            <div className="flex flex-col items-start justify-between w-1/2">
+                                <span className="text-xs text-gray-600">
+                                    Оплата:
+                                </span>
+                                <span className="text-sm font-semibold text-primary">
+                                    {formatNumber(orderData.summary.payment)}{' '}
+                                    UZS
+                                </span>
+                            </div>
+                            <div className="flex flex-col items-start justify-between w-1/2">
+                                <span className="text-xs text-gray-600">
+                                    Долг:
+                                </span>
+                                <span className="text-sm font-semibold text-primary">
+                                    {formatNumber(orderData.summary.debt)} UZS
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

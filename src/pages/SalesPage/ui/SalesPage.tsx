@@ -112,7 +112,7 @@ export const SalesPage = () => {
                 <div className="w-full bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
                     <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
                         <span className="text-sm font-semibold">
-                            Общая разница:
+                            Общая сумма:
                         </span>
                         <span className="text-sm font-semibold flex text-primary">
                             100$ <Dot /> 1 250 000 cум
