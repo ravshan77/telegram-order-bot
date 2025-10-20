@@ -35,7 +35,7 @@ export const CategoriesList = () => {
     }
 
     return (
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
             {categoriesTree?.map((cat) => (
                 <Link key={cat?.id} to={getCategoryPath(cat.id)}>
                     <Button
