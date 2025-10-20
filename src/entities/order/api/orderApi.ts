@@ -9,6 +9,7 @@ import type {
     ApproveOrderRequest,
     DeleteOrderRequest,
     OrderErrorResponse,
+    OrderFilters,
 } from '../model/types'
 
 class OrderApi extends BaseRestClient {
@@ -17,8 +18,10 @@ class OrderApi extends BaseRestClient {
     }
 
     // Get all orders with optional count
-    async getOrders(): Promise<Order[]> {
-        return this.get<Order[]>(API_ENDPOINTS.orders.getAll)
+    async getOrders(filters?: OrderFilters): Promise<Order[]> {
+        return this.get<Order[]>(API_ENDPOINTS.orders.getAll, {
+            params: filters,
+        })
     }
 
     // Get orders count

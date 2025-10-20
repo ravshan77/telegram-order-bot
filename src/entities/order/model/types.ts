@@ -135,6 +135,14 @@ export interface OrderErrorResponse {
     enable_order_with_available_items?: string
 }
 
+export interface OrderFilters {
+    date_start?: string
+    date_end?: string
+    skip?: number
+    limit?: number
+    is_approved?: boolean
+}
+
 // // Request types
 // export interface OrderItemRequest {
 //     item_id: string

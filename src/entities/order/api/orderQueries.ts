@@ -13,13 +13,14 @@ import type {
     DeleteOrderItemRequest,
     ApproveOrderRequest,
     DeleteOrderRequest,
+    OrderFilters,
 } from '../model/types'
 import toast from 'react-hot-toast'
 
 // Query Keys
 export const ORDER_KEYS = {
     all: ['orders'] as const,
-    lists: () => [...ORDER_KEYS.all, 'list'] as const,
+    lists: (filters?: OrderFilters) => [...ORDER_KEYS.all, filters] as const,
     count: () => [...ORDER_KEYS.all, 'count'] as const,
     notApproved: () => [...ORDER_KEYS.all, 'not-approved'] as const,
     details: () => [...ORDER_KEYS.all, 'detail'] as const,
@@ -32,11 +33,12 @@ export const ORDER_KEYS = {
  * Get all orders
  */
 export const useOrders = (
+    filters?: OrderFilters,
     options?: Omit<UseQueryOptions<Order[], Error>, 'queryKey' | 'queryFn'>,
 ) => {
     return useQuery<Order[], Error>({
-        queryKey: ORDER_KEYS.lists(),
-        queryFn: () => orderApi.getOrders(),
+        queryKey: ORDER_KEYS.lists(filters),
+        queryFn: () => orderApi.getOrders(filters),
         staleTime: 2 * 60 * 1000,
         ...options,
     })

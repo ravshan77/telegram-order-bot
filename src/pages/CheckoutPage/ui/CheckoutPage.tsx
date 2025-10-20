@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { SingleValue } from 'react-select'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { Input } from '@/shared/ui/kit/Input'
+import { SelectOption } from '@/shared/types'
 import { Dot, MapPinPlus } from 'lucide-react'
 import { Select } from '@/shared/ui/kit/Select'
 import { Link, useNavigate } from 'react-router-dom'
@@ -12,26 +13,11 @@ import { Button, Spinner, Alert } from '@/shared/ui/kit'
 import { useDeliveryAddresses } from '@/entities/deliveryAddress'
 import { getDeliveryAddressPath, getOrdersPath } from '@/shared/config'
 import { useNotApprovedOrder, useApproveOrder } from '@/entities/order'
-
-const paymentOptions: Option[] = [
-    { value: '1', label: 'Наличные' },
-    { value: '2', label: 'UzCard' },
-    { value: '3', label: 'Humo' },
-    { value: '4', label: 'Перечисление' },
-    { value: '5', label: 'Click' },
-    { value: '6', label: 'Payme' },
-    { value: '7', label: 'Visa' },
-    // { value: '', label: 'Другое' },
-]
-
-type Option = {
-    value: string
-    label: string
-}
+import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
 
 interface FormDataType {
-    paymentType: Option | null
-    locationType: Option | null
+    paymentType: SelectOption<string> | null
+    locationType: SelectOption<string> | null
     orderDate: string | null
     additionalInfo: string | null
 }
@@ -58,7 +44,7 @@ export const CheckoutPage = () => {
         additionalInfo: '',
     })
 
-    const locationOptions: Option[] =
+    const locationOptions: SelectOption<string>[] =
         addresses?.locations?.map((loc) => ({
             value: loc.id,
             label: loc.name,
@@ -160,7 +146,9 @@ export const CheckoutPage = () => {
                                 options={paymentOptions}
                                 isSearchable={false}
                                 value={formData.paymentType}
-                                onChange={(option: SingleValue<Option>) =>
+                                onChange={(
+                                    option: SingleValue<SelectOption<string>>,
+                                ) =>
                                     setFormData({
                                         ...formData,
                                         paymentType: option,
@@ -192,7 +180,11 @@ export const CheckoutPage = () => {
                                     options={locationOptions}
                                     isSearchable={false}
                                     value={formData.locationType}
-                                    onChange={(option: SingleValue<Option>) =>
+                                    onChange={(
+                                        option: SingleValue<
+                                            SelectOption<string>
+                                        >,
+                                    ) =>
                                         setFormData({
                                             ...formData,
                                             locationType: option,
