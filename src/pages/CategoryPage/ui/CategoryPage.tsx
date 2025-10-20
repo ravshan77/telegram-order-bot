@@ -1,17 +1,19 @@
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useParams } from 'react-router-dom'
+import { Alert, Tabs } from '@/shared/ui/kit'
 import TabNav from '@/shared/ui/kit/Tabs/TabNav'
 import { useCategory } from '@/entities/category'
 import TabList from '@/shared/ui/kit/Tabs/TabList'
-import React, { useState, useEffect } from 'react'
 import { ProductCard } from '@/widgets/ProductCard'
-import { Alert, Spinner, Tabs } from '@/shared/ui/kit'
 import TabContent from '@/shared/ui/kit/Tabs/TabContent'
+import React, { useState, useCallback, useMemo } from 'react'
+import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
 import { transformProductToView, useProducts } from '@/entities/product'
 
 export const CategoryPage: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>()
     const [currentTab, setCurrentTab] = useState<string>(categoryId || '')
+    const [limit, setLimit] = useState(20)
 
     const {
         data: category,
@@ -25,44 +27,57 @@ export const CategoryPage: React.FC = () => {
         isLoading: isLoadingProducts,
         isError: isErrorProducts,
         error: productsError,
-        refetch,
+        isFetching,
     } = useProducts(
         {
-            limit: 20,
+            limit,
             skip: 1,
             category_id: currentTab,
         },
         {
             enabled: !!currentTab,
+            placeholderData: (previousData) => previousData,
         },
     )
 
-    useEffect(() => {
-        if (currentTab) {
-            refetch()
-        }
-    }, [currentTab, refetch])
+    const handleLoadMore = useCallback(async () => {
+        setLimit((prev) => prev + 20)
+    }, [])
 
-    if (isLoadingCategory || isLoadingProducts) {
+    const { scrollContainerRef, sentinelRef } = useVerticalInfiniteScroll({
+        onLoadMore: handleLoadMore,
+        isLoading: isFetching,
+        threshold: 20,
+    })
+
+    const handleTabChange = (tabValue: string) => {
+        setCurrentTab(tabValue)
+        setLimit(20)
+    }
+
+    const productViews = useMemo(() => {
+        return (productsData?.data || []).map(transformProductToView)
+    }, [productsData?.data])
+
+    if (isLoadingCategory) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <Spinner size={40} />
+                <div className="animate-pulse text-gray-400">Загрузка...</div>
             </div>
         )
     }
 
-    if (isErrorCategory || isErrorProducts) {
+    if (isErrorCategory) {
         return (
             <div className="p-4">
                 <Alert showIcon type="danger">
-                    {categoryError?.message || productsError?.message}
+                    {categoryError?.message}
                 </Alert>
             </div>
         )
     }
 
     const categoryChilds = category?.childs ?? []
-    const productViews = productsData?.data?.map(transformProductToView) || []
 
     return (
         <div className="pb-16">
@@ -70,7 +85,7 @@ export const CategoryPage: React.FC = () => {
                 <GoBack text={category?.name} />
             </div>
 
-            <Tabs value={currentTab} onChange={setCurrentTab}>
+            <Tabs value={currentTab} onChange={handleTabChange}>
                 <TabList>
                     <TabNav
                         key={category?.id}
@@ -90,17 +105,38 @@ export const CategoryPage: React.FC = () => {
                     ))}
                 </TabList>
 
-                <div className="py-4">
-                    <TabContent value={currentTab}>
-                        <div className="grid grid-cols-2 gap-3 mb-6">
-                            {productViews.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                />
-                            ))}
+                <div
+                    ref={scrollContainerRef}
+                    className="py-4 overflow-y-auto scroll-smooth"
+                    style={{ maxHeight: 'calc(100vh - 200px)' }}
+                >
+                    {isErrorProducts ? (
+                        <Alert showIcon type="danger">
+                            {productsError?.message}
+                        </Alert>
+                    ) : productViews.length === 0 && isLoadingProducts ? (
+                        <div className="h-96" />
+                    ) : productViews.length === 0 ? (
+                        <div className="flex justify-center items-center h-96 text-gray-500">
+                            Товары не найдены
                         </div>
-                    </TabContent>
+                    ) : (
+                        <TabContent value={currentTab}>
+                            <div className="grid grid-cols-2 gap-3 mb-6">
+                                {productViews.map((product) => (
+                                    <ProductCard
+                                        key={product.id}
+                                        product={product}
+                                    />
+                                ))}
+                            </div>
+                            <div
+                                ref={sentinelRef}
+                                className="h-1"
+                                aria-hidden="true"
+                            />
+                        </TabContent>
+                    )}
                 </div>
             </Tabs>
         </div>
