@@ -1,17 +1,17 @@
 import dayjs from 'dayjs'
 import { useState } from 'react'
+import { Dot } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { SingleValue } from 'react-select'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { Input } from '@/shared/ui/kit/Input'
 import { SelectOption } from '@/shared/types'
-import { Dot, MapPinPlus } from 'lucide-react'
 import { Select } from '@/shared/ui/kit/Select'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { getOrdersPath } from '@/shared/config'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
 import { useDeliveryAddresses } from '@/entities/deliveryAddress'
-import { getDeliveryAddressPath, getOrdersPath } from '@/shared/config'
 import { useNotApprovedOrder, useApproveOrder } from '@/entities/order'
 import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
 
@@ -173,28 +173,21 @@ export const CheckoutPage = () => {
                         </FormItem>
 
                         <FormItem label="Локация">
-                            <div className="flex gap-1">
-                                <Select
-                                    placeholder="Выберите адрес"
-                                    className="w-full"
-                                    options={locationOptions}
-                                    isSearchable={false}
-                                    value={formData.locationType}
-                                    onChange={(
-                                        option: SingleValue<
-                                            SelectOption<string>
-                                        >,
-                                    ) =>
-                                        setFormData({
-                                            ...formData,
-                                            locationType: option,
-                                        })
-                                    }
-                                />
-                                <Link to={getDeliveryAddressPath()}>
-                                    <Button icon={<MapPinPlus />} />
-                                </Link>
-                            </div>
+                            <Select
+                                placeholder="Выберите адрес"
+                                className="w-full"
+                                options={locationOptions}
+                                isSearchable={false}
+                                value={formData.locationType}
+                                onChange={(
+                                    option: SingleValue<SelectOption<string>>,
+                                ) =>
+                                    setFormData({
+                                        ...formData,
+                                        locationType: option,
+                                    })
+                                }
+                            />
                         </FormItem>
 
                         <FormItem label="Дополнительная информация">
@@ -214,7 +207,7 @@ export const CheckoutPage = () => {
                     </Form>
                 </div>
 
-                <div className="w-full bg-white absolute flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-3 px-0 border-t">
+                <div className="m-4 bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-3 px-0 border-t">
                     <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
                         <span className="text-sm text-gray-600">
                             Общая сумма:

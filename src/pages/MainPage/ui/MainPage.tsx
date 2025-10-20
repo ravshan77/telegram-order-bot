@@ -15,7 +15,7 @@ export const MainPage: FC = () => {
                     filters={{ is_favorite: true }}
                 />
                 <ProductSection title="Скидки на смартфоны" />
-                <ProductSection title="Скидки на смартфоны" />
+                <ProductSection title="Скидки на смартфоны." />
             </div>
         </div>
     )
