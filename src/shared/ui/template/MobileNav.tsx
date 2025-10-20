@@ -1,17 +1,17 @@
-import { useState, Suspense, lazy } from 'react'
 import classNames from 'classnames'
 import { Drawer } from '@/shared/ui/kit'
+import Loading from '../kit-pro/Loading'
+import appConfig from '@/app/config/app.config'
+import { useState, Suspense, lazy } from 'react'
 import NavToggle from '@/shared/ui/kit-pro/NavToggle'
+import { useSessionUser } from '@/shared/model/authStore'
+import { useThemeStore } from '@/shared/model/themeStore'
+import navigationConfig from '@/app/config/navigation.config'
+import { useRouteKeyStore } from '@/shared/model/routeKeyStore'
 import { DIR_RTL } from '@/shared/config/constants/theme.constant'
 import withHeaderItem, {
     WithHeaderItemProps,
 } from '@/shared/lib/hoc/withHeaderItem'
-import navigationConfig from '@/app/config/navigation.config'
-import appConfig from '@/app/config/app.config'
-import { useThemeStore } from '@/shared/model/themeStore'
-import { useRouteKeyStore } from '@/shared/model/routeKeyStore'
-import { useSessionUser } from '@/shared/model/authStore'
-import Loading from '../kit-pro/Loading'
 
 const VerticalMenuContent = lazy(
     () => import('@/shared/ui/template/VerticalMenuContent'),

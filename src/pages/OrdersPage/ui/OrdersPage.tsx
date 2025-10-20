@@ -5,9 +5,12 @@ import { MoreHorizontal } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getOrderDetailsPath } from '@/shared/config'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
+import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
 export const OrdersPage = () => {
     const navigate = useNavigate()
+    const today = dayjs().toDate()
+    const deafult_value: [Date, Date] = [today, today]
 
     const { data: orders, isLoading, isError, error } = useOrders()
 
@@ -52,6 +55,9 @@ export const OrdersPage = () => {
             <div>
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-lg font-semibold">Заказы</h2>
+                    <div className="flex items-center gap-2 text-sm">
+                        <DatePickerRange defaultValue={deafult_value} />
+                    </div>
                 </div>
                 <div className="space-y-4 mb-4 overflow-y-auto">
                     {orders?.map((order) => {

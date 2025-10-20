@@ -163,7 +163,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
             {renderNavigation(navigationTree, 0)}
             <AuthorityCheck userAuthority={userAuthority} authority={[]}>
                 <div
-                    className={`fixed ${larger?.lg ? 'w-[260px]' : 'w-[300px]'} bottom-6`}
+                    className={`fixed ${larger?.lg ? 'w-[260px]' : 'w-[300px]'} bottom-6 ${collapsed ? 'hidden' : ''}`}
                 >
                     {isLoading ? (
                         <Loader />
