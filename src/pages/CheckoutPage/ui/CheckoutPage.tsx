@@ -125,7 +125,7 @@ export const CheckoutPage = () => {
     const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
 
     return (
-        <div className="pb-32 h-full relative">
+        <div className="pb-32 h-full">
             <div>
                 <div className="">
                     <GoBack text={'Оформление заказа'} />
@@ -207,8 +207,8 @@ export const CheckoutPage = () => {
                     </Form>
                 </div>
 
-                <div className="m-4 bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-3 px-0 border-t">
-                    <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
+                <div className="w-full bg-white fixed flex flex-col h-36 bottom-0 left-0 right-0 py-3 space-y-3 pb-3 px-4 border-t">
+                    <div className="w-full h-10 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
                         <span className="text-sm text-gray-600">
                             Общая сумма:
                         </span>
@@ -220,7 +220,7 @@ export const CheckoutPage = () => {
                     </div>
                     <Button
                         variant="solid"
-                        className="w-full mt-2 rounded-lg font-medium"
+                        className="w-full rounded-lg font-medium"
                         disabled={
                             !formData.orderDate ||
                             approveOrder.isPending ||
