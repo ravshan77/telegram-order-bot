@@ -19,9 +19,11 @@ export const useHorizontalInfiniteScroll = ({
 
     useEffect(() => {
         const userAgent = navigator.userAgent.toLowerCase()
-        const isMobile =
-            /iphone|ipad|android|mobile|ipod/.test(userAgent) ||
-            window.innerWidth < 768
+
+        const isMobile = /iphone|ipad|android|mobile|ipod/.test(userAgent)
+
+        // console.log({ userAgent })
+        // console.log({ isMobile })
 
         setIsDesktop(!isMobile)
     }, [])
