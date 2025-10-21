@@ -38,7 +38,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const cardRef = useRef<HTMLDivElement>(null)
     const flyToCart = useFlyToCart('#cart-icon', { duration: 0.8, scale: 0.2 })
 
-    const cartItem = order?.items?.find((item) => item.item.id === product.id)
+    const cartItem = order?.items
+        ?.filter((item) => !item?.is_deleted)
+        ?.find((item) => item.item.id === product.id)
 
     const goShowProduct = () => {
         setSelectedProduct(product)

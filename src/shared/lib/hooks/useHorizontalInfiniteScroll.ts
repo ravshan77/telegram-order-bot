@@ -15,6 +15,17 @@ export const useHorizontalInfiniteScroll = ({
     const [isAtEnd, setIsAtEnd] = useState(false)
     const isLoadingRef = useRef(false)
 
+    const [isDesktop, setIsDesktop] = useState(false)
+
+    useEffect(() => {
+        const userAgent = navigator.userAgent.toLowerCase()
+        const isMobile =
+            /iphone|ipad|android|mobile|ipod/.test(userAgent) ||
+            window.innerWidth < 768
+
+        setIsDesktop(!isMobile)
+    }, [])
+
     const handleScroll = useCallback(
         async (e: React.UIEvent<HTMLDivElement>) => {
             if (isLoadingRef.current || isAtEnd) return
@@ -47,5 +58,6 @@ export const useHorizontalInfiniteScroll = ({
     return {
         scrollContainerRef,
         handleScroll,
+        isDesktop,
     }
 }

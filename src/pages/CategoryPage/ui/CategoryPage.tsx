@@ -46,11 +46,12 @@ export const CategoryPage: React.FC = () => {
         setLimit((prev) => prev + 20)
     }, [])
 
-    const { scrollContainerRef, sentinelRef } = useVerticalInfiniteScroll({
-        onLoadMore: handleLoadMore,
-        isLoading: isFetching,
-        threshold: 20,
-    })
+    const { scrollContainerRef, sentinelRef, isDesktop } =
+        useVerticalInfiniteScroll({
+            onLoadMore: handleLoadMore,
+            isLoading: isFetching,
+            threshold: 20,
+        })
 
     const handleTabChange = (tabValue: string) => {
         const dd = category?.childs.find((child) => child?.id === tabValue)
@@ -115,7 +116,7 @@ export const CategoryPage: React.FC = () => {
 
                 <div
                     ref={scrollContainerRef}
-                    className="py-4 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100"
+                    className={`py-4 overflow-y-auto scroll-smooth ${isDesktop ? 'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
                     style={{ maxHeight: 'calc(100vh - 200px)' }}
                 >
                     {isErrorProducts ? (

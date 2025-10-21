@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 interface UseVerticalInfiniteScrollProps {
     onLoadMore: () => Promise<void> | void
@@ -15,6 +15,17 @@ export const useVerticalInfiniteScroll = ({
     const observerRef = useRef<IntersectionObserver | null>(null)
     const sentinelRef = useRef<HTMLDivElement>(null)
     const isLoadingRef = useRef(false)
+
+    const [isDesktop, setIsDesktop] = useState(false)
+
+    useEffect(() => {
+        const userAgent = navigator.userAgent.toLowerCase()
+        const isMobile =
+            /iphone|ipad|android|mobile|ipod/.test(userAgent) ||
+            window.innerWidth < 768
+
+        setIsDesktop(!isMobile)
+    }, [])
 
     useEffect(() => {
         isLoadingRef.current = isLoading
@@ -55,5 +66,6 @@ export const useVerticalInfiniteScroll = ({
     return {
         scrollContainerRef,
         sentinelRef,
+        isDesktop,
     }
 }

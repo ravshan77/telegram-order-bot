@@ -4,12 +4,12 @@ import { GoBack } from '@/shared/ui/kit-pro'
 import { useNavigate } from 'react-router-dom'
 import { getCheckoutPath } from '@/shared/config/'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
-import { Image, Minus, Plus, Trash2 } from 'lucide-react'
 import {
     useNotApprovedOrder,
     useUpdateOrderItem,
     useDeleteOrderItem,
 } from '@/entities/order'
+import { BasketItem } from '@/widgets/BasketItem'
 
 // const APP_CDN = import.meta.env.VITE_APP_CDN
 
@@ -123,90 +123,18 @@ export const BasketPage: React.FC = () => {
 
             <div className="flex-1 overflow-y-auto">
                 <div className="py-2 space-y-3">
-                    {cart.map((orderItem) => (
-                        <div
-                            key={orderItem.id}
-                            className="bg-white rounded-2xl p-4 border cursor-pointer"
-                        >
-                            <div className="flex gap-3">
-                                {/* Product Image */}
-                                <div className="w-20 h-20 flex-shrink-0 border rounded-lg overflow-hidden">
-                                    <Image
-                                        size={40}
-                                        className="w-full h-full"
-                                    />
-                                </div>
-
-                                {/* Product Info */}
-                                <div className="flex-1 min-w-0">
-                                    <h3 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2">
-                                        {orderItem.item.name}
-                                    </h3>
-                                    <p className="text-sm font-bold text-primary mb-1">
-                                        {orderItem.net_price.amount.toLocaleString()}{' '}
-                                        {orderItem.net_price.currency.name}
-                                    </p>
-                                    <p className="text-xs text-gray-500">
-                                        Цена продажи
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Quantity Controls & Delete */}
-                            <div className="flex items-center justify-evenly mt-4">
-                                <button
-                                    className="p-2 text-gray-400 hover:text-red-500"
-                                    disabled={deleteItem.isPending}
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleRemove(orderItem.id)
-                                    }}
-                                >
-                                    <Trash2 size={20} />
-                                </button>
-
-                                <div className="flex items-center gap-3">
-                                    <Button
-                                        className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
-                                        disabled={updateItem.isPending}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            handleUpdateQuantity(
-                                                orderItem.id,
-                                                orderItem.item.id,
-                                                orderItem.quantity - 1,
-                                            )
-                                        }}
-                                    >
-                                        <Minus
-                                            size={16}
-                                            className="text-gray-700"
-                                        />
-                                    </Button>
-                                    <span className="text-base font-medium w-8 text-center">
-                                        {orderItem.quantity}
-                                    </span>
-                                    <Button
-                                        className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
-                                        disabled={updateItem.isPending}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            handleUpdateQuantity(
-                                                orderItem.id,
-                                                orderItem.item.id,
-                                                orderItem.quantity + 1,
-                                            )
-                                        }}
-                                    >
-                                        <Plus
-                                            size={16}
-                                            className="text-gray-700"
-                                        />
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                    {cart
+                        ?.filter((orderItem) => !orderItem?.is_deleted)
+                        .map((orderItem) => (
+                            <BasketItem
+                                key={orderItem?.id}
+                                item={orderItem}
+                                updating={updateItem.isPending}
+                                deleting={deleteItem.isPending}
+                                onRemove={handleRemove}
+                                onUpdateQuantity={handleUpdateQuantity}
+                            />
+                        ))}
                 </div>
             </div>
 
@@ -214,8 +142,10 @@ export const BasketPage: React.FC = () => {
             <div className="fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
                 <div>
                     <p className="text-primary font-bold">
-                        {getTotalPrice().toLocaleString()}{' '}
-                        {order.net_price[0]?.currency.name || 'UZS'}
+                        {getTotalPrice()?.toLocaleString()}{' '}
+                        {order?.net_price?.length
+                            ? order?.net_price[0]?.currency?.name
+                            : ''}
                     </p>
                     <p className="text-xs font-light">Общая сумма:</p>
                 </div>

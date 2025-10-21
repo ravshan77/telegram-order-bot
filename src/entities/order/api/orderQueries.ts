@@ -14,6 +14,7 @@ import type {
     ApproveOrderRequest,
     DeleteOrderRequest,
     OrderFilters,
+    OrderItem,
 } from '../model/types'
 import toast from 'react-hot-toast'
 
@@ -74,6 +75,7 @@ export const useNotApprovedOrder = (
         // staleTime: 0, // 1 minute
         staleTime: 1 * 60 * 1000, // 1 minute
         retry: 1, // Only retry once for 404 errors
+        refetchOnWindowFocus: false,
         ...options,
     })
 }
@@ -135,6 +137,7 @@ export const useAddOrderItem = () => {
                 ORDER_KEYS.detail(updatedOrder.id),
                 updatedOrder,
             )
+
             queryClient.invalidateQueries({
                 queryKey: ORDER_KEYS.notApproved(),
             })
@@ -156,16 +159,26 @@ export const useUpdateOrderItem = () => {
         mutationFn: (data) => orderApi.updateOrderItem(data),
         onSuccess: (updatedOrder) => {
             // Update not approved order cache
-            queryClient.setQueryData(ORDER_KEYS.notApproved(), updatedOrder)
+            // queryClient.setQueryData(ORDER_KEYS.notApproved(), updatedOrder)
 
-            // Update specific order cache
-            queryClient.setQueryData(
-                ORDER_KEYS.detail(updatedOrder.id),
-                updatedOrder,
-            )
+            // // Update specific order cache
+            // queryClient.setQueryData(
+            //     ORDER_KEYS.detail(updatedOrder.id),
+            //     updatedOrder,
+            // )
             queryClient.invalidateQueries({
                 queryKey: ORDER_KEYS.notApproved(),
             })
+
+            queryClient.setQueryData(
+                ORDER_KEYS.notApproved(),
+                (old: Order) => ({
+                    ...old,
+                    items: old.items.map((i: OrderItem) =>
+                        i.id === updatedOrder.id ? updatedOrder : i,
+                    ),
+                }),
+            )
             toast.success('Количество обновлено')
         },
         onError: (error: any) => {
@@ -187,13 +200,24 @@ export const useDeleteOrderItem = () => {
             queryClient.setQueryData(ORDER_KEYS.notApproved(), updatedOrder)
 
             // Update specific order cache
-            queryClient.setQueryData(
-                ORDER_KEYS.detail(updatedOrder.id),
-                updatedOrder,
-            )
+            // queryClient.setQueryData(
+            //     ORDER_KEYS.detail(updatedOrder.id),
+            //     updatedOrder,
+            // )
+
             queryClient.invalidateQueries({
                 queryKey: ORDER_KEYS.notApproved(),
             })
+
+            queryClient.setQueryData(
+                ORDER_KEYS.notApproved(),
+                (old: Order) => ({
+                    ...old,
+                    items: old.items.map((i: OrderItem) =>
+                        i.id === updatedOrder.id ? updatedOrder : i,
+                    ),
+                }),
+            )
             toast.success('Товар удален из корзины')
         },
         onError: (error: any) => {

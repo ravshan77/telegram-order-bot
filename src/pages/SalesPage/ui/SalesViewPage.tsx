@@ -7,29 +7,72 @@ import { useParams } from 'react-router-dom'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { Alert, Button, Spinner } from '@/shared/ui/kit'
 import { salesApi } from '@/entities/sales/api/salesApi'
-// import { getSalesPath } from '@/shared/config'
 
 export const SalesViewPage: React.FC = () => {
     const { saleId } = useParams<{ saleId: string }>()
-    // const navigate = useNavigate()
-    // const [searchParams] = useSearchParams()
 
     const { data: sale, isLoading, isError, error } = useSale(saleId!)
 
+    // const handleDownloadExcel = async () => {
+    //     try {
+    //         const blob = await salesApi.downloadSaleExcel(saleId!)
+    //         const url = window.URL.createObjectURL(blob)
+    //         const link = document.createElement('a')
+    //         link.href = url
+    //         link.download = `sale_${sale?.number || saleId}.xlsx`
+    //         document.body.appendChild(link)
+    //         link.click()
+    //         document.body.removeChild(link)
+    //         window.URL.revokeObjectURL(url)
+    //         toast.success('Файл успешно загружен')
+    //     } catch (err: any) {
+    //         toast.error(err.message || 'Ошибка при скачивании файла')
+    //     }
+    // }
+
     const handleDownloadExcel = async () => {
         try {
-            const blob = await salesApi.downloadSaleExcel(saleId!)
+            const response = await salesApi.downloadSaleExcel(saleId!)
+            let base64: string | undefined
+
+            if (response instanceof Blob) {
+                base64 = await response.text()
+            } else if (typeof response === 'string') {
+                base64 = response
+            } else if (response?.data) {
+                base64 = response.data
+            } else if (response?.base64) {
+                base64 = response.base64
+            }
+
+            if (!base64) throw new Error('Server bo‘sh ma’lumot yubordi')
+            const cleanBase64 = base64.replace(/\s|"/g, '')
+            const binary = atob(cleanBase64)
+            const bytes = new Uint8Array(binary.length)
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i)
+            }
+
+            const blob = new Blob([bytes], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            })
+
             const url = window.URL.createObjectURL(blob)
             const link = document.createElement('a')
             link.href = url
-            link.download = `sale_${sale?.number || saleId}.xlsx`
+            link.download = `sale_${saleId}.xlsx`
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
             window.URL.revokeObjectURL(url)
+
             toast.success('Файл успешно загружен')
         } catch (err: any) {
-            toast.error(err.message || 'Ошибка при скачивании файла')
+            console.error('Excel yuklab olishda xato:', err)
+            toast.error(
+                'Excel yuklab olishda xato: ' +
+                    (err.message || 'noma’lum xato'),
+            )
         }
     }
 
@@ -78,14 +121,11 @@ export const SalesViewPage: React.FC = () => {
     return (
         <div className="pb-32">
             <div>
-                {/* Header */}
                 <div className="bg-white w-full">
                     <GoBack navigatePath={-1} />
                 </div>
 
-                {/* Content */}
                 <div className="py-4">
-                    {/* Status Card */}
                     <div className="bg-gray-50 rounded-2xl p-4 mb-4 shadow-sm border">
                         <div className="flex items-start justify-between mb-4">
                             <h2 className="text-base font-semibold">
@@ -149,7 +189,6 @@ export const SalesViewPage: React.FC = () => {
                             </div>
                         )}
 
-                        {/* PDF Download Button */}
                         <Button
                             className="w-full flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
                             onClick={handleDownloadExcel}
@@ -159,7 +198,6 @@ export const SalesViewPage: React.FC = () => {
                         </Button>
                     </div>
 
-                    {/* Product Cards */}
                     {sale.items
                         .filter((item) => !item.is_deleted)
                         .map((item) => (
@@ -167,17 +205,14 @@ export const SalesViewPage: React.FC = () => {
                                 key={item.id}
                                 className="bg-white rounded-2xl p-4 mb-3 shadow-sm border"
                             >
-                                {/* Header - Quantity Info */}
                                 <div className="flex items-center justify-between mb-3 text-xs text-gray-500">
                                     <span>Количество: {item.quantity} шт.</span>
                                 </div>
 
-                                {/* Product Name */}
                                 <h3 className="text-sm font-semibold text-gray-900 mb-3 leading-snug">
                                     {item.warehouse_item.name}
                                 </h3>
 
-                                {/* Price Details */}
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-600">

@@ -3,6 +3,7 @@ import { getCategoryPath } from '@/shared/config'
 import { useCategories } from '@/entities/category'
 import { Alert, Button, Spinner } from '@/shared/ui/kit'
 import { capitalizeFirstLetter } from '@/shared/ui/kit/utils/capitalize'
+import { useHorizontalInfiniteScroll } from '@/shared/lib/hooks'
 
 const APP_CDN = import.meta.env.VITE_APP_CDN
 
@@ -13,6 +14,8 @@ export const CategoriesList = () => {
         isError: isErrorProducts,
         error: productsError,
     } = useCategories()
+
+    const { isDesktop } = useHorizontalInfiniteScroll({ onLoadMore: () => {} })
 
     const categoriesTree = data?.categoriesTree ?? []
 
@@ -35,7 +38,9 @@ export const CategoriesList = () => {
     }
 
     return (
-        <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <div
+            className={`flex gap-2 overflow-x-auto ${isDesktop ? 'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
+        >
             {categoriesTree?.map((cat) => (
                 <Link key={cat?.id} to={getCategoryPath(cat.id)}>
                     <Button

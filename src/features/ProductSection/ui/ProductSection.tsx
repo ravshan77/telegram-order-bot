@@ -37,11 +37,12 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
         setLimit((prev) => prev + 50)
     }, [])
 
-    const { scrollContainerRef, handleScroll } = useHorizontalInfiniteScroll({
-        onLoadMore: handleLoadMore,
-        isLoading: isFetching,
-        threshold: 100,
-    })
+    const { scrollContainerRef, handleScroll, isDesktop } =
+        useHorizontalInfiniteScroll({
+            onLoadMore: handleLoadMore,
+            isLoading: isFetching,
+            threshold: 100,
+        })
 
     const productViews = useMemo(() => {
         return (data?.data || []).map(transformProductToView)
@@ -75,7 +76,7 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
 
             <div
                 ref={scrollContainerRef}
-                className="flex gap-3 overflow-x-auto pb-3 scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100"
+                className={`flex gap-3 overflow-x-auto pb-3 scroll-smooth ${isDesktop ? 'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
                 onScroll={handleScroll}
             >
                 {productViews.length > 0 ? (
