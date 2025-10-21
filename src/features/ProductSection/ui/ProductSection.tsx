@@ -62,8 +62,6 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
         )
     }
 
-    alert(`isDesktop: ${isDesktop}`)
-
     return (
         <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
@@ -78,7 +76,7 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
 
             <div
                 ref={scrollContainerRef}
-                className={`flex gap-3 overflow-x-auto pb-3 scroll-smooth ${isDesktop ? 'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
+                className={`flex gap-3 overflow-x-auto pb-3 ${isDesktop ? ' scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
                 onScroll={handleScroll}
             >
                 {productViews.length > 0 ? (

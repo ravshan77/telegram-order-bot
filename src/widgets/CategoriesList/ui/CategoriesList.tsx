@@ -39,7 +39,7 @@ export const CategoriesList = () => {
 
     return (
         <div
-            className={`flex gap-2 overflow-x-auto ${isDesktop ? 'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
+            className={`flex gap-2 overflow-x-auto ${isDesktop ? ' scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
         >
             {categoriesTree?.map((cat) => (
                 <Link key={cat?.id} to={getCategoryPath(cat.id)}>

@@ -116,7 +116,7 @@ export const CategoryPage: React.FC = () => {
 
                 <div
                     ref={scrollContainerRef}
-                    className={`py-4 overflow-y-auto scroll-smooth ${isDesktop ? 'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
+                    className={`py-4 overflow-y-auto ${isDesktop ? ' scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
                     style={{ maxHeight: 'calc(100vh - 200px)' }}
                 >
                     {isErrorProducts ? (
