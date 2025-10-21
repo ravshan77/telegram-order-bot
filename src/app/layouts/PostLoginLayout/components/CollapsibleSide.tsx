@@ -17,7 +17,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
     const tg = useTelegram()
     const { larger, smaller } = useResponsive()
     const { data: order } = useNotApprovedOrder()
-    const cart = order?.items.filter((item) => !item?.is_deleted) || []
+    const cart = order?.items?.filter((item) => !item?.is_deleted) || []
     const totalItems = cart?.length
 
     return (
