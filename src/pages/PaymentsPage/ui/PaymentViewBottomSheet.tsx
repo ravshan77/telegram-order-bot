@@ -1,3 +1,4 @@
+import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
 import {
     Drawer,
     DrawerTitle,
@@ -14,6 +15,7 @@ export function PaymentViewBottomSheet({
     isOpen,
     setIsOpen,
 }: BottomSheetProps) {
+    // paymentOptions
     return (
         <Drawer open={isOpen} onOpenChange={(prew) => setIsOpen(prew)}>
             <DrawerContent className="bg-white">

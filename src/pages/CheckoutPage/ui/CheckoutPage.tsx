@@ -45,11 +45,11 @@ export const CheckoutPage = () => {
 
     const locationOptions: SelectOption<string>[] =
         addresses?.locations?.map((loc) => ({
-            value: loc.id,
-            label: loc.name,
+            value: loc?.id,
+            label: loc?.name,
         })) || []
 
-    const defaultLocation = addresses?.locations?.find((loc) => loc.is_default)
+    const defaultLocation = addresses?.locations?.find((loc) => loc?.is_default)
     // useState(() => {
     //     if (defaultLocation && !formData.locationType) {
     //         setFormData((prev) => ({
@@ -63,12 +63,12 @@ export const CheckoutPage = () => {
     // })
 
     useEffect(() => {
-        if (defaultLocation && !formData.locationType) {
+        if (defaultLocation && !formData?.locationType) {
             setFormData((prev) => ({
                 ...prev,
                 locationType: {
-                    value: defaultLocation.id,
-                    label: defaultLocation.name,
+                    value: defaultLocation?.id,
+                    label: defaultLocation?.name,
                 },
             }))
         }
@@ -87,26 +87,26 @@ export const CheckoutPage = () => {
 
         try {
             await approveOrder.mutateAsync({
-                id: order.id,
-                date: formData.orderDate,
-                comment: formData.additionalInfo || '',
-                location_id: formData.locationType?.value || null,
-                payment_type: formData.paymentType
-                    ? Number(formData.paymentType.value)
+                id: order?.id,
+                date: formData?.orderDate,
+                comment: formData?.additionalInfo || '',
+                location_id: formData?.locationType?.value || null,
+                payment_type: formData?.paymentType
+                    ? Number(formData?.paymentType?.value)
                     : null,
             })
 
             toast.success('Заказ успешно оформлен!')
             navigate(getOrdersPath())
         } catch (err: any) {
-            toast.error(err.message || 'Ошибка при оформлении заказа')
+            toast.error(err?.message || 'Ошибка при оформлении заказа')
         }
     }
 
     const getTotalPrice = () => {
         if (!order) return 0
-        return order.items.reduce(
-            (sum, item) => sum + item.net_price.amount * item.quantity,
+        return order?.items?.reduce(
+            (sum, item) => sum + item?.net_price?.amount * item?.quantity,
             0,
         )
     }
@@ -130,8 +130,8 @@ export const CheckoutPage = () => {
     }
 
     const totalAmount = getTotalPrice()
-    const uzsAmount = `${totalAmount.toLocaleString()} UZS`
-    const usdAmount = `${(totalAmount / 12500).toFixed(2)}$`
+    const uzsAmount = `${totalAmount?.toLocaleString()} UZS`
+    const usdAmount = `${(totalAmount / 12500)?.toFixed(2)}$`
 
     return (
         <div className="pb-32 h-full">
@@ -154,7 +154,7 @@ export const CheckoutPage = () => {
                                 placeholder="Выберите"
                                 options={paymentOptions}
                                 isSearchable={false}
-                                value={formData.paymentType}
+                                value={formData?.paymentType}
                                 onChange={(
                                     option: SingleValue<SelectOption<string>>,
                                 ) =>
@@ -171,7 +171,7 @@ export const CheckoutPage = () => {
                                 type="date"
                                 placeholder="Введите"
                                 className="text-start"
-                                value={formData.orderDate || ''}
+                                value={formData?.orderDate || ''}
                                 onChange={(e) =>
                                     setFormData({
                                         ...formData,
@@ -187,7 +187,7 @@ export const CheckoutPage = () => {
                                 className="w-full"
                                 options={locationOptions}
                                 isSearchable={false}
-                                value={formData.locationType}
+                                value={formData?.locationType}
                                 onChange={(
                                     option: SingleValue<SelectOption<string>>,
                                 ) =>
@@ -204,7 +204,7 @@ export const CheckoutPage = () => {
                                 textArea
                                 rows={4}
                                 placeholder="Введите дополнительную информацию"
-                                value={formData.additionalInfo || ''}
+                                value={formData?.additionalInfo || ''}
                                 onChange={(e) =>
                                     setFormData({
                                         ...formData,
@@ -231,11 +231,11 @@ export const CheckoutPage = () => {
                         variant="solid"
                         className="w-full rounded-lg font-medium"
                         disabled={
-                            !formData.orderDate ||
-                            approveOrder.isPending ||
-                            order.items.length === 0
+                            !formData?.orderDate ||
+                            approveOrder?.isPending ||
+                            order?.items?.length === 0
                         }
-                        loading={approveOrder.isPending}
+                        loading={approveOrder?.isPending}
                         onClick={handleSubmitOrder}
                     >
                         Оформить
