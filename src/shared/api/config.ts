@@ -57,8 +57,8 @@ export const API_ENDPOINTS = {
         getById: (id: string) => `/get-payment/${id}`,
     },
     payouts: {
-        getAll: '/payouts',
-        getById: (id: number | string) => `/payouts/${id}`,
+        getAll: '/get-payouts',
+        getById: (id: number | string) => `/get-payout/${id}`,
     },
     debt: {
         get: '/debt',
