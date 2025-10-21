@@ -53,8 +53,8 @@ export const API_ENDPOINTS = {
         downloadExcel: (id: string) => `/get-sale-excel/${id}`,
     },
     payments: {
-        getAll: '/payments',
-        getById: (id: number | string) => `/payments/${id}`,
+        getAll: '/get-payments',
+        getById: (id: string) => `/get-payment/${id}`,
     },
     payouts: {
         getAll: '/payouts',
