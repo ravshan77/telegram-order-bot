@@ -1,117 +1,248 @@
 import dayjs from 'dayjs'
-import { Dot } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useSales } from '@/entities/sales'
+import { MoreHorizontal } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getSaleDetailPath } from '@/shared/config'
+import { Button, Spinner, Alert } from '@/shared/ui/kit'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
-
-const sales = [
-    {
-        id: 1,
-        number: '№ 1654872',
-        date: '15.09.2025',
-        totalAmount: '500 000 сум',
-        paidAmount: '300 000 сум',
-        debt: '- 200 000 сум',
-    },
-    {
-        id: 2,
-        number: '№ 1654872',
-        date: '15.09.2025',
-        totalAmount: '500 000 сум',
-        paidAmount: '300 000 сум',
-        debt: '- 200 000 сум',
-    },
-    {
-        id: 3,
-        number: '№ 1654872',
-        date: '15.09.2025',
-        totalAmount: '500 000 сум',
-        paidAmount: '300 000 сум',
-        debt: '- 200 000 сум',
-    },
-    {
-        id: 4,
-        number: '№ 1654872',
-        date: '15.09.2025',
-        totalAmount: '500 000 сум',
-        paidAmount: '300 000 сум',
-        debt: '- 200 000 сум',
-    },
-]
 
 export const SalesPage = () => {
     const navigate = useNavigate()
-    const today = dayjs().toDate()
-    const deafult_value: [Date, Date] = [today, today]
+    const [searchParams, setSearchParams] = useSearchParams()
 
-    const goToSaleDetail = (saleId: string | number) =>
-        navigate(getSaleDetailPath(saleId))
+    const today = dayjs().startOf('day').toDate()
+    const urlDateStart = searchParams.get('date_start')
+    const urlDateEnd = searchParams.get('date_end')
+
+    const initialDateStart = urlDateStart ? dayjs(urlDateStart).toDate() : today
+    const initialDateEnd = urlDateEnd ? dayjs(urlDateEnd).toDate() : today
+
+    const [filters, setFilters] = useState<{
+        date_start: Date | null
+        date_end: Date | null
+    }>({
+        date_start: initialDateStart,
+        date_end: initialDateEnd,
+    })
+
+    // Filtrlarni URL ga sinxronlash
+    useEffect(() => {
+        const params: Record<string, string> = {}
+
+        if (filters.date_start && dayjs(filters.date_start).isValid()) {
+            params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
+        }
+
+        if (filters.date_end && dayjs(filters.date_end).isValid()) {
+            params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+        }
+
+        setSearchParams(params)
+    }, [filters, setSearchParams])
+
+    // API params
+    const apiParams: Record<string, string> = {}
+
+    if (filters?.date_start && dayjs(filters.date_start).isValid()) {
+        apiParams.date_time_start = dayjs(filters.date_start).format(
+            'YYYY-MM-DD',
+        )
+    }
+
+    if (filters?.date_end && dayjs(filters.date_end).isValid()) {
+        apiParams.date_time_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+    }
+
+    const { data: sales, isLoading, isError, error } = useSales(apiParams)
+
+    const goToSaleDetail = useCallback(
+        (saleId: string) => {
+            const dateStart = filters.date_start
+                ? dayjs(filters.date_start).format('YYYY-MM-DD')
+                : undefined
+            const dateEnd = filters.date_end
+                ? dayjs(filters.date_end).format('YYYY-MM-DD')
+                : undefined
+
+            navigate(getSaleDetailPath(saleId, dateStart, dateEnd))
+        },
+        [navigate, filters],
+    )
+
+    if (isError) {
+        return (
+            <div className="p-4">
+                <Alert showIcon type="danger">
+                    Ошибка загрузки продаж: {error?.message}
+                </Alert>
+            </div>
+        )
+    }
+
+    const total_currency_sum = sales?.length
+        ? Object.values(
+              sales.reduce(
+                  (acc, order) => {
+                      order.net_price.forEach((net) => {
+                          const currencyName = net.currency.name
+                          const amount = net.amount
+
+                          if (!acc[currencyName]) {
+                              acc[currencyName] = {
+                                  currency_name: currencyName,
+                                  total_sum: 0,
+                              }
+                          }
+
+                          acc[currencyName].total_sum += amount
+                      })
+
+                      return acc
+                  },
+                  {} as Record<
+                      string,
+                      { currency_name: string; total_sum: number }
+                  >,
+              ),
+          )
+        : []
 
     return (
-        <div className="pb-16">
+        <div className="pb-32">
             <div>
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-lg font-semibold">Продажи</h2>
                     <div className="flex items-center gap-2 text-sm">
-                        <DatePickerRange defaultValue={deafult_value} />
+                        <DatePickerRange
+                            value={[filters?.date_start, filters?.date_end]}
+                            singleDate={true}
+                            onChange={(e) => {
+                                if (e[0] && e[1]) {
+                                    setFilters({
+                                        date_start: e[0],
+                                        date_end: e[1],
+                                    })
+                                }
+                            }}
+                        />
                     </div>
                 </div>
 
                 <div className="space-y-4 mb-4 overflow-y-auto">
-                    {sales.map((sale) => (
-                        <div
-                            key={sale.id}
-                            className="border p-3 rounded-2xl"
-                            onClick={() => goToSaleDetail(sale.id)}
-                        >
-                            <div className="flex justify-between items-start mb-4">
-                                <span className="text-sm text-gray-600">
-                                    {sale.number}
-                                </span>
-                                <span className="text-sm text-gray-600">
-                                    {sale.date}
-                                </span>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4 mb-3">
-                                <div>
-                                    <span className="text-xs text-gray-500 block mb-1">
-                                        Сумма
-                                    </span>
-                                    <span className="text-base font-bold text-gray-600">
-                                        {sale.totalAmount}
-                                    </span>
-                                </div>
-                                <div>
-                                    <span className="text-xs text-gray-500 block mb-1">
-                                        Оплата
-                                    </span>
-                                    <span className="text-base font-bold text-gray-600">
-                                        {sale.paidAmount}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="flex justify-between items-center pt-3 border-t">
-                                <span className="text-sm text-gray-600">
-                                    В долг:
-                                </span>
-                                <span className="text-base font-bold text-red-500">
-                                    {sale.debt}
-                                </span>
-                            </div>
+                    {isLoading && (
+                        <div className="flex justify-center items-center h-72">
+                            <Spinner size={40} />
                         </div>
-                    ))}
+                    )}
+
+                    {!isLoading && sales?.length === 0 ? (
+                        <div className="h-72 flex flex-col items-center justify-center">
+                            <p className="text-gray-500">
+                                У вас пока нет продаж
+                            </p>
+                        </div>
+                    ) : (
+                        sales?.map((sale) => {
+                            // Calculate payment total
+                            const paymentTotal =
+                                sale.payment?.debt_states.reduce(
+                                    (sum, debt) => sum + debt.amount,
+                                    0,
+                                ) || 0
+
+                            // Calculate debt (total - payment)
+                            const totalAmount = sale.net_price[0]?.amount || 0
+                            const debtAmount = totalAmount - paymentTotal
+
+                            return (
+                                <div
+                                    key={sale.id}
+                                    className="border p-3 rounded-2xl cursor-pointer"
+                                    onClick={() => goToSaleDetail(sale.id)}
+                                >
+                                    <div className="flex justify-between items-start mb-4">
+                                        <span className="text-sm text-gray-600">
+                                            № {sale.number}
+                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm text-gray-600">
+                                                {dayjs(sale.date).format(
+                                                    'DD.MM.YYYY',
+                                                )}
+                                            </span>
+                                            <Button
+                                                variant="plain"
+                                                size="xs"
+                                                icon={
+                                                    <MoreHorizontal size={20} />
+                                                }
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4 mb-3">
+                                        <div>
+                                            <span className="text-xs text-gray-500 block mb-1">
+                                                Сумма
+                                            </span>
+                                            <span className="text-base font-bold text-gray-600">
+                                                {totalAmount.toLocaleString()}{' '}
+                                                {sale.net_price[0]?.currency
+                                                    .name || 'UZS'}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="text-xs text-gray-500 block mb-1">
+                                                Оплата
+                                            </span>
+                                            <span className="text-base font-bold text-gray-600">
+                                                {paymentTotal.toLocaleString()}{' '}
+                                                {sale.payment?.debt_states[0]
+                                                    ?.currency.name || 'UZS'}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-between items-center pt-3 border-t">
+                                        <span className="text-sm text-gray-600">
+                                            В долг:
+                                        </span>
+                                        <span className="text-base font-bold text-red-500">
+                                            {debtAmount > 0 ? '-' : ''}
+                                            {Math.abs(
+                                                debtAmount,
+                                            ).toLocaleString()}{' '}
+                                            {sale.net_price[0]?.currency.name ||
+                                                'UZS'}
+                                        </span>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    )}
                 </div>
 
+                {/* Total Summary */}
                 <div className="w-full bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
                     <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
                         <span className="text-sm font-semibold">
                             Общая сумма:
                         </span>
-                        <span className="text-sm font-semibold flex text-primary">
-                            100$ <Dot /> 1 250 000 cум
-                        </span>
+                        <div className="flex gap-4">
+                            {total_currency_sum?.map((crn) => (
+                                <span
+                                    key={crn?.currency_name}
+                                    className="text-sm font-semibold text-primary"
+                                >
+                                    {crn?.total_sum?.toLocaleString()}{' '}
+                                    {crn?.currency_name}
+                                </span>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

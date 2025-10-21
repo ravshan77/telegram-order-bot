@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
-import { useState } from 'react'
 import { Dot } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { SingleValue } from 'react-select'
 import { GoBack } from '@/shared/ui/kit-pro'
+import { useEffect, useState } from 'react'
 import { Input } from '@/shared/ui/kit/Input'
 import { SelectOption } from '@/shared/types'
 import { Select } from '@/shared/ui/kit/Select'
@@ -34,7 +34,6 @@ export const CheckoutPage = () => {
     } = useNotApprovedOrder()
 
     const { data: addresses } = useDeliveryAddresses()
-
     const approveOrder = useApproveOrder()
 
     const [formData, setFormData] = useState<FormDataType>({
@@ -50,10 +49,20 @@ export const CheckoutPage = () => {
             label: loc.name,
         })) || []
 
-    useState(() => {
-        const defaultLocation = addresses?.locations?.find(
-            (loc) => loc.is_default,
-        )
+    const defaultLocation = addresses?.locations?.find((loc) => loc.is_default)
+    // useState(() => {
+    //     if (defaultLocation && !formData.locationType) {
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             locationType: {
+    //                 value: defaultLocation.id,
+    //                 label: defaultLocation.name,
+    //             },
+    //         }))
+    //     }
+    // })
+
+    useEffect(() => {
         if (defaultLocation && !formData.locationType) {
             setFormData((prev) => ({
                 ...prev,
@@ -63,7 +72,7 @@ export const CheckoutPage = () => {
                 },
             }))
         }
-    })
+    }, [addresses?.locations])
 
     const handleSubmitOrder = async () => {
         if (!order) {

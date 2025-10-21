@@ -3,10 +3,29 @@ export const getOrdersPath = () => '/orders'
 export const getOrderDetailsPath = (orderId: number | string = ':orderId') =>
     `/order/order-details/${orderId}`
 
-export const getSalesPath = () => '/sales'
+export const getSalesPath = (dateStart?: string, dateEnd?: string) => {
+    if (dateStart && dateEnd) {
+        return `/sales?date_start=${dateStart}&date_end=${dateEnd}`
+    }
+    return '/sales'
+}
+
+export const getSaleDetailPath = (
+    saleId: number | string = ':saleId',
+    dateStart?: string,
+    dateEnd?: string,
+) => {
+    if (dateStart && dateEnd) {
+        return `/sale/${saleId}?date_start=${dateStart}&date_end=${dateEnd}`
+    }
+    return `/sale/${saleId}`
+}
+
+// export const getSalesPath = () => '/sales'
+// export const getSaleDetailPath = (saleId: number | string = ':saleId') => `/sale/${saleId}`
+
 export const getProfilePath = () => '/profile'
-export const getSaleDetailPath = (saleId: number | string = ':saleId') =>
-    `/sale/${saleId}`
+
 export const getPaymentsPath = () => '/payments'
 export const getPayoutsPath = () => '/payouts'
 export const getDebtPath = () => '/debt'

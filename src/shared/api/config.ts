@@ -48,8 +48,9 @@ export const API_ENDPOINTS = {
         delete: '/order/delete',
     },
     sales: {
-        getAll: '/sales',
-        getById: (id: number | string) => `/sales/${id}`,
+        getAll: '/get-sales',
+        getById: (id: string) => `/get-sale/${id}`,
+        downloadExcel: (id: string) => `/get-sale-excel/${id}`,
     },
     payments: {
         getAll: '/payments',
