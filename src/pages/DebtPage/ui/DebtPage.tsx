@@ -1,14 +1,33 @@
+import { Alert, Spinner } from '@/shared/ui/kit'
+import { useDeliveryAddresses } from '@/entities/deliveryAddress'
+
 export const DebtPage = () => {
-    const currentDebt = [
-        {
-            currency: 'UZS',
-            amount: '119 000',
-        },
-        {
-            currency: 'USD',
-            amount: '12,72$',
-        },
-    ]
+    const {
+        data: addresses,
+        isLoading,
+        isError,
+        error,
+    } = useDeliveryAddresses()
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Spinner size={40} />
+            </div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div className="p-4">
+                <Alert showIcon type="danger">
+                    Ошибка загрузки адресов: {error?.message}
+                </Alert>
+            </div>
+        )
+    }
+
+    const debts = addresses?.debts || []
 
     return (
         <div className="pb-16">
@@ -23,16 +42,16 @@ export const DebtPage = () => {
                     </h3>
 
                     <div className="space-y-3 ">
-                        {currentDebt.map((debt, index) => (
+                        {debts?.map((debt, index) => (
                             <div
                                 key={index}
                                 className="flex justify-between items-center"
                             >
                                 <span className="text-gray-500 text-sm">
-                                    {debt.currency}
+                                    {debt.currency.name}
                                 </span>
                                 <span className="font-semibold text-black text-base">
-                                    {debt.amount}
+                                    {debt.amount.toLocaleString()}
                                 </span>
                             </div>
                         ))}

@@ -1,16 +1,15 @@
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { usePayouts } from '@/entities/payout'
 import type { Payment } from '@/entities/payment'
-import { Button, Alert, Spinner } from '@/shared/ui/kit'
-import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
+import { Button, Alert, Spinner, Input } from '@/shared/ui/kit'
 import { PaymentViewBottomSheet } from '@/pages/PaymentsPage/ui/PaymentViewBottomSheet'
 
 export const PayoutsPage = () => {
-    const today = dayjs().toDate()
+    const today = dayjs().startOf('day').format('YYYY-MM-DD')
     const [filters, setFilters] = useState<{
-        date_start: Date | null
-        date_end: Date | null
+        date_start: string | null
+        date_end: string | null
     }>({
         date_start: today,
         date_end: today,
@@ -29,7 +28,20 @@ export const PayoutsPage = () => {
         params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
     }
 
-    const { data: payments, isLoading, isError, error } = usePayouts(params)
+    const shouldFetch =
+        !!filters.date_start &&
+        !!filters.date_end &&
+        dayjs(filters.date_start).isValid() &&
+        dayjs(filters.date_end).isValid()
+
+    const {
+        data: payments,
+        isLoading,
+        isError,
+        error,
+    } = usePayouts(params, {
+        enabled: shouldFetch,
+    })
 
     const handleCardClick = (payment: Payment) => {
         setSelectedPayment(payment)
@@ -80,6 +92,16 @@ export const PayoutsPage = () => {
 
     const totals = calculateTotalByCurrency()
 
+    const handleFilter = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        if (e.target.name === 'date_start') {
+            setFilters({ date_start: e.target.value, date_end: null })
+            return
+        }
+        setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    }
+
     return (
         <div className="pb-32">
             <PaymentViewBottomSheet
@@ -90,20 +112,21 @@ export const PayoutsPage = () => {
             />
 
             <div>
-                <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-lg font-semibold">Выплаты</h2>
-                    <div className="flex items-center gap-2 text-sm">
-                        <DatePickerRange
-                            value={[filters?.date_start, filters?.date_end]}
-                            singleDate={true}
-                            onChange={(e) => {
-                                if (e[0] && e[1]) {
-                                    setFilters({
-                                        date_start: e[0],
-                                        date_end: e[1],
-                                    })
-                                }
-                            }}
+                <div className="mb-3">
+                    <h2 className="text-lg font-semibold pb-2">Выплаты</h2>
+                    <div className="flex items-center justify-between gap-2 text-sm">
+                        <Input
+                            type="date"
+                            name="date_start"
+                            value={filters?.date_start}
+                            onChange={handleFilter}
+                        />
+
+                        <Input
+                            type="date"
+                            name="date_end"
+                            value={filters?.date_end}
+                            onChange={handleFilter}
                         />
                     </div>
                 </div>

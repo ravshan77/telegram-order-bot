@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
-import React, { useState } from 'react'
-import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
+import { usePayouts } from '@/entities/payout'
+import React, { ChangeEvent, useState } from 'react'
+import { Alert, Input, Spinner } from '@/shared/ui/kit'
 
 interface Transaction {
     id: number
@@ -13,8 +14,71 @@ interface Transaction {
 }
 
 export const ReconciliationActPage: React.FC = () => {
-    const today = dayjs().toDate()
-    const deafult_value: [Date, Date] = [today, today]
+    const today = dayjs().startOf('day').format('YYYY-MM-DD')
+    const [filters, setFilters] = useState<{
+        date_start: string | null
+        date_end: string | null
+    }>({
+        date_start: today,
+        date_end: today,
+    })
+
+    const params: Record<string, string> = {}
+
+    if (filters?.date_start && dayjs(filters.date_start).isValid()) {
+        params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
+    }
+
+    if (filters?.date_end && dayjs(filters.date_end).isValid()) {
+        params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+    }
+
+    const shouldFetch =
+        !!filters.date_start &&
+        !!filters.date_end &&
+        dayjs(filters.date_start).isValid() &&
+        dayjs(filters.date_end).isValid()
+
+    const {
+        data: dataAkt,
+        isLoading,
+        isError,
+        error,
+    } = usePayouts(params, {
+        enabled: shouldFetch,
+    })
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-72">
+                <Spinner size={40} />
+            </div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div className="p-4">
+                <Alert showIcon type="danger">
+                    Ошибка загрузки оплат: {error?.message}
+                </Alert>
+            </div>
+        )
+    }
+
+    const total_currency_sum: any[] = []
+
+    const handleFilter = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        if (e.target.name === 'date_start') {
+            setFilters({ date_start: e.target.value, date_end: null })
+            return
+        }
+        setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    }
+
+    // ------ old codes -------
     const [transactions] = useState<Transaction[]>([
         {
             id: 1,
@@ -63,28 +127,38 @@ export const ReconciliationActPage: React.FC = () => {
         },
     ])
 
-    const formatNumber = (num: number) => {
-        return num.toLocaleString('en-US').replace(/,/g, ' ')
-    }
+    const formatNumber = (num: number) =>
+        num.toLocaleString('en-US').replace(/,/g, ' ')
 
     return (
-        <div className="pb-52">
+        <div className="pb-32">
             {/* Header */}
-            <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold">АКТ сверка</h2>
-                <div className="flex items-center gap-2 text-sm">
-                    <DatePickerRange defaultValue={deafult_value} />
+            <div className="mb-3">
+                <h2 className="text-lg font-semibold pb-2">АКТ сверка</h2>
+                <div className="flex items-center justify-between gap-2 text-sm">
+                    <Input
+                        type="date"
+                        name="date_start"
+                        value={filters?.date_start}
+                        onChange={handleFilter}
+                    />
+
+                    <Input
+                        type="date"
+                        name="date_end"
+                        value={filters?.date_end}
+                        onChange={handleFilter}
+                    />
                 </div>
             </div>
 
             {/* Transaction Cards - Scrollable */}
-            <div className="px-0 py-4 space-y-3">
+            {/* <div className="px-0 py-4 space-y-3">
                 {transactions.map((transaction) => (
                     <div
                         key={transaction.id}
                         className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
                     >
-                        {/* Company and DateTime */}
                         <div className="flex items-center justify-between mb-3">
                             <span className="text-sm font-medium text-gray-700">
                                 {transaction.company}
@@ -94,14 +168,12 @@ export const ReconciliationActPage: React.FC = () => {
                             </span>
                         </div>
 
-                        {/* Transaction Type */}
                         <div className="mb-3">
                             <span className="text-base text-gray-900">
                                 {transaction.type}
                             </span>
                         </div>
 
-                        {/* Amounts */}
                         <div className="flex items-center justify-between">
                             <span
                                 className={`text-lg font-semibold ${
@@ -128,69 +200,45 @@ export const ReconciliationActPage: React.FC = () => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
 
-            {/* Fixed Footer - Summary */}
-            <div className="fixed -z-0 bottom-0 min-h-56 left-0 right-0 bg-white border-t shadow-2xl">
-                <div className="px-4 py-0 space-y-1">
-                    {/* Starting Debt */}
-                    <div className="flex items-center justify-between py-2 border-t ">
-                        <span className="w-32 text-sm text-gray-600">
-                            Начальная задолженность:
-                        </span>
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm font-semibold text-gray-900">
-                                100$
-                            </span>
-                            <span className="text-sm font-semibold text-gray-900">
-                                175 250 000 сум
-                            </span>
-                        </div>
+            {/* New fixed bar */}
+            <div className="w-full bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
+                <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
+                    <span className="text-sm font-semibold">
+                        Нач. задолженности:
+                    </span>
+                    <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                        {total_currency_sum?.map((crn) => {
+                            return (
+                                <span
+                                    key={crn?.currency_name}
+                                    className="text-sm font-semibold flex text-primary"
+                                >
+                                    {crn?.total_sum?.toLocaleString()}{' '}
+                                    {crn?.currency_name}
+                                </span>
+                            )
+                        })}
                     </div>
+                </div>
 
-                    {/* Total */}
-                    <div className="flex items-center justify-between py-2 border-t ">
-                        <span className="w-32 text-sm text-gray-600">
-                            Итого:
-                        </span>
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm font-semibold text-gray-900">
-                                100$
-                            </span>
-                            <span className="text-sm font-semibold text-gray-900">
-                                213 000 000 сум
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Difference */}
-                    <div className="flex items-center justify-between py-2 border-t ">
-                        <span className="w-32 text-sm text-gray-600">
-                            Общая разница:
-                        </span>
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm font-semibold text-gray-900">
-                                100$
-                            </span>
-                            <span className="text-sm font-semibold text-gray-900">
-                                72 500 000 сум
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Final Debt */}
-                    <div className="flex items-center justify-between py-2 border-t ">
-                        <span className="w-32 text-sm text-gray-600">
-                            Конечная задолженность:
-                        </span>
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm font-semibold text-gray-900">
-                                100$
-                            </span>
-                            <span className="text-sm font-semibold text-gray-900">
-                                20 000 000 сум
-                            </span>
-                        </div>
+                <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
+                    <span className="text-sm font-semibold">
+                        Kон.задолженность:
+                    </span>
+                    <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                        {total_currency_sum?.map((crn) => {
+                            return (
+                                <span
+                                    key={crn?.currency_name}
+                                    className="text-sm font-semibold flex text-primary"
+                                >
+                                    {crn?.total_sum?.toLocaleString()}{' '}
+                                    {crn?.currency_name}
+                                </span>
+                            )
+                        })}
                     </div>
                 </div>
             </div>

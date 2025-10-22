@@ -7,6 +7,7 @@ import {
     getPaymentsPath,
     getPayoutsPath,
     getReconciliationActPath,
+    getRefundsPath,
     getSalesPath,
 } from '@/shared/config'
 import { NAV_ITEM_TYPE_ITEM } from '@/shared/config/constants/navigation.constant'
@@ -38,6 +39,16 @@ const mainNavigationConfig: NavigationTree[] = [
         title: 'Продажи',
         translateKey: 'nav.main.incoming',
         icon: 'mainSales',
+        type: NAV_ITEM_TYPE_ITEM,
+        authority: [],
+        subMenu: [],
+    },
+    {
+        key: 'refunds',
+        path: getRefundsPath(),
+        title: 'Возврат',
+        translateKey: 'nav.main.incoming',
+        icon: 'mainRefunds',
         type: NAV_ITEM_TYPE_ITEM,
         authority: [],
         subMenu: [],

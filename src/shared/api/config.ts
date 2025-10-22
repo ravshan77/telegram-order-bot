@@ -22,13 +22,6 @@ export const API_ENDPOINTS = {
         delete: (id: string) => `/contractor/location/delete/${id}`,
         setDefault: (id: string) => `/contractor/location/set-default/${id}`,
     },
-    cart: {
-        get: '/cart',
-        addItem: '/cart/items',
-        updateItem: (id: number | string) => `/cart/items/${id}`,
-        removeItem: (id: number | string) => `/cart/items/${id}`,
-        clear: '/cart/clear',
-    },
     orders: {
         getAll: '/order/get',
         getCount: '/order/get/count',
@@ -46,6 +39,11 @@ export const API_ENDPOINTS = {
         getById: (id: string) => `/get-sale/${id}`,
         downloadExcel: (id: string) => `/get-sale-excel/${id}`,
     },
+    refunds: {
+        getAll: '/get-refunds',
+        getById: (id: string) => `/get-refund/${id}`,
+        downloadExcel: (id: string) => `/get-refund-excel/${id}`,
+    },
     payments: {
         getAll: '/get-payments',
         getById: (id: string) => `/get-payment/${id}`,
@@ -53,9 +51,6 @@ export const API_ENDPOINTS = {
     payouts: {
         getAll: '/get-payouts',
         getById: (id: number | string) => `/get-payout/${id}`,
-    },
-    debt: {
-        get: '/debt',
     },
     reconciliationAct: {
         get: '/reconciliation-act',

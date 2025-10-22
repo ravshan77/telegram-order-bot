@@ -30,6 +30,24 @@ export const getSaleDetailPath = (
     return `/sale/${saleId}`
 }
 
+export const getRefundsPath = (dateStart?: string, dateEnd?: string) => {
+    if (dateStart && dateEnd) {
+        return `/refunds?date_start=${dateStart}&date_end=${dateEnd}`
+    }
+    return '/refunds'
+}
+
+export const getRefundDetailPath = (
+    refundId: number | string = ':refundId',
+    dateStart?: string,
+    dateEnd?: string,
+) => {
+    if (dateStart && dateEnd) {
+        return `/refund/${refundId}?date_start=${dateStart}&date_end=${dateEnd}`
+    }
+    return `/refund/${refundId}`
+}
+
 export const getProfilePath = () => '/profile'
 
 export const getPaymentsPath = () => '/payments'

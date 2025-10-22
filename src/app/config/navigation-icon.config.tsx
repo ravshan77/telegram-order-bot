@@ -19,6 +19,7 @@ import {
     List,
     ShoppingCart,
     Tag,
+    Undo2,
     Wallet,
 } from 'lucide-react'
 
@@ -43,6 +44,7 @@ const navigationIcon: NavigationIcons = {
     mainProducts: <ShoppingCart />,
     mainOrders: <Tag />,
     mainSales: <List />,
+    mainRefunds: <Undo2 />,
     mainPayments: <Wallet />,
     mainPayouts: <HandCoins />,
     mainDebt: <Calculator />,

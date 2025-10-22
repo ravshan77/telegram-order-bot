@@ -3,22 +3,24 @@ import authRoute from './authRoute'
 import othersRoute from './othersRoute'
 import type { Routes } from '@/@types/routes'
 import {
-    getBasketPath,
-    getCategoryPath,
-    getCheckoutPath,
     getDebtPath,
-    getDeliveryAddressMapPath,
-    getDeliveryAddressPath,
     getMainPath,
-    getOrderDetailsPath,
+    getSalesPath,
+    getBasketPath,
     getOrdersPath,
-    getPaymentsPath,
     getPayoutsPath,
     getProductPath,
     getProfilePath,
-    getReconciliationActPath,
+    getRefundsPath,
+    getCategoryPath,
+    getCheckoutPath,
+    getPaymentsPath,
     getSaleDetailPath,
-    getSalesPath,
+    getRefundDetailPath,
+    getOrderDetailsPath,
+    getDeliveryAddressPath,
+    getReconciliationActPath,
+    getDeliveryAddressMapPath,
 } from '@/shared/config'
 
 export const publicRoutes: Routes = [...authRoute]
@@ -42,6 +44,20 @@ export const protectedRoutes: Routes = [
         component: lazy(() => import('@/pages/SalesPage/ui/SalesViewPage')),
         authority: [],
     },
+
+    {
+        key: 'refunds',
+        path: getRefundsPath(),
+        component: lazy(() => import('@/pages/RefundsPage')),
+        authority: [],
+    },
+    {
+        key: 'refunds-detail',
+        path: getRefundDetailPath(),
+        component: lazy(() => import('@/pages/RefundsPage/ui/RefundViewPage')),
+        authority: [],
+    },
+
     {
         key: 'profile',
         path: getProfilePath(),

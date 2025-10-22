@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
-import { useSales } from '@/entities/sales'
 import { MoreHorizontal } from 'lucide-react'
-import { getSaleDetailPath } from '@/shared/config'
+import { useRefunds } from '@/entities/refund'
+import { getRefundDetailPath } from '@/shared/config'
 import { Button, Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
-export const SalesPage = () => {
+export const RefundsPage = () => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -58,16 +58,16 @@ export const SalesPage = () => {
         dayjs(filters.date_end).isValid()
 
     const {
-        data: sales,
+        data: refunds,
         isLoading,
         isError,
         error,
-    } = useSales(apiParams, {
+    } = useRefunds(apiParams, {
         enabled: shouldFetch,
     })
 
-    const goToSaleDetail = useCallback(
-        (saleId: string) => {
+    const goToRefundDetail = useCallback(
+        (returnId: string) => {
             const dateStart = filters.date_start
                 ? dayjs(filters.date_start).format('YYYY-MM-DD')
                 : undefined
@@ -75,7 +75,7 @@ export const SalesPage = () => {
                 ? dayjs(filters.date_end).format('YYYY-MM-DD')
                 : undefined
 
-            navigate(getSaleDetailPath(saleId, dateStart, dateEnd))
+            navigate(getRefundDetailPath(returnId, dateStart, dateEnd))
         },
         [navigate, filters],
     )
@@ -90,9 +90,9 @@ export const SalesPage = () => {
         )
     }
 
-    const total_currency_sum = sales?.length
+    const total_currency_sum = refunds?.length
         ? Object.values(
-              sales.reduce(
+              refunds.reduce(
                   (acc, order) => {
                       order.net_price.forEach((net) => {
                           const currencyName = net.currency.name
@@ -132,7 +132,7 @@ export const SalesPage = () => {
         <div className="pb-32">
             <div>
                 <div className="mb-3">
-                    <h2 className="text-lg font-semibold pb-2">Продажи</h2>
+                    <h2 className="text-lg font-semibold pb-2">Возврат</h2>
                     <div className="flex items-center justify-between gap-2 text-sm">
                         <Input
                             type="date"
@@ -157,14 +157,14 @@ export const SalesPage = () => {
                         </div>
                     )}
 
-                    {!isLoading && sales?.length === 0 ? (
+                    {!isLoading && refunds?.length === 0 ? (
                         <div className="h-72 flex flex-col items-center justify-center">
                             <p className="text-gray-500">
                                 У вас пока нет продаж
                             </p>
                         </div>
                     ) : (
-                        sales?.map((sale) => {
+                        refunds?.map((sale) => {
                             // Calculate payment total
                             const paymentTotal =
                                 sale.payment?.debt_states.reduce(
@@ -180,7 +180,7 @@ export const SalesPage = () => {
                                 <div
                                     key={sale.id}
                                     className="border p-3 rounded-2xl cursor-pointer"
-                                    onClick={() => goToSaleDetail(sale.id)}
+                                    onClick={() => goToRefundDetail(sale.id)}
                                 >
                                     <div className="flex justify-between items-start mb-4">
                                         <span className="text-sm text-gray-600">
@@ -271,4 +271,4 @@ export const SalesPage = () => {
     )
 }
 
-export default SalesPage
+export default RefundsPage
