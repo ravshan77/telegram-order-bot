@@ -30,9 +30,6 @@ export const getSaleDetailPath = (
     return `/sale/${saleId}`
 }
 
-// export const getSalesPath = () => '/sales'
-// export const getSaleDetailPath = (saleId: number | string = ':saleId') => `/sale/${saleId}`
-
 export const getProfilePath = () => '/profile'
 
 export const getPaymentsPath = () => '/payments'

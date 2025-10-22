@@ -104,7 +104,6 @@ export const SalesViewPage: React.FC = () => {
         return num.toLocaleString('en-US').replace(/,/g, ' ')
     }
 
-    // Umumiy summalarni hisoblash
     const totalAmount = sale.totals.reduce(
         (sum, total) => sum + total.amount,
         0,
@@ -267,48 +266,6 @@ export const SalesViewPage: React.FC = () => {
                 </div>
 
                 {/* Fixed Footer - Summary */}
-                {/* <div className="fixed bottom-0 h-40 left-0 right-0 bg-white border-t shadow-2xl">
-                    <div className="px-4 py-4 space-y-3">
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600">
-                                Общая сумма:
-                            </span>
-                            <span className="text-sm font-semibold">
-                                {formatNumber(totalAmount)}{' '}
-                                {sale.totals[0]?.currency.name || 'UZS'}
-                            </span>
-                        </div>
-                        {discountAmount > 0 && (
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-600">
-                                    Скидка:
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    {formatNumber(discountAmount)}{' '}
-                                    {sale.exact_discounts[0]?.currency.name ||
-                                        'UZS'}
-                                </span>
-                            </div>
-                        )}
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600">
-                                Оплата:
-                            </span>
-                            <span className="text-sm font-semibold">
-                                {formatNumber(paymentAmount)}{' '}
-                                {sale.payment?.debt_states[0]?.currency.name ||
-                                    'UZS'}
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-600">Долг:</span>
-                            <span className="text-sm font-semibold">
-                                {formatNumber(debtAmount)}{' '}
-                                {sale.debts[0]?.currency.name || 'UZS'}
-                            </span>
-                        </div>
-                    </div>
-                </div> */}
 
                 <div className="fixed bottom-0 h-40 left-0 right-0 bg-white border-t shadow-2xl">
                     <div className="m-4 px-4 py-4 space-y-3 rounded-md bg-primary-subtle">

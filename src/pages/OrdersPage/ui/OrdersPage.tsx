@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 import { useOrders } from '@/entities/order'
 import { MoreHorizontal } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getOrderDetailsPath } from '@/shared/config'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
 export const OrdersPage = () => {
@@ -26,7 +26,6 @@ export const OrdersPage = () => {
         date_end: initialDateEnd,
     })
 
-    // Filtrlarni URL ga sinxronlash
     useEffect(() => {
         const params: Record<string, string> = {}
 
@@ -41,7 +40,6 @@ export const OrdersPage = () => {
         setSearchParams(params)
     }, [filters, setSearchParams])
 
-    // API params
     const apiParams: Record<string, string> = {}
 
     if (filters?.date_start && dayjs(filters.date_start).isValid()) {
@@ -55,11 +53,6 @@ export const OrdersPage = () => {
     }
 
     const { data: orders, isLoading, isError, error } = useOrders(apiParams)
-
-    // const goToOrderDetails = useCallback(
-    //     (orderId: string) => navigate(getOrderDetailsPath(orderId)),
-    //     [navigate],
-    // )
 
     const goToOrderDetails = useCallback(
         (orderId: string) => {
@@ -223,7 +216,7 @@ export const OrdersPage = () => {
                                             <span className="text-gray-500">
                                                 Общая сумма:
                                             </span>
-                                            <div className="flex gap-2">
+                                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
                                                 {order.net_price.map(
                                                     (pric, ind) => {
                                                         return (
@@ -250,13 +243,12 @@ export const OrdersPage = () => {
                     )}
                 </div>
 
-                {/* Total Summary */}
                 <div className="w-full bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
                     <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
                         <span className="text-sm font-semibold">
                             Всего заказов:
                         </span>
-                        <div className="flex gap-4">
+                        <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
                             {total_currency_sum?.map((crn) => {
                                 return (
                                     <span

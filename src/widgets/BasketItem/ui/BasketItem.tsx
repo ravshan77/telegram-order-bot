@@ -1,9 +1,11 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { Button } from '@/shared/ui/kit'
+import { useItemMap } from '@/shared/lib/hooks'
+import { OrderItem } from '@/entities/order/model'
 import { Minus, Plus, Trash2, Image } from 'lucide-react'
 
 interface BasketItemProps {
-    item: any
+    item: OrderItem
     onRemove: (positionId: string) => void
     onUpdateQuantity: (
         positionId: string,
@@ -14,6 +16,8 @@ interface BasketItemProps {
     deleting: boolean
 }
 
+const APP_CDN = import.meta.env.VITE_APP_CDN
+
 export const BasketItem = ({
     item,
     onRemove,
@@ -21,11 +25,21 @@ export const BasketItem = ({
     updating,
     deleting,
 }: BasketItemProps) => {
+    const { getItemById } = useItemMap()
+
+    const found_item = getItemById(item.item.id)
+
+    const images = found_item?.item.images.map((img) => `${APP_CDN}${img.path}`)
+
     return (
         <div className="bg-white rounded-2xl p-4 border cursor-pointer">
             <div className="flex gap-3">
                 <div className="w-20 h-20 flex-shrink-0 border rounded-lg overflow-hidden">
-                    <Image size={40} className="w-full h-full" />
+                    {!images?.length ? (
+                        <Image size={40} className="w-full h-full" />
+                    ) : (
+                        <img src={images[0]} alt="Mahsulot" />
+                    )}
                 </div>
 
                 <div className="flex-1 min-w-0">

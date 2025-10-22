@@ -22,7 +22,7 @@ export interface ProductItem {
 interface ProductPrice {
     bulk_price: Price
     common_price: Price
-    contractor: null | string | number | object // agar contractor keyingi bosqichlarda object bo‘lishi mumkin bo‘lsa
+    contractor: null | string | number | object
 }
 
 interface WarehouseState {

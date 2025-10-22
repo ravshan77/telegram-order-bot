@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import { Dot } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { SingleValue } from 'react-select'
 import { GoBack } from '@/shared/ui/kit-pro'
@@ -50,17 +49,6 @@ export const CheckoutPage = () => {
         })) || []
 
     const defaultLocation = addresses?.locations?.find((loc) => loc?.is_default)
-    // useState(() => {
-    //     if (defaultLocation && !formData.locationType) {
-    //         setFormData((prev) => ({
-    //             ...prev,
-    //             locationType: {
-    //                 value: defaultLocation.id,
-    //                 label: defaultLocation.name,
-    //             },
-    //         }))
-    //     }
-    // })
 
     useEffect(() => {
         if (defaultLocation && !formData?.locationType) {
@@ -103,14 +91,6 @@ export const CheckoutPage = () => {
         }
     }
 
-    const getTotalPrice = () => {
-        if (!order) return 0
-        return order?.items?.reduce(
-            (sum, item) => sum + item?.net_price?.amount * item?.quantity,
-            0,
-        )
-    }
-
     if (isLoadingOrder) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -128,10 +108,6 @@ export const CheckoutPage = () => {
             </div>
         )
     }
-
-    const totalAmount = getTotalPrice()
-    const uzsAmount = `${totalAmount?.toLocaleString()} UZS`
-    const usdAmount = `${(totalAmount / 12500)?.toFixed(2)}$`
 
     return (
         <div className="pb-32 h-full">
@@ -221,10 +197,18 @@ export const CheckoutPage = () => {
                         <span className="text-sm text-gray-600">
                             Общая сумма:
                         </span>
-                        <div className="text-right">
-                            <p className="font-bold flex text-primary">
-                                {usdAmount} <Dot /> {uzsAmount}
-                            </p>
+                        <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                            {order.net_price.map((prc) => {
+                                return (
+                                    <span
+                                        key={prc.currency.id}
+                                        className="font-bold flex text-primary"
+                                    >
+                                        {prc?.amount?.toLocaleString()}{' '}
+                                        {prc?.currency?.name}
+                                    </span>
+                                )
+                            })}
                         </div>
                     </div>
                     <Button

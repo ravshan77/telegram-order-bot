@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 import { useSales } from '@/entities/sales'
 import { MoreHorizontal } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getSaleDetailPath } from '@/shared/config'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
 export const SalesPage = () => {
@@ -12,8 +12,8 @@ export const SalesPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
 
     const today = dayjs().startOf('day').toDate()
-    const urlDateStart = searchParams.get('date_start')
     const urlDateEnd = searchParams.get('date_end')
+    const urlDateStart = searchParams.get('date_start')
 
     const initialDateStart = urlDateStart ? dayjs(urlDateStart).toDate() : today
     const initialDateEnd = urlDateEnd ? dayjs(urlDateEnd).toDate() : today
@@ -26,7 +26,6 @@ export const SalesPage = () => {
         date_end: initialDateEnd,
     })
 
-    // Filtrlarni URL ga sinxronlash
     useEffect(() => {
         const params: Record<string, string> = {}
 
@@ -41,7 +40,6 @@ export const SalesPage = () => {
         setSearchParams(params)
     }, [filters, setSearchParams])
 
-    // API params
     const apiParams: Record<string, string> = {}
 
     if (filters?.date_start && dayjs(filters.date_start).isValid()) {
@@ -232,7 +230,7 @@ export const SalesPage = () => {
                         <span className="text-sm font-semibold">
                             Общая сумма:
                         </span>
-                        <div className="flex gap-4">
+                        <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
                             {total_currency_sum?.map((crn) => (
                                 <span
                                     key={crn?.currency_name}

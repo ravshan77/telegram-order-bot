@@ -4,7 +4,7 @@ import Theme from '@/shared/ui/template/Theme'
 import { BrowserRouter } from 'react-router-dom'
 // import { useAlerts } from '@/features/Alert'
 import './styles/safelistcss'
-import { QueryProvider } from './providers'
+import { ItemMapProvider, QueryProvider } from './providers'
 
 function App() {
     // useAlerts()
@@ -14,7 +14,9 @@ function App() {
             <QueryProvider>
                 <BrowserRouter>
                     <Layout>
-                        <Routes />
+                        <ItemMapProvider>
+                            <Routes />
+                        </ItemMapProvider>
                     </Layout>
                 </BrowserRouter>
             </QueryProvider>

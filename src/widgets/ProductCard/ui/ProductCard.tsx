@@ -1,3 +1,10 @@
+import {
+    useAddOrderItem,
+    useRegisterOrder,
+    useUpdateOrderItem,
+    useDeleteOrderItem,
+    useNotApprovedOrder,
+} from '@/entities/order'
 import React, { useRef } from 'react'
 import toast from 'react-hot-toast'
 import { Button } from '@/shared/ui/kit'
@@ -10,13 +17,6 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { ProductView } from '@/entities/product/model/types'
-import {
-    useNotApprovedOrder,
-    useRegisterOrder,
-    useAddOrderItem,
-    useUpdateOrderItem,
-    useDeleteOrderItem,
-} from '@/entities/order'
 
 interface ProductCardProps {
     product: ProductView

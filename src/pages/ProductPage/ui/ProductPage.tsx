@@ -1,3 +1,8 @@
+import {
+    useAddOrderItem,
+    useRegisterOrder,
+    useNotApprovedOrder,
+} from '@/entities/order'
 import toast from 'react-hot-toast'
 import { Image } from 'lucide-react'
 import React, { useState } from 'react'
@@ -8,11 +13,6 @@ import { getBasketPath } from '@/shared/config'
 import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { ProductSection } from '@/features/ProductSection'
-import {
-    useAddOrderItem,
-    useNotApprovedOrder,
-    useRegisterOrder,
-} from '@/entities/order'
 
 const APP_CDN = import.meta.env.VITE_APP_CDN
 
@@ -32,14 +32,12 @@ export const ProductPage: React.FC = () => {
 
         try {
             if (!order) {
-                // Create new order with this item
                 await registerOrder.mutateAsync({
                     items: [
                         { item_id: String(selectedProduct?.id), quantity: 1 },
                     ],
                 })
             } else {
-                // Add item to existing order
                 await addItem.mutateAsync({
                     id: order.id,
                     item: { item_id: String(selectedProduct?.id), quantity: 1 },
@@ -59,12 +57,10 @@ export const ProductPage: React.FC = () => {
 
     return (
         <div className="pb-16">
-            {/* Header */}
             <div className="bg-white w-full">
                 <GoBack />
             </div>
 
-            {/* Image gallery */}
             <div className="bg-white mt-4">
                 {images?.length === 0 ? (
                     <div className="w-full flex justify-center">
@@ -111,7 +107,6 @@ export const ProductPage: React.FC = () => {
                     </ImageGallery>
                 )}
 
-                {/* Product info */}
                 <div className="py-4">
                     <h1 className="text-base font-semibold mb-2">
                         {selectedProduct.name}

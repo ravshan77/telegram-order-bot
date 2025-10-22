@@ -1,23 +1,20 @@
+import {
+    useUpdateOrderItem,
+    useDeleteOrderItem,
+    useNotApprovedOrder,
+} from '@/entities/order'
 import React from 'react'
 import toast from 'react-hot-toast'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useNavigate } from 'react-router-dom'
+import { BasketItem } from '@/widgets/BasketItem'
 import { getCheckoutPath } from '@/shared/config/'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
-import {
-    useNotApprovedOrder,
-    useUpdateOrderItem,
-    useDeleteOrderItem,
-} from '@/entities/order'
-import { BasketItem } from '@/widgets/BasketItem'
-
-// const APP_CDN = import.meta.env.VITE_APP_CDN
 
 export const BasketPage: React.FC = () => {
     const navigate = useNavigate()
     const { data: order, isLoading, isError, error } = useNotApprovedOrder()
 
-    // Mutations
     const updateItem = useUpdateOrderItem()
     const deleteItem = useDeleteOrderItem()
 
@@ -67,13 +64,6 @@ export const BasketPage: React.FC = () => {
         } catch (err: any) {
             toast.error(err.message || 'Ошибка при удалении товара')
         }
-    }
-
-    const getTotalPrice = () => {
-        return cart.reduce(
-            (sum, item) => sum + item.net_price.amount * item.quantity,
-            0,
-        )
     }
 
     const goToCheckout = () => {
@@ -141,12 +131,19 @@ export const BasketPage: React.FC = () => {
             {/* Bottom fixed bar */}
             <div className="fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
                 <div>
-                    <p className="text-primary font-bold">
-                        {getTotalPrice()?.toLocaleString()}{' '}
-                        {order?.net_price?.length
-                            ? order?.net_price[0]?.currency?.name
-                            : ''}
-                    </p>
+                    <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                        {order.net_price.map((prc) => {
+                            return (
+                                <span
+                                    key={prc.currency.id}
+                                    className="font-bold flex text-primary"
+                                >
+                                    {prc?.amount?.toLocaleString()}{' '}
+                                    {prc?.currency?.name}
+                                </span>
+                            )
+                        })}
+                    </div>
                     <p className="text-xs font-light">Общая сумма:</p>
                 </div>
                 <Button

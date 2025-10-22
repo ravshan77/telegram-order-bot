@@ -15,12 +15,10 @@ export const ProfilePage: React.FC = () => {
 
     const handleSettings = () => {
         console.log('Navigate to settings')
-        alert('Настройка page opening...')
     }
 
     const handleChatId = () => {
         console.log('Navigate to chat ID')
-        alert('Чат ID page opening...')
     }
 
     return (

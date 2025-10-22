@@ -1,15 +1,15 @@
 import { GoBack } from '@/shared/ui/kit-pro'
-import { useNavigate, useParams } from 'react-router-dom'
 import { Alert, Tabs } from '@/shared/ui/kit'
 import TabNav from '@/shared/ui/kit/Tabs/TabNav'
 import { useCategory } from '@/entities/category'
+import { getCategoryPath } from '@/shared/config'
 import TabList from '@/shared/ui/kit/Tabs/TabList'
 import { ProductCard } from '@/widgets/ProductCard'
 import TabContent from '@/shared/ui/kit/Tabs/TabContent'
+import { useNavigate, useParams } from 'react-router-dom'
 import React, { useState, useCallback, useMemo } from 'react'
 import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
 import { transformProductToView, useProducts } from '@/entities/product'
-import { getCategoryPath } from '@/shared/config'
 
 export const CategoryPage: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>()

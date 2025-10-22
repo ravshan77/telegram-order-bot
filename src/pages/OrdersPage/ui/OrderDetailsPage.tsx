@@ -107,17 +107,19 @@ export const OrderDetailsPage = () => {
                             <span className="text-sm font-semibold">
                                 Общая сумма:
                             </span>
-                            {order.net_price.map((prc) => {
-                                return (
-                                    <span
-                                        key={`${prc?.currency.name}`}
-                                        className="text-sm font-semibold flex text-primary"
-                                    >
-                                        {prc?.amount?.toLocaleString()}{' '}
-                                        {prc?.currency.name}
-                                    </span>
-                                )
-                            })}
+                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {order.net_price.map((prc) => {
+                                    return (
+                                        <span
+                                            key={`${prc?.currency.name}`}
+                                            className="text-sm font-semibold flex text-primary"
+                                        >
+                                            {prc?.amount?.toLocaleString()}{' '}
+                                            {prc?.currency.name}
+                                        </span>
+                                    )
+                                })}
+                            </div>
                         </div>
                     </div>
                 </div>

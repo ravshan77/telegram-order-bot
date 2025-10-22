@@ -4,8 +4,8 @@ import {
     DrawerHeader,
     DrawerContent,
 } from '@/shared/ui/kit/Sheet'
-import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
 import type { Payment } from '@/entities/payment'
+import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
 
 interface PaymentViewBottomSheetProps {
     isOpen: boolean
@@ -27,15 +27,12 @@ export function PaymentViewBottomSheet({
     payment,
     allPayments,
 }: PaymentViewBottomSheetProps) {
-    // Bitta payment uchun
     const getSinglePaymentData = (payment: Payment): PaymentTypeTotal[] => {
         const result: PaymentTypeTotal[] = []
 
-        // Barcha payment_type'larni iterate qilamiz
         paymentOptions.forEach((option) => {
             const paymentType = parseInt(option.value)
 
-            // cash_box_states'dan shu payment_type'ni topamiz
             const cashBoxState = payment.cash_box_states.find(
                 (state) => state.payment_type === paymentType,
             )
@@ -51,14 +48,12 @@ export function PaymentViewBottomSheet({
         return result
     }
 
-    // Barcha payments uchun umumiy
     const getAllPaymentsData = (payments: Payment[]): PaymentTypeTotal[] => {
         const totalsMap = new Map<
             number,
             { amount: number; currency: string }
         >()
 
-        // Har bir payment'ning cash_box_states'ini yig'amiz
         payments.forEach((payment) => {
             payment.cash_box_states.forEach((state) => {
                 const existing = totalsMap.get(state.payment_type)
@@ -73,7 +68,6 @@ export function PaymentViewBottomSheet({
             })
         })
 
-        // Barcha payment_type'lar uchun natija
         const result: PaymentTypeTotal[] = []
         paymentOptions.forEach((option) => {
             const paymentType = parseInt(option.value)
@@ -138,126 +132,3 @@ export function PaymentViewBottomSheet({
         </Drawer>
     )
 }
-
-// // import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
-// import {
-//     Drawer,
-//     DrawerTitle,
-//     DrawerHeader,
-//     DrawerContent,
-// } from '@/shared/ui/kit/Sheet'
-
-// interface BottomSheetProps {
-//     isOpen: boolean
-//     setIsOpen: (prev: boolean) => void
-// }
-
-// export function PaymentViewBottomSheet({
-//     isOpen,
-//     setIsOpen,
-// }: BottomSheetProps) {
-//     // paymentOptions
-//     return (
-//         <Drawer open={isOpen} onOpenChange={(prew) => setIsOpen(prew)}>
-//             <DrawerContent className="bg-white">
-//                 <div className="mx-auto w-full px-4">
-//                     <DrawerHeader className="p-0">
-//                         <DrawerTitle className="text-start text-xl">
-//                             Оформление заказа
-//                         </DrawerTitle>
-//                     </DrawerHeader>
-//                     <div className="px-4 pb-8">
-//                         <div>
-//                             <div
-//                                 className="flex justify-between items-center py-4 border-b border-dashed"
-//                                 style={{
-//                                     borderImage:
-//                                         'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-//                                 }}
-//                             >
-//                                 <span className="text-gray-700">Наличный</span>
-//                                 <span className="font-semibold text-black">
-//                                     146 000 сум
-//                                 </span>
-//                             </div>
-
-//                             <div
-//                                 className="flex justify-between items-center py-4 border-b border-dashed"
-//                                 style={{
-//                                     borderImage:
-//                                         'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-//                                 }}
-//                             >
-//                                 <span className="text-gray-700">Uzcard</span>
-//                                 <span className="font-semibold text-black">
-//                                     20 000 сум
-//                                 </span>
-//                             </div>
-
-//                             <div
-//                                 className="flex justify-between items-center py-4 border-b border-dashed"
-//                                 style={{
-//                                     borderImage:
-//                                         'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-//                                 }}
-//                             >
-//                                 <span className="text-gray-700">Humo</span>
-//                                 <span className="font-semibold text-black">
-//                                     150 000 сум
-//                                 </span>
-//                             </div>
-
-//                             <div
-//                                 className="flex justify-between items-center py-4 border-b border-dashed"
-//                                 style={{
-//                                     borderImage:
-//                                         'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-//                                 }}
-//                             >
-//                                 <span className="text-gray-700">
-//                                     Перечисления
-//                                 </span>
-//                                 <span className="font-semibold text-black">
-//                                     75 000 сум
-//                                 </span>
-//                             </div>
-
-//                             <div
-//                                 className="flex justify-between items-center py-4 border-b border-dashed"
-//                                 style={{
-//                                     borderImage:
-//                                         'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-//                                 }}
-//                             >
-//                                 <span className="text-gray-700">Click</span>
-//                                 <span className="font-semibold text-black">
-//                                     210 000 сум
-//                                 </span>
-//                             </div>
-
-//                             <div
-//                                 className="flex justify-between items-center py-4 border-b border-dashed"
-//                                 style={{
-//                                     borderImage:
-//                                         'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-//                                 }}
-//                             >
-//                                 <span className="text-gray-700">Payme</span>
-//                                 <span className="font-semibold text-black">
-//                                     15 000 сум
-//                                 </span>
-//                             </div>
-
-//                             <div className="flex justify-between items-center py-4">
-//                                 <span className="text-gray-700">Visa</span>
-//                                 <span className="font-semibold text-black">
-//                                     50$
-//                                 </span>
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </DrawerContent>
-//         </Drawer>
-//     )
-// }
