@@ -1,7 +1,16 @@
 export const getMainPath = () => '/main'
 export const getOrdersPath = () => '/orders'
-export const getOrderDetailsPath = (orderId: number | string = ':orderId') =>
-    `/order/order-details/${orderId}`
+export const getOrderDetailsPath = (
+    orderId: number | string = ':orderId',
+    dateStart?: string,
+    dateEnd?: string,
+) => {
+    if (dateStart && dateEnd) {
+        return `/order/order-details/${orderId}?date_start=${dateStart}&date_end=${dateEnd}`
+    }
+
+    return `/order/order-details/${orderId}`
+}
 
 export const getSalesPath = (dateStart?: string, dateEnd?: string) => {
     if (dateStart && dateEnd) {

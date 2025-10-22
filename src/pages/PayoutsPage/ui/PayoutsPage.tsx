@@ -1,10 +1,9 @@
 import dayjs from 'dayjs'
 import { useState } from 'react'
+import { usePayouts } from '@/entities/payout'
 import type { Payment } from '@/entities/payment'
 import { Button, Alert, Spinner } from '@/shared/ui/kit'
-// import { PayoutViewDrawer } from './PayoutViewDrawer'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
-import { usePayouts } from '@/entities/payout'
 import { PaymentViewBottomSheet } from '@/pages/PaymentsPage/ui/PaymentViewBottomSheet'
 
 export const PayoutsPage = () => {
@@ -60,7 +59,6 @@ export const PayoutsPage = () => {
         )
     }
 
-    // Umumiy summani hisoblash
     const calculateTotalByCurrency = () => {
         const totals: Record<string, number> = {}
 

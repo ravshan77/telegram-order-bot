@@ -1,38 +1,78 @@
 import dayjs from 'dayjs'
 import { useOrders } from '@/entities/order'
 import { MoreHorizontal } from 'lucide-react'
-import { useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getOrderDetailsPath } from '@/shared/config'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
 import DatePickerRange from '@/shared/ui/kit/DatePicker/DatePickerRange'
 
 export const OrdersPage = () => {
     const navigate = useNavigate()
+    const [searchParams, setSearchParams] = useSearchParams()
+
     const today = dayjs().startOf('day').toDate()
+    const urlDateStart = searchParams.get('date_start')
+    const urlDateEnd = searchParams.get('date_end')
+
+    const initialDateStart = urlDateStart ? dayjs(urlDateStart).toDate() : today
+    const initialDateEnd = urlDateEnd ? dayjs(urlDateEnd).toDate() : today
+
     const [filters, setFilters] = useState<{
         date_start: Date | null
         date_end: Date | null
     }>({
-        date_end: today,
-        date_start: today,
+        date_start: initialDateStart,
+        date_end: initialDateEnd,
     })
 
-    const params: Record<string, string> = {}
+    // Filtrlarni URL ga sinxronlash
+    useEffect(() => {
+        const params: Record<string, string> = {}
+
+        if (filters.date_start && dayjs(filters.date_start).isValid()) {
+            params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
+        }
+
+        if (filters.date_end && dayjs(filters.date_end).isValid()) {
+            params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+        }
+
+        setSearchParams(params)
+    }, [filters, setSearchParams])
+
+    // API params
+    const apiParams: Record<string, string> = {}
 
     if (filters?.date_start && dayjs(filters.date_start).isValid()) {
-        params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
+        apiParams.date_time_start = dayjs(filters.date_start).format(
+            'YYYY-MM-DD',
+        )
     }
 
     if (filters?.date_end && dayjs(filters.date_end).isValid()) {
-        params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+        apiParams.date_time_end = dayjs(filters.date_end).format('YYYY-MM-DD')
     }
 
-    const { data: orders, isLoading, isError, error } = useOrders(params)
+    const { data: orders, isLoading, isError, error } = useOrders(apiParams)
+
+    // const goToOrderDetails = useCallback(
+    //     (orderId: string) => navigate(getOrderDetailsPath(orderId)),
+    //     [navigate],
+    // )
 
     const goToOrderDetails = useCallback(
-        (orderId: string) => navigate(getOrderDetailsPath(orderId)),
-        [navigate],
+        (orderId: string) => {
+            const dateStart = filters.date_start
+                ? dayjs(filters.date_start).format('YYYY-MM-DD')
+                : undefined
+            const dateEnd = filters.date_end
+                ? dayjs(filters.date_end).format('YYYY-MM-DD')
+                : undefined
+
+            navigate(getOrderDetailsPath(orderId, dateStart, dateEnd))
+        },
+        [navigate, filters],
     )
 
     if (isError) {
