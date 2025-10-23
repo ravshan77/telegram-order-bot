@@ -11,16 +11,21 @@ import { Search, ShoppingCart, User } from 'lucide-react'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import { getBasketPath, getProfilePath } from '@/shared/config'
+// import { useHeaderSearchStore } from '@/shared/store/useHeaderSearch'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
-import { useState } from 'react'
 import { HeaderSearchSheet } from '@/widgets/HeaderSearch'
+import { useState } from 'react'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
     const tg = useTelegram()
     const { larger, smaller } = useResponsive()
     const { data: order } = useNotApprovedOrder()
     const cart = order?.items?.filter((item) => !item?.is_deleted) || []
+    // const { searchItemName, setSearchItemName } = useHeaderSearchStore(
+    //     (store) => store,
+    // )
     const totalItems = cart?.length
+
     const [searchItemName, setSearchItemName] = useState('')
     const [isOpenSheet, setIsopenSheet] = useState(false)
 
@@ -57,11 +62,6 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                         }
                                         onFocus={() => setIsopenSheet(true)}
                                         onBlur={() => setIsopenSheet(false)}
-                                    />
-                                    <HeaderSearchSheet
-                                        isOpen={isOpenSheet}
-                                        setIsOpen={setIsopenSheet}
-                                        searchItemName={searchItemName}
                                     />
                                 </div>
                             </>
@@ -106,6 +106,11 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                     <div className="h-full flex flex-auto flex-col">
                         {children}
                     </div>
+                    <HeaderSearchSheet
+                        isOpen={isOpenSheet}
+                        setIsOpen={setIsopenSheet}
+                        searchItemName={searchItemName}
+                    />
                 </div>
             </div>
         </LayoutBase>

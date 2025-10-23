@@ -1,3 +1,5 @@
+import { DowlandExcelFilter } from '@/entities/askActReport'
+
 export const API_ENDPOINTS = {
     products: {
         getAll: '/item/get',
@@ -52,8 +54,10 @@ export const API_ENDPOINTS = {
         getAll: '/get-payouts',
         getById: (id: number | string) => `/get-payout/${id}`,
     },
-    reconciliationAct: {
-        get: '/reconciliation-act',
+    askActReport: {
+        getAll: '/report/ask-act-report',
+        downloadExcel: (filters: DowlandExcelFilter) =>
+            `/report/ask-act-report-excel?date_start=${filters?.date_start}&date_end=${filters?.date_end}`,
     },
 } as const
 

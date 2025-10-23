@@ -1,8 +1,10 @@
 import { FC } from 'react'
 import { ProductSection } from '@/widgets/ProductSection'
 import { CategoriesList } from '@/widgets/CategoriesList'
+// import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
 
 export const MainPage: FC = () => {
+    // const { searchItemName } = useHeaderSearchStore((store) => store)
     return (
         <div className="pb-0">
             <div>

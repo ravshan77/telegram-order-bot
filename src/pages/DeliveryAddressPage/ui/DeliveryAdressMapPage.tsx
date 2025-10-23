@@ -25,6 +25,8 @@ declare global {
     }
 }
 
+const YANDEX_MAPS_KEY = import.meta.env.VITE_YANDEX_MAPS_KEY
+
 export const DeliveryAddressMapPage: React.FC = () => {
     const navigate = useNavigate()
     const { addressId } = useParams<{ addressId: string }>()
@@ -38,7 +40,6 @@ export const DeliveryAddressMapPage: React.FC = () => {
         useDeliveryAddress(addressId || '', {
             enabled: !!isEditMode,
         })
-    console.log(existingLocation)
 
     const [selectedLocation, setSelectedLocation] = useState<LocationData>({
         lat: existingLocation?.latitude
@@ -57,8 +58,6 @@ export const DeliveryAddressMapPage: React.FC = () => {
 
     const [loading, setLoading] = useState(false)
     const [isMapReady, setIsMapReady] = useState(false)
-
-    const API_KEY = '76b31853-7efc-4276-8ade-b32eadec4571'
 
     const createLocation = useCreateDeliveryAddress()
     const updateLocation = useUpdateDeliveryAddress()
@@ -83,7 +82,7 @@ export const DeliveryAddressMapPage: React.FC = () => {
             }
 
             const script = document.createElement('script')
-            script.src = `https://api-maps.yandex.ru/2.1/?apikey=${API_KEY}&lang=ru_RU`
+            script.src = `https://api-maps.yandex.ru/2.1/?apikey=${YANDEX_MAPS_KEY}&lang=ru_RU`
             script.async = true
             script.onload = () => {
                 window.ymaps.ready(() => {

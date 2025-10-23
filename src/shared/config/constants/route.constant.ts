@@ -53,7 +53,7 @@ export const getProfilePath = () => '/profile'
 export const getPaymentsPath = () => '/payments'
 export const getPayoutsPath = () => '/payouts'
 export const getDebtPath = () => '/debt'
-export const getReconciliationActPath = () => '/reconciliation-act'
+export const getAskActReportPath = () => '/ask-act-report'
 export const getDeliveryAddressPath = () => '/delivery-address'
 export const getDeliveryAddressMapPath = (
     addressId: number | string = ':addressId',

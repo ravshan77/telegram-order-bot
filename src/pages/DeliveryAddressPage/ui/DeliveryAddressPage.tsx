@@ -6,9 +6,9 @@ import { getDeliveryAddressMapPath } from '@/shared/config'
 import { Alert, Button, Dropdown, Spinner } from '@/shared/ui/kit'
 import {
     Location,
-    useDeleteDeliveryAddress,
     useDeliveryAddresses,
     useUpdateDefaultLocation,
+    useDeleteDeliveryAddress,
     useUpdateDeliveryAddress,
 } from '@/entities/deliveryAddress'
 

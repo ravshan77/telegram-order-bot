@@ -6,7 +6,7 @@ import {
     getOrdersPath,
     getPaymentsPath,
     getPayoutsPath,
-    getReconciliationActPath,
+    getAskActReportPath,
     getRefundsPath,
     getSalesPath,
 } from '@/shared/config'
@@ -84,8 +84,8 @@ const mainNavigationConfig: NavigationTree[] = [
         subMenu: [],
     },
     {
-        key: 'reconciliation-act',
-        path: getReconciliationActPath(),
+        key: 'ask-act-report',
+        path: getAskActReportPath(),
         title: 'АКТ сверка',
         translateKey: 'nav.main.incoming',
         icon: 'reconciliationAct',

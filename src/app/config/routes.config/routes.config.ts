@@ -19,7 +19,7 @@ import {
     getRefundDetailPath,
     getOrderDetailsPath,
     getDeliveryAddressPath,
-    getReconciliationActPath,
+    getAskActReportPath,
     getDeliveryAddressMapPath,
 } from '@/shared/config'
 
@@ -95,9 +95,9 @@ export const protectedRoutes: Routes = [
         authority: [],
     },
     {
-        key: 'reconciliation-act',
-        path: getReconciliationActPath(),
-        component: lazy(() => import('@/pages/ReconciliationActPage')),
+        key: 'ask-act-report',
+        path: getAskActReportPath(),
+        component: lazy(() => import('@/pages/AskActReportPage')),
         authority: [],
     },
     {
