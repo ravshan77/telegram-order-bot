@@ -13,7 +13,6 @@ import { HeaderSearchSheet } from '@/widgets/HeaderSearch'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import { getBasketPath, getProfilePath } from '@/shared/config'
-// import { useHeaderSearchStore } from '@/shared/store/useHeaderSearch'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
@@ -21,12 +20,9 @@ const CollapsibleSide = ({ children }: CommonProps) => {
     const { larger, smaller } = useResponsive()
     const { data: order } = useNotApprovedOrder()
     const cart = order?.items?.filter((item) => !item?.is_deleted) || []
-    // const { searchItemName, setSearchItemName } = useHeaderSearchStore(
-    //     (store) => store,
-    // )
     const totalItems = cart?.length
 
-    const [searchItemName, setSearchItemName] = useState('')
+    // const [searchItemName, setSearchItemName] = useState('')
     const [isOpenSheet, setIsopenSheet] = useState(false)
 
     return (
@@ -47,23 +43,26 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                         }
                         headerMiddle={
                             <>
-                                <div className="flex items-center gap-2 bg-gray-100 rounded-md px-3">
-                                    <Search
-                                        size={20}
-                                        className="text-gray-400"
-                                    />
-                                    <Input
-                                        type="text"
-                                        placeholder="Поиск"
-                                        className="h-full bg-transparent flex-1 outline-none focus:outline-none focus:ring-0"
-                                        value={searchItemName}
-                                        onChange={(e) =>
-                                            setSearchItemName(e.target.value)
-                                        }
-                                        onFocus={() => setIsopenSheet(true)}
-                                        onBlur={() => setIsopenSheet(false)}
-                                    />
-                                </div>
+                                {!isOpenSheet ? (
+                                    <div className="flex items-center gap-2 bg-gray-100 rounded-md px-3">
+                                        <Search
+                                            size={20}
+                                            className="text-gray-400"
+                                        />
+                                        <Input
+                                            // readOnly
+                                            type="text"
+                                            placeholder="Поиск"
+                                            className="h-full bg-transparent flex-1 outline-none focus:outline-none focus:ring-0"
+                                            // value={searchItemName}
+                                            // onChange={(e) =>
+                                            //     setSearchItemName(e.target.value)
+                                            // }
+                                            onFocus={() => setIsopenSheet(true)}
+                                            // onBlur={() => setIsopenSheet(false)}
+                                        />
+                                    </div>
+                                ) : null}
                             </>
                         }
                         headerEnd={

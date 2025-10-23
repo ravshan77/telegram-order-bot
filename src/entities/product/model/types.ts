@@ -101,6 +101,7 @@ export interface Items {
 // UI uchun qo'shimcha propertylar Product interfacei
 export interface ProductView extends ProductItem {
     price: number
+    currency: Currency
     stock: number
     discount?: number | string | null
 }
