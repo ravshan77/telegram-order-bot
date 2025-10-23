@@ -58,3 +58,4 @@ export const API_ENDPOINTS = {
 } as const
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+export const APP_CDN = import.meta.env.VITE_APP_CDN

@@ -1,7 +1,6 @@
 import { Category } from '@/entities/category'
 import { CategoryTree } from '@/entities/category/model/types'
 
-// API dan keladigan ma'lumotlar
 export interface ProductItem {
     barcodes: string[]
     category: string | null

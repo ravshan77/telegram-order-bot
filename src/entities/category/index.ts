@@ -1,2 +1,3 @@
-export type { Category } from './model/types'
-export * from './api'
+export * from './api/categoryApi'
+export type * from './model/types'
+export * from './api/categoryQueries'

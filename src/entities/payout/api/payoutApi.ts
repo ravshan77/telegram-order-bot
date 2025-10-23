@@ -1,7 +1,7 @@
+import { PayOut } from '../model/types'
 import { PaymentFilters } from '@/entities/payment'
 import { BaseRestClient } from '@/shared/api/ApiService'
 import { API_ENDPOINTS, API_BASE_URL } from '@/shared/api/config'
-import { PayOut } from '../model/types'
 
 class PayoutApi extends BaseRestClient {
     constructor() {

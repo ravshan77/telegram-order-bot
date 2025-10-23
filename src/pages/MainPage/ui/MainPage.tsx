@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { ProductSection } from '@/features/ProductSection'
-import CategoriesList from '@/widgets/CategoriesList/ui/CategoriesList'
+import { ProductSection } from '@/widgets/ProductSection'
+import { CategoriesList } from '@/widgets/CategoriesList'
 
 export const MainPage: FC = () => {
     return (

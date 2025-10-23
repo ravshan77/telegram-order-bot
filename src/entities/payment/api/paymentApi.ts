@@ -1,6 +1,6 @@
 import { BaseRestClient } from '@/shared/api/ApiService'
-import { API_ENDPOINTS, API_BASE_URL } from '@/shared/api/config'
 import type { Payment, PaymentFilters } from '../model/types'
+import { API_ENDPOINTS, API_BASE_URL } from '@/shared/api/config'
 
 class PaymentApi extends BaseRestClient {
     constructor() {

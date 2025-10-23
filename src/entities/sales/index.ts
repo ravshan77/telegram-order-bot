@@ -1,2 +1,3 @@
-export type { Sale, SaleItem, SalesFilters } from './model/types'
-export * from './api'
+export * from './api/salesApi'
+export * from './api/salesQueries'
+export type * from './model/types'

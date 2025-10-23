@@ -12,14 +12,12 @@ class ProductApi extends BaseRestClient {
         super(API_BASE_URL)
     }
 
-    // Get all products with filters
     async getAllProducts(filters?: ProductFilters): Promise<ItemResponse> {
         return this.get<ItemResponse>(API_ENDPOINTS.products.getAll, {
             params: filters,
         })
     }
 
-    // Get paginated products
     async getPaginatedProducts(
         page: number = 1,
         limit: number = 20,
@@ -33,7 +31,6 @@ class ProductApi extends BaseRestClient {
         )
     }
 
-    // Get product by ID
     async getProductById(id: string): Promise<ProductItem> {
         return this.get<ProductItem>(API_ENDPOINTS.products.getById(id))
     }

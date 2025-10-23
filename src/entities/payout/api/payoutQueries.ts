@@ -1,7 +1,9 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
-import { PaymentFilters } from '@/entities/payment'
 import { PayOut } from '../model/types'
 import { payoutApi } from './payoutApi'
+import { PaymentFilters } from '@/entities/payment'
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
+
+// ============ QUERY KEYS ============
 
 export const PAYOUT_KEYS = {
     all: ['payouts'] as const,
@@ -11,6 +13,8 @@ export const PAYOUT_KEYS = {
     details: () => [...PAYOUT_KEYS.all, 'detail'] as const,
     detail: (id: string) => [...PAYOUT_KEYS.details(), id] as const,
 }
+
+// ============ QUERIES ============
 
 export const usePayouts = (
     filters?: PaymentFilters,

@@ -1,3 +1,3 @@
 export * from './model/types'
+export * from './api/payoutApi'
 export * from './api/payoutQueries'
-export { payoutApi } from './api/payoutApi'

@@ -3,15 +3,16 @@ import {
     useInfiniteQuery,
     type UseQueryOptions,
 } from '@tanstack/react-query'
-import { productApi } from './productApi'
 import type {
-    ItemResponse,
-    PaginatedResponse,
-    ProductFilters,
     ProductItem,
+    ItemResponse,
+    ProductFilters,
+    PaginatedResponse,
 } from '../model/types'
+import { productApi } from './productApi'
 
-// Query Keys
+// ============ QUERY KEYS ============
+
 export const PRODUCT_KEYS = {
     all: ['products'] as const,
     lists: () => [...PRODUCT_KEYS.all, 'list'] as const,

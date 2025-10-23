@@ -5,24 +5,23 @@ import {
     useDeleteOrderItem,
     useNotApprovedOrder,
 } from '@/entities/order'
-import React, { useRef } from 'react'
 import toast from 'react-hot-toast'
+import React, { useRef } from 'react'
+import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { Pagination } from 'swiper/modules'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
 import { useFlyToCart } from '@/shared/lib/hooks'
 import { Image, Minus, Plus } from 'lucide-react'
+import { ProductView } from '@/entities/product'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { ProductView } from '@/entities/product/model/types'
 
 interface ProductCardProps {
     product: ProductView
 }
-
-const APP_CDN = import.meta.env.VITE_APP_CDN
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const navigate = useNavigate()

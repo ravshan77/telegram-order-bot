@@ -1,6 +1,8 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { paymentApi } from './paymentApi'
 import type { Payment, PaymentFilters } from '../model/types'
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
+
+// ============ QUERY KEYS ============
 
 export const PAYMENT_KEYS = {
     all: ['payments'] as const,
@@ -10,6 +12,8 @@ export const PAYMENT_KEYS = {
     details: () => [...PAYMENT_KEYS.all, 'detail'] as const,
     detail: (id: string) => [...PAYMENT_KEYS.details(), id] as const,
 }
+
+// ============ QUERIES ============
 
 export const usePayments = (
     filters?: PaymentFilters,

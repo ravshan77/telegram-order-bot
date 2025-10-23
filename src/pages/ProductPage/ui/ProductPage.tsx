@@ -5,16 +5,15 @@ import {
 } from '@/entities/order'
 import toast from 'react-hot-toast'
 import { Image } from 'lucide-react'
+import { APP_CDN } from '@/shared/api'
 import React, { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
 import { BoxSvg } from '@/shared/ui/svg'
 import { useNavigate } from 'react-router-dom'
 import { getBasketPath } from '@/shared/config'
+import { ProductSection } from '@/widgets/ProductSection'
 import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
 import { useCartStore } from '@/shared/store/useCartStore'
-import { ProductSection } from '@/features/ProductSection'
-
-const APP_CDN = import.meta.env.VITE_APP_CDN
 
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)

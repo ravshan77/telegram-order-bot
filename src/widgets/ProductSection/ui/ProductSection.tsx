@@ -1,10 +1,13 @@
+import {
+    useProducts,
+    ProductFilters,
+    transformProductToView,
+} from '@/entities/product'
 import { ChevronRight } from 'lucide-react'
 import { Alert, Button } from '@/shared/ui/kit'
 import { ProductCard } from '@/widgets/ProductCard'
 import React, { useState, useCallback, useMemo } from 'react'
-import { ProductFilters } from '@/entities/product/model/types'
 import { useHorizontalInfiniteScroll } from '@/shared/lib/hooks'
-import { transformProductToView, useProducts } from '@/entities/product'
 
 interface ProductSectionProps {
     title: string

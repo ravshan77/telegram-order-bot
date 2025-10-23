@@ -6,6 +6,8 @@ import {
 import { salesApi } from './salesApi'
 import type { Sale, SalesFilters } from '../model/types'
 
+// ============ QUERY KEYS ============
+
 export const SALES_KEYS = {
     all: ['sales'] as const,
     lists: () => [...SALES_KEYS.all, 'list'] as const,
@@ -13,6 +15,8 @@ export const SALES_KEYS = {
     details: () => [...SALES_KEYS.all, 'detail'] as const,
     detail: (id: string) => [...SALES_KEYS.details(), id] as const,
 }
+
+// ============ QUERIES ============
 
 export const useSales = (
     filters?: SalesFilters,

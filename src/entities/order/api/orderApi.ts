@@ -1,123 +1,106 @@
-import { BaseRestClient } from '@/shared/api/ApiService'
-import { API_ENDPOINTS, API_BASE_URL } from '@/shared/api/config'
 import type {
-    RegisterOrderRequest,
     Order,
-    AddOrderItemRequest,
-    UpdateOrderItemRequest,
-    DeleteOrderItemRequest,
-    ApproveOrderRequest,
+    OrderFilters,
     DeleteOrderRequest,
     OrderErrorResponse,
-    OrderFilters,
+    AddOrderItemRequest,
+    ApproveOrderRequest,
+    RegisterOrderRequest,
+    DeleteOrderItemRequest,
+    UpdateOrderItemRequest,
 } from '../model/types'
+import { BaseRestClient } from '@/shared/api/ApiService'
+import { API_ENDPOINTS, API_BASE_URL } from '@/shared/api/config'
 
 class OrderApi extends BaseRestClient {
     constructor() {
         super(API_BASE_URL)
     }
 
-    // Get all orders with optional count
     async getOrders(filters?: OrderFilters): Promise<Order[]> {
         return this.get<Order[]>(API_ENDPOINTS.orders.getAll, {
             params: filters,
         })
     }
 
-    // Get orders count
     async getOrdersCount(): Promise<number> {
         return this.get<number>(API_ENDPOINTS.orders.getCount)
     }
 
-    // Get not approved order (active cart/draft order)
     async getNotApprovedOrder(): Promise<Order | null> {
         try {
             return await this.get<Order>(API_ENDPOINTS.orders.getNotApproved)
         } catch (error: any) {
-            // Agar order topilmasa, null qaytarish
-            // if (error?.response?.status === 404) {
-            //     return null
-            // }
-            console.log(error)
-
             this.handleOrderError(error)
-            throw new Error(error)
+            // throw new Error(error)
         }
     }
 
-    // Get order by ID
     async getOrderById(id: string): Promise<Order> {
         return this.get<Order>(API_ENDPOINTS.orders.getById(id))
     }
 
-    // Register new order (create cart)
     async registerOrder(data: RegisterOrderRequest): Promise<Order> {
         try {
             return await this.post<Order>(API_ENDPOINTS.orders.register, data)
         } catch (error: any) {
             this.handleOrderError(error)
-            throw error
+            // throw error
         }
     }
 
-    // Add item to order
     async addOrderItem(data: AddOrderItemRequest): Promise<Order> {
         try {
             return await this.post<Order>(API_ENDPOINTS.orders.addItem, data)
         } catch (error: any) {
             this.handleOrderError(error)
-            throw error
+            // throw error
         }
     }
 
-    // Update order item
     async updateOrderItem(data: UpdateOrderItemRequest): Promise<Order> {
         try {
             return await this.post<Order>(API_ENDPOINTS.orders.updateItem, data)
         } catch (error: any) {
             this.handleOrderError(error)
-            throw error
+            // throw error
         }
     }
 
-    // Delete order item
     async deleteOrderItem(data: DeleteOrderItemRequest): Promise<Order> {
         try {
             return await this.post<Order>(API_ENDPOINTS.orders.deleteItem, data)
         } catch (error: any) {
             this.handleOrderError(error)
-            throw error
+            // throw error
         }
     }
 
-    // Approve order (checkout)
     async approveOrder(data: ApproveOrderRequest): Promise<Order> {
         try {
             return await this.post<Order>(API_ENDPOINTS.orders.approve, data)
         } catch (error: any) {
             this.handleOrderError(error)
-            throw error
+            // throw error
         }
     }
 
-    // Delete order (cancel)
     async deleteOrder(data: DeleteOrderRequest): Promise<void> {
         try {
             await this.post<void>(API_ENDPOINTS.orders.delete, data)
         } catch (error: any) {
             this.handleOrderError(error)
-            throw error
+            // throw error
         }
     }
 
     /**
-     * Handle order-specific errors
+     * Handle order errors
      */
     private handleOrderError(error: any): never {
         const response = (error?.response?.data as OrderErrorResponse) || error
 
         if (response) {
-            // Check each error type and throw appropriate message
             if (response.order_not_found) {
                 throw new Error('Заказ не найден')
             }
@@ -151,7 +134,7 @@ class OrderApi extends BaseRestClient {
             }
         }
 
-        // Generic error
+        // other errors
         throw new Error(
             error?.response?.data?.message ||
                 error?.message ||

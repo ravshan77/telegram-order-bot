@@ -1,4 +1,3 @@
-// Request types
 export interface OrderItemRequest {
     item_id: string
     quantity: number
@@ -36,7 +35,6 @@ export interface DeleteOrderRequest {
     id: string // order ID
 }
 
-// Response types (existing, keep them)
 export interface Item {
     id: string
     name: string

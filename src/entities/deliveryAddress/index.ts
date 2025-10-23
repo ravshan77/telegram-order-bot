@@ -1,11 +1,3 @@
-export type {
-    Location,
-    Contact,
-    Debt,
-    // Contractor,
-    LocationFormData,
-    LocationResponse,
-    LocationView,
-} from './model'
-
-export * from './api'
+export type * from './model/types'
+export * from './api/deliveryAddressApi'
+export * from './api/deliveryAddressQueries'

@@ -1,1 +1,0 @@
-export { transformProductToView } from './transformProductToView'

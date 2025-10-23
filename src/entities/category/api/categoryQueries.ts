@@ -13,11 +13,6 @@ export const CATEGORY_KEYS = {
 
 // ============ QUERIES ============
 
-/**
- * Get all categories
- * @example
- * const { data: categories, isLoading } = useCategories()
- */
 export const useCategories = (
     options?: Omit<
         UseQueryOptions<CategoriesResponse, Error>,
@@ -32,11 +27,6 @@ export const useCategories = (
     })
 }
 
-/**
- * Get single category by ID
- * @example
- * const { data: category } = useCategory('123')
- */
 export const useCategory = (
     id: string,
     options?: Omit<

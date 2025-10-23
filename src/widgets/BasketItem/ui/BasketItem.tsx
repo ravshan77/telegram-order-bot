@@ -1,7 +1,8 @@
 import { memo } from 'react'
+import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
+import { OrderItem } from '@/entities/order'
 import { useItemMap } from '@/shared/lib/hooks'
-import { OrderItem } from '@/entities/order/model'
 import { Minus, Plus, Trash2, Image } from 'lucide-react'
 
 interface BasketItemProps {
@@ -15,8 +16,6 @@ interface BasketItemProps {
     updating: boolean
     deleting: boolean
 }
-
-const APP_CDN = import.meta.env.VITE_APP_CDN
 
 export const BasketItem = ({
     item,
