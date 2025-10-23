@@ -152,7 +152,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
 
     return (
         <Menu
-            className="px-4 pb-4 relative"
+            className="px-4 pb-44 relative"
             sideCollapsed={collapsed}
             defaultActiveKeys={activedRoute?.key ? [activedRoute.key] : []}
             defaultExpandedKeys={defaulExpandKey}
@@ -184,7 +184,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
                         </div>
                     )}
                     <div className="pt-4">
-                        <span>Разработка: &ensp; </span>
+                        <span>Разработано: &ensp; </span>
                         <Link
                             to={'https://hippo.uz/uz/'}
                             className="text-primary"

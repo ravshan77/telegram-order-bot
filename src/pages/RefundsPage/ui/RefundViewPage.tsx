@@ -100,23 +100,26 @@ export const RefundViewPage: React.FC = () => {
     }
 
     const formatNumber = (num: number) => {
-        return num.toLocaleString('en-US').replace(/,/g, ' ')
+        return num?.toLocaleString('en-US')?.replace(/,/g, ' ')
     }
 
-    const totalAmount = refund.totals.reduce(
-        (sum, total) => sum + total.amount,
-        0,
-    )
-    const discountAmount = refund.exact_discounts.reduce(
-        (sum, discount) => sum + discount.amount,
-        0,
-    )
-    const paymentAmount =
-        refund.payment?.debt_states.reduce(
-            (sum, debt) => sum + debt.amount,
-            0,
-        ) || 0
-    const debtAmount = refund.debts.reduce((sum, debt) => sum + debt.amount, 0)
+    // const totalAmount = refund?.totals?.reduce(
+    //     (sum, total) => sum + total?.amount,
+    //     0,
+    // )
+    // const discountAmount = refund?.exact_discounts?.reduce(
+    //     (sum, discount) => sum + discount?.amount,
+    //     0,
+    // )
+    // const paymentAmount =
+    //     refund?.payment?.debt_states?.reduce(
+    //         (sum, debt) => sum + debt?.amount,
+    //         0,
+    //     ) || 0
+    // const debtAmount = refund?.debts?.reduce(
+    //     (sum, debt) => sum + debt?.amount,
+    //     0,
+    // )
 
     return (
         <div className="pb-32">
@@ -129,16 +132,16 @@ export const RefundViewPage: React.FC = () => {
                     <div className="bg-gray-50 rounded-2xl p-4 mb-4 shadow-sm border">
                         <div className="flex items-start justify-between mb-4">
                             <h2 className="text-base font-semibold">
-                                Продажа № {refund.number}
+                                Продажа № {refund?.number}
                             </h2>
                             <span
                                 className={`px-3 py-1 text-xs font-medium rounded-full ${
-                                    refund.is_approved
+                                    refund?.is_approved
                                         ? 'bg-green-50 text-green-500'
                                         : 'bg-red-50 text-red-500'
                                 }`}
                             >
-                                {refund.is_approved
+                                {refund?.is_approved
                                     ? 'Подтвержден'
                                     : 'Не подтвержден'}
                             </span>
@@ -150,7 +153,7 @@ export const RefundViewPage: React.FC = () => {
                                     Дата продажи:
                                 </p>
                                 <p className="text-sm font-medium">
-                                    {dayjs(refund.date).format('DD.MM.YYYY')}
+                                    {dayjs(refund?.date).format('DD.MM.YYYY')}
                                 </p>
                             </div>
                             <div>
@@ -158,7 +161,7 @@ export const RefundViewPage: React.FC = () => {
                                     Дата создания:
                                 </p>
                                 <p className="text-sm font-medium">
-                                    {dayjs(refund.created_at).format(
+                                    {dayjs(refund?.created_at)?.format(
                                         'DD.MM.YYYY HH:mm',
                                     )}
                                 </p>
@@ -171,20 +174,20 @@ export const RefundViewPage: React.FC = () => {
                                     Дата подтверждения:
                                 </p>
                                 <p className="text-sm font-medium">
-                                    {dayjs(refund.approved_at).format(
+                                    {dayjs(refund?.approved_at)?.format(
                                         'DD.MM.YYYY HH:mm',
                                     )}
                                 </p>
                             </div>
                         )}
 
-                        {refund.payment?.notes && (
+                        {refund?.payment?.notes && (
                             <div className="mb-4">
                                 <p className="text-xs text-gray-500 mb-1">
                                     Информация:
                                 </p>
                                 <p className="text-sm font-medium">
-                                    {refund.payment.notes}
+                                    {refund?.payment?.notes}
                                 </p>
                             </div>
                         )}
@@ -198,19 +201,21 @@ export const RefundViewPage: React.FC = () => {
                         </Button>
                     </div>
 
-                    {refund.items
-                        .filter((item) => !item.is_deleted)
-                        .map((item) => (
+                    {refund?.items
+                        ?.filter((item) => !item?.is_deleted)
+                        ?.map((item) => (
                             <div
-                                key={item.id}
+                                key={item?.id}
                                 className="bg-white rounded-2xl p-4 mb-3 shadow-sm border"
                             >
                                 <div className="flex items-center justify-between mb-3 text-xs text-gray-500">
-                                    <span>Количество: {item.quantity} шт.</span>
+                                    <span>
+                                        Количество: {item?.quantity} шт.
+                                    </span>
                                 </div>
 
                                 <h3 className="text-sm font-semibold text-gray-900 mb-3 leading-snug">
-                                    {item.warehouse_item.name}
+                                    {item?.warehouse_item?.name}
                                 </h3>
 
                                 <div className="space-y-2">
@@ -219,18 +224,18 @@ export const RefundViewPage: React.FC = () => {
                                             Цена:
                                         </span>
                                         <span className="text-sm font-medium">
-                                            {formatNumber(item.price.amount)}{' '}
-                                            {item.price.currency.name}
+                                            {item?.price?.amount?.toLocaleString()}{' '}
+                                            {item?.price?.currency?.name}
                                         </span>
                                     </div>
-                                    {item.discount && (
+                                    {item?.discount && (
                                         <>
                                             <div className="flex items-center justify-between">
                                                 <span className="text-sm text-gray-600">
                                                     Скидка:
                                                 </span>
                                                 <span className="text-sm font-medium">
-                                                    {item.discount.value}%
+                                                    {item?.discount?.value}%
                                                 </span>
                                             </div>
                                             <div className="flex items-center justify-between">
@@ -239,12 +244,13 @@ export const RefundViewPage: React.FC = () => {
                                                 </span>
                                                 <span className="text-sm font-medium">
                                                     {formatNumber(
-                                                        item.net_price.amount /
-                                                            item.quantity,
+                                                        item?.net_price
+                                                            ?.amount /
+                                                            item?.quantity,
                                                     )}{' '}
                                                     {
-                                                        item.net_price.currency
-                                                            .name
+                                                        item?.net_price
+                                                            ?.currency?.name
                                                     }
                                                 </span>
                                             </div>
@@ -256,9 +262,9 @@ export const RefundViewPage: React.FC = () => {
                                         </span>
                                         <span className="text-sm font-medium">
                                             {formatNumber(
-                                                item.net_price.amount,
+                                                item?.net_price?.amount,
                                             )}{' '}
-                                            {item.net_price.currency.name}
+                                            {item?.net_price?.currency?.name}
                                         </span>
                                     </div>
                                 </div>
@@ -275,20 +281,34 @@ export const RefundViewPage: React.FC = () => {
                                 <span className="text-xs text-gray-600">
                                     Общая сумма:
                                 </span>
-                                <span className="text-sm font-semibold text-primary">
-                                    {formatNumber(totalAmount)}{' '}
-                                    {refund.totals[0]?.currency.name || 'UZS'}
-                                </span>
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {refund?.totals?.map((total) => (
+                                        <span
+                                            key={total.currency.id}
+                                            className="text-sm font-semibold text-primary"
+                                        >
+                                            {total.amount.toLocaleString()}{' '}
+                                            {total.currency.name}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
                             <div className="flex flex-col items-start justify-between w-1/2">
                                 <span className="text-xs text-gray-600">
                                     Скидка:
                                 </span>
-                                <span className="text-sm font-semibold text-primary">
-                                    {formatNumber(discountAmount)}{' '}
-                                    {refund.exact_discounts[0]?.currency.name ||
-                                        'UZS'}
-                                </span>
+
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {refund?.exact_discounts?.map((total) => (
+                                        <span
+                                            key={total.currency.id}
+                                            className="text-sm font-semibold text-primary"
+                                        >
+                                            {total.amount.toLocaleString()}{' '}
+                                            {total.currency.name}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-between">
@@ -296,20 +316,36 @@ export const RefundViewPage: React.FC = () => {
                                 <span className="text-xs text-gray-600">
                                     Оплата:
                                 </span>
-                                <span className="text-sm font-semibold text-primary">
-                                    {formatNumber(paymentAmount)}{' '}
-                                    {refund.payment?.debt_states[0]?.currency
-                                        .name || 'UZS'}
-                                </span>
+
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {refund?.payment?.debt_states?.map(
+                                        (total) => (
+                                            <span
+                                                key={total.currency.id}
+                                                className="text-sm font-semibold text-primary"
+                                            >
+                                                {total.amount.toLocaleString()}{' '}
+                                                {total.currency.name}
+                                            </span>
+                                        ),
+                                    )}
+                                </div>
                             </div>
                             <div className="flex flex-col items-start justify-between w-1/2">
                                 <span className="text-xs text-gray-600">
                                     Долг:
                                 </span>
-                                <span className="text-sm font-semibold text-primary">
-                                    {formatNumber(debtAmount)}{' '}
-                                    {refund.debts[0]?.currency.name || 'UZS'}
-                                </span>
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {refund?.debts?.map((total) => (
+                                        <span
+                                            key={total.currency.id}
+                                            className="text-sm font-semibold text-primary"
+                                        >
+                                            {total.amount.toLocaleString()}{' '}
+                                            {total.currency.name}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
