@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Input } from '@/shared/ui/kit'
 import Header from '@/shared/ui/template/Header'
@@ -8,13 +9,12 @@ import MobileNav from '@/shared/ui/template/MobileNav'
 import { useNotApprovedOrder } from '@/entities/order'
 import LayoutBase from '@/shared/ui/template/LayoutBase'
 import { Search, ShoppingCart, User } from 'lucide-react'
+import { HeaderSearchSheet } from '@/widgets/HeaderSearch'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import { getBasketPath, getProfilePath } from '@/shared/config'
 // import { useHeaderSearchStore } from '@/shared/store/useHeaderSearch'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
-import { HeaderSearchSheet } from '@/widgets/HeaderSearch'
-import { useState } from 'react'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
     const tg = useTelegram()
@@ -107,9 +107,11 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                         {children}
                     </div>
                     <HeaderSearchSheet
-                        isOpen={isOpenSheet}
-                        setIsOpen={setIsopenSheet}
-                        searchItemName={searchItemName}
+                        open={isOpenSheet}
+                        onOpenChange={setIsopenSheet}
+                        // isOpen={isOpenSheet}
+                        // setIsOpen={setIsopenSheet}
+                        // searchItemName={searchItemName}
                     />
                 </div>
             </div>
