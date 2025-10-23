@@ -84,7 +84,7 @@ export const RefundsPage = () => {
         return (
             <div className="p-4">
                 <Alert showIcon type="danger">
-                    Ошибка загрузки продаж: {error?.message}
+                    Ошибка загрузки возврат: {error?.message}
                 </Alert>
             </div>
         )
@@ -160,7 +160,7 @@ export const RefundsPage = () => {
                     {!isLoading && refunds?.length === 0 ? (
                         <div className="h-72 flex flex-col items-center justify-center">
                             <p className="text-gray-500">
-                                У вас пока нет продаж
+                                У вас пока нет возврат
                             </p>
                         </div>
                     ) : (

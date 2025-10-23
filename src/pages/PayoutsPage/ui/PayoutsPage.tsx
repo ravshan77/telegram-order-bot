@@ -65,7 +65,7 @@ export const PayoutsPage = () => {
         return (
             <div className="p-4">
                 <Alert showIcon type="danger">
-                    Ошибка загрузки оплат: {error?.message}
+                    Ошибка загрузки выплат: {error?.message}
                 </Alert>
             </div>
         )
@@ -135,7 +135,7 @@ export const PayoutsPage = () => {
                     {!payments || payments.length === 0 ? (
                         <div className="h-72 flex flex-col items-center justify-center">
                             <p className="text-gray-500">
-                                У вас пока нет оплат
+                                У вас пока нет выплат
                             </p>
                         </div>
                     ) : (
