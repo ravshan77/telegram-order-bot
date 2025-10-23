@@ -21,8 +21,6 @@ const CollapsibleSide = ({ children }: CommonProps) => {
     const { data: order } = useNotApprovedOrder()
     const cart = order?.items?.filter((item) => !item?.is_deleted) || []
     const totalItems = cart?.length
-
-    // const [searchItemName, setSearchItemName] = useState('')
     const [isOpenSheet, setIsopenSheet] = useState(false)
 
     return (
@@ -50,16 +48,11 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                             className="text-gray-400"
                                         />
                                         <Input
-                                            // readOnly
+                                            readOnly
                                             type="text"
                                             placeholder="Поиск"
                                             className="h-full bg-transparent flex-1 outline-none focus:outline-none focus:ring-0"
-                                            // value={searchItemName}
-                                            // onChange={(e) =>
-                                            //     setSearchItemName(e.target.value)
-                                            // }
                                             onFocus={() => setIsopenSheet(true)}
-                                            // onBlur={() => setIsopenSheet(false)}
                                         />
                                     </div>
                                 ) : null}
@@ -108,9 +101,6 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                     <HeaderSearchSheet
                         open={isOpenSheet}
                         onOpenChange={setIsopenSheet}
-                        // isOpen={isOpenSheet}
-                        // setIsOpen={setIsopenSheet}
-                        // searchItemName={searchItemName}
                     />
                 </div>
             </div>

@@ -75,12 +75,6 @@ export const RefundViewPage: React.FC = () => {
         }
     }
 
-    // const handleGoBack = () => {
-    //     const dateStart = searchParams.get('date_start')
-    //     const dateEnd = searchParams.get('date_end')
-    //     navigate(getSalesPath(dateStart || undefined, dateEnd || undefined))
-    // }
-
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -102,24 +96,6 @@ export const RefundViewPage: React.FC = () => {
     const formatNumber = (num: number) => {
         return num?.toLocaleString('en-US')?.replace(/,/g, ' ')
     }
-
-    // const totalAmount = refund?.totals?.reduce(
-    //     (sum, total) => sum + total?.amount,
-    //     0,
-    // )
-    // const discountAmount = refund?.exact_discounts?.reduce(
-    //     (sum, discount) => sum + discount?.amount,
-    //     0,
-    // )
-    // const paymentAmount =
-    //     refund?.payment?.debt_states?.reduce(
-    //         (sum, debt) => sum + debt?.amount,
-    //         0,
-    //     ) || 0
-    // const debtAmount = refund?.debts?.reduce(
-    //     (sum, debt) => sum + debt?.amount,
-    //     0,
-    // )
 
     return (
         <div className="pb-32">

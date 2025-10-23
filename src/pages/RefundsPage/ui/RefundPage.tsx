@@ -167,13 +167,17 @@ export const RefundsPage = () => {
                         refunds?.map((sale) => {
                             // Calculate payment total
                             const paymentTotal =
-                                sale.payment?.debt_states.reduce(
+                                sale?.payment?.debt_states.reduce(
                                     (sum, debt) => sum + debt.amount,
                                     0,
                                 ) || 0
 
                             // Calculate debt (total - payment)
-                            const totalAmount = sale.net_price[0]?.amount || 0
+                            const totalAmount =
+                                sale?.net_price?.reduce(
+                                    (sum, debt) => sum + debt.amount,
+                                    0,
+                                ) || 0
                             const debtAmount = totalAmount - paymentTotal
 
                             return (
@@ -210,21 +214,49 @@ export const RefundsPage = () => {
                                             <span className="text-xs text-gray-500 block mb-1">
                                                 Сумма
                                             </span>
-                                            <span className="text-base font-bold text-gray-600">
-                                                {totalAmount.toLocaleString()}{' '}
-                                                {sale.net_price[0]?.currency
-                                                    .name || 'UZS'}
-                                            </span>
+                                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                                {sale.net_price?.map((crn) => (
+                                                    <span
+                                                        key={crn?.currency.id}
+                                                        className="text-base font-bold text-gray-600"
+                                                    >
+                                                        {crn?.amount?.toLocaleString()}{' '}
+                                                        {crn?.currency.name}
+                                                    </span>
+                                                )) ?? (
+                                                    <>
+                                                        <span className="text-base font-bold text-gray-600">
+                                                            0
+                                                        </span>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
                                         <div>
                                             <span className="text-xs text-gray-500 block mb-1">
                                                 Оплата
                                             </span>
-                                            <span className="text-base font-bold text-gray-600">
-                                                {paymentTotal.toLocaleString()}{' '}
-                                                {sale.payment?.debt_states[0]
-                                                    ?.currency.name || 'UZS'}
-                                            </span>
+                                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                                {sale.payment?.debt_states?.map(
+                                                    (crn) => (
+                                                        <span
+                                                            key={
+                                                                crn?.currency.id
+                                                            }
+                                                            className="text-base font-bold text-gray-600"
+                                                        >
+                                                            {crn?.amount?.toLocaleString()}{' '}
+                                                            {crn?.currency.name}
+                                                        </span>
+                                                    ),
+                                                ) ?? (
+                                                    <>
+                                                        <span className="text-base font-bold text-gray-600">
+                                                            0
+                                                        </span>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
@@ -237,8 +269,8 @@ export const RefundsPage = () => {
                                             {Math.abs(
                                                 debtAmount,
                                             ).toLocaleString()}{' '}
-                                            {sale.net_price[0]?.currency.name ||
-                                                'UZS'}
+                                            {sale?.net_price[0]?.currency
+                                                ?.name || 'UZS'}
                                         </span>
                                     </div>
                                 </div>

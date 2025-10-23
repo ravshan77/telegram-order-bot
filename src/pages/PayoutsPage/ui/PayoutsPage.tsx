@@ -140,11 +140,6 @@ export const PayoutsPage = () => {
                         </div>
                     ) : (
                         payments.map((payment) => {
-                            const totalDebtAmount = payment.debt_states.reduce(
-                                (sum, debt) => sum + debt.amount,
-                                0,
-                            )
-
                             return (
                                 <div
                                     key={payment.id}
@@ -194,13 +189,28 @@ export const PayoutsPage = () => {
                                             <span className="text-sm text-gray-600">
                                                 Закрытая задолженность:
                                             </span>
-                                            <span className="text-sm font-medium text-end">
-                                                {totalDebtAmount.toLocaleString()}{' '}
-                                                {
-                                                    payment.debt_states[0]
-                                                        ?.currency.name
-                                                }
-                                            </span>
+
+                                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                                {payment?.debt_states?.map(
+                                                    (crn) => (
+                                                        <span
+                                                            key={
+                                                                crn?.currency.id
+                                                            }
+                                                            className="text-base font-bold text-gray-600"
+                                                        >
+                                                            {crn?.amount?.toLocaleString()}{' '}
+                                                            {crn?.currency.name}
+                                                        </span>
+                                                    ),
+                                                ) ?? (
+                                                    <>
+                                                        <span className="text-base font-bold text-gray-600">
+                                                            0
+                                                        </span>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

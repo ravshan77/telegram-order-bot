@@ -104,19 +104,6 @@ export const SalesViewPage: React.FC = () => {
         return num.toLocaleString('en-US').replace(/,/g, ' ')
     }
 
-    const totalAmount = sale.totals.reduce(
-        (sum, total) => sum + total.amount,
-        0,
-    )
-    const discountAmount = sale.exact_discounts.reduce(
-        (sum, discount) => sum + discount.amount,
-        0,
-    )
-    const paymentAmount =
-        sale.payment?.debt_states.reduce((sum, debt) => sum + debt.amount, 0) ||
-        0
-    const debtAmount = sale.debts.reduce((sum, debt) => sum + debt.amount, 0)
-
     return (
         <div className="pb-32">
             <div>
@@ -218,7 +205,7 @@ export const SalesViewPage: React.FC = () => {
                                             Цена:
                                         </span>
                                         <span className="text-sm font-medium">
-                                            {formatNumber(item.price.amount)}{' '}
+                                            {item.price.amount.toLocaleString()}{' '}
                                             {item.price.currency.name}
                                         </span>
                                     </div>
@@ -254,9 +241,7 @@ export const SalesViewPage: React.FC = () => {
                                             Итого:
                                         </span>
                                         <span className="text-sm font-medium">
-                                            {formatNumber(
-                                                item.net_price.amount,
-                                            )}{' '}
+                                            {item.net_price.amount.toLocaleString()}{' '}
                                             {item.net_price.currency.name}
                                         </span>
                                     </div>
@@ -274,20 +259,47 @@ export const SalesViewPage: React.FC = () => {
                                 <span className="text-xs text-gray-600">
                                     Общая сумма:
                                 </span>
-                                <span className="text-sm font-semibold text-primary">
-                                    {formatNumber(totalAmount)}{' '}
-                                    {sale.totals[0]?.currency.name || 'UZS'}
-                                </span>
+
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {sale.totals?.map((crn) => (
+                                        <span
+                                            key={crn?.currency.id}
+                                            className="text-base font-bold text-gray-600"
+                                        >
+                                            {crn?.amount?.toLocaleString()}{' '}
+                                            {crn?.currency.name}
+                                        </span>
+                                    )) ?? (
+                                        <>
+                                            <span className="text-base font-bold text-gray-600">
+                                                0
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                             <div className="flex flex-col items-start justify-between w-1/2">
                                 <span className="text-xs text-gray-600">
                                     Скидка:
                                 </span>
-                                <span className="text-sm font-semibold text-primary">
-                                    {formatNumber(discountAmount)}{' '}
-                                    {sale.exact_discounts[0]?.currency.name ||
-                                        'UZS'}
-                                </span>
+
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {sale.exact_discounts?.map((crn) => (
+                                        <span
+                                            key={crn?.currency.id}
+                                            className="text-base font-bold text-gray-600"
+                                        >
+                                            {crn?.amount?.toLocaleString()}{' '}
+                                            {crn?.currency.name}
+                                        </span>
+                                    )) ?? (
+                                        <>
+                                            <span className="text-base font-bold text-gray-600">
+                                                0
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-between">
@@ -295,20 +307,47 @@ export const SalesViewPage: React.FC = () => {
                                 <span className="text-xs text-gray-600">
                                     Оплата:
                                 </span>
-                                <span className="text-sm font-semibold text-primary">
-                                    {formatNumber(paymentAmount)}{' '}
-                                    {sale.payment?.debt_states[0]?.currency
-                                        .name || 'UZS'}
-                                </span>
+
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {sale.payment?.debt_states?.map((crn) => (
+                                        <span
+                                            key={crn?.currency.id}
+                                            className="text-base font-bold text-gray-600"
+                                        >
+                                            {crn?.amount?.toLocaleString()}{' '}
+                                            {crn?.currency.name}
+                                        </span>
+                                    )) ?? (
+                                        <>
+                                            <span className="text-base font-bold text-gray-600">
+                                                0
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                             <div className="flex flex-col items-start justify-between w-1/2">
                                 <span className="text-xs text-gray-600">
                                     Долг:
                                 </span>
-                                <span className="text-sm font-semibold text-primary">
-                                    {formatNumber(debtAmount)}{' '}
-                                    {sale.debts[0]?.currency.name || 'UZS'}
-                                </span>
+
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {sale.debts?.map((crn) => (
+                                        <span
+                                            key={crn?.currency.id}
+                                            className="text-base font-bold text-gray-600"
+                                        >
+                                            {crn?.amount?.toLocaleString()}{' '}
+                                            {crn?.currency.name}
+                                        </span>
+                                    )) ?? (
+                                        <>
+                                            <span className="text-base font-bold text-gray-600">
+                                                0
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -84,7 +84,7 @@ export const ProductPage: React.FC = () => {
                                     <img
                                         src={images[0]}
                                         alt={`product-0`}
-                                        className="rounded-xl h-96 object-cover overflow-hidden"
+                                        className="rounded-xl h-96 object-cover overflow-hidden border border-gray-400"
                                     />
                                 </div>
                             ) : (
@@ -97,7 +97,7 @@ export const ProductPage: React.FC = () => {
                                         <img
                                             src={img}
                                             alt={`product-${index}`}
-                                            className="rounded-xl h-96 w-80 object-cover border"
+                                            className="rounded-xl h-96 w-80 object-cover border border-gray-400"
                                         />
                                     </div>
                                 ))

@@ -93,7 +93,7 @@ export function HeaderSearchSheet({
             onOpenChange={onOpenChange}
         >
             <DrawerContent
-                className="h-[100vh] absolute top-0 left-0 max-h-[100vh] rounded-none border-none outline-none focus:outline-none bg-white"
+                className="rounded-none border-none outline-none focus:outline-none bg-white"
                 style={{
                     height: '100vh',
                     maxHeight: '100vh',
