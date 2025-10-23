@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Search, X, Loader2 } from 'lucide-react'
 // import {
 //     Drawer,
@@ -19,8 +19,7 @@ import {
 } from '@/shared/ui/kit/Sheet'
 import { Input, ScrollBar } from '@/shared/ui/kit'
 import { ProductItem, useProducts } from '@/entities/product'
-import { useCartStore } from '@/shared/store/useCartStore'
-import './drw.css'
+// import { useCartStore } from '@/shared/store/useCartStore'
 
 interface HeaderSearchSheetProps {
     open: boolean
@@ -42,7 +41,7 @@ export function HeaderSearchSheet({
         },
     )
 
-    const { setSelectedProduct } = useCartStore()
+    // const { setSelectedProduct } = useCartStore()
 
     // Debounce search query
     useEffect(() => {
@@ -67,6 +66,8 @@ export function HeaderSearchSheet({
 
     const handleProductClick = (product: ProductItem) => {
         // setSelectedProduct(product)
+        console.log(product)
+
         onOpenChange(false)
     }
 
