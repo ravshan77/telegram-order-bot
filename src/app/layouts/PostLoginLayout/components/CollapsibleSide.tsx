@@ -12,6 +12,8 @@ import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import { getBasketPath, getProfilePath } from '@/shared/config'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
+import { useState } from 'react'
+import { HeaderSearchSheet } from '@/widgets/HeaderSearch'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
     const tg = useTelegram()
@@ -19,6 +21,8 @@ const CollapsibleSide = ({ children }: CommonProps) => {
     const { data: order } = useNotApprovedOrder()
     const cart = order?.items?.filter((item) => !item?.is_deleted) || []
     const totalItems = cart?.length
+    const [searchItemName, setSearchItemName] = useState('')
+    const [isOpenSheet, setIsopenSheet] = useState(false)
 
     return (
         <LayoutBase
@@ -47,6 +51,17 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                         type="text"
                                         placeholder="Поиск"
                                         className="h-full bg-transparent flex-1 outline-none focus:outline-none focus:ring-0"
+                                        value={searchItemName}
+                                        onChange={(e) =>
+                                            setSearchItemName(e.target.value)
+                                        }
+                                        onFocus={() => setIsopenSheet(true)}
+                                        onBlur={() => setIsopenSheet(false)}
+                                    />
+                                    <HeaderSearchSheet
+                                        isOpen={isOpenSheet}
+                                        setIsOpen={setIsopenSheet}
+                                        searchItemName={searchItemName}
                                     />
                                 </div>
                             </>
