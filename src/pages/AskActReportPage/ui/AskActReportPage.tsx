@@ -62,10 +62,10 @@ export const AskActReportPage: React.FC = () => {
     const handleFilter = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
-        if (e.target.name === 'date_start') {
-            setFilters({ date_start: e.target.value, date_end: null })
-            return
-        }
+        // if (e.target.name === 'date_start') {
+        //     setFilters({ date_start: e.target.value, date_end: null })
+        //     return
+        // }
         setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
