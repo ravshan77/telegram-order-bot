@@ -135,7 +135,6 @@ export const OrdersPage = () => {
                             customInput={
                                 <Input
                                     readOnly
-                                    // type="date"
                                     value={date_value('date_start')}
                                     inputMode="none"
                                     onFocus={(e) => e.target.blur()}
@@ -155,8 +154,9 @@ export const OrdersPage = () => {
                             customInput={
                                 <Input
                                     readOnly
-                                    type="date"
                                     value={date_value('date_end')}
+                                    inputMode="none"
+                                    onFocus={(e) => e.target.blur()}
                                 />
                             }
                             onChange={(date) => handleFilter(date, 'date_end')}

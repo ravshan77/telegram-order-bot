@@ -1,61 +1,56 @@
 import dayjs from 'dayjs'
+import DatePicker from 'react-datepicker'
 import { MoreHorizontal } from 'lucide-react'
 import { useRefunds } from '@/entities/refund'
 import { getRefundDetailPath } from '@/shared/config'
+import { useCallback, useEffect, useState } from 'react'
 import { Button, Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+
+type FilterKey = 'date_time_start' | 'date_time_end'
 
 export const RefundsPage = () => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
+    const today = dayjs().format('YYYY-MM-DD')
+    const urlDateStart = searchParams.get('date_time_start')
+    const urlDateEnd = searchParams.get('date_time_end')
+    const initialDateStart = urlDateStart ?? today
+    const initialDateEnd = urlDateEnd ?? today
 
-    const today = dayjs().startOf('day').format('YYYY-MM-DD')
-    const urlDateStart = searchParams.get('date_start')
-    const urlDateEnd = searchParams.get('date_end')
-
-    const initialDateStart = urlDateStart ? urlDateStart : today
-    const initialDateEnd = urlDateEnd ? urlDateEnd : today
-
-    const [filters, setFilters] = useState<{
-        date_start: string | null
-        date_end: string | null
-    }>({
-        date_start: initialDateStart,
-        date_end: initialDateEnd,
+    const [filters, setFilters] = useState({
+        date_time_start: initialDateStart,
+        date_time_end: initialDateEnd,
     })
 
     useEffect(() => {
         const params: Record<string, string> = {}
 
-        if (filters.date_start && dayjs(filters.date_start).isValid()) {
-            params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
+        if (filters.date_time_start) {
+            params.date_time_start = dayjs(filters.date_time_start).format(
+                'YYYY-MM-DD',
+            )
         }
 
-        if (filters.date_end && dayjs(filters.date_end).isValid()) {
-            params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+        if (filters.date_time_end) {
+            params.date_time_end = dayjs(filters.date_time_end).format(
+                'YYYY-MM-DD',
+            )
         }
 
         setSearchParams(params)
     }, [filters, setSearchParams])
 
-    const apiParams: Record<string, string> = {}
-
-    if (filters?.date_start && dayjs(filters.date_start).isValid()) {
-        apiParams.date_time_start = dayjs(filters.date_start).format(
-            'YYYY-MM-DD',
-        )
-    }
-
-    if (filters?.date_end && dayjs(filters.date_end).isValid()) {
-        apiParams.date_time_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+    const apiParams = {
+        date_time_start: filters.date_time_start,
+        date_time_end: filters.date_time_end,
     }
 
     const shouldFetch =
-        !!filters.date_start &&
-        !!filters.date_end &&
-        dayjs(filters.date_start).isValid() &&
-        dayjs(filters.date_end).isValid()
+        !!filters.date_time_start &&
+        !!filters.date_time_end &&
+        dayjs(filters.date_time_start).isValid() &&
+        dayjs(filters.date_time_end).isValid()
 
     const {
         data: refunds,
@@ -68,11 +63,11 @@ export const RefundsPage = () => {
 
     const goToRefundDetail = useCallback(
         (returnId: string) => {
-            const dateStart = filters.date_start
-                ? dayjs(filters.date_start).format('YYYY-MM-DD')
+            const dateStart = filters.date_time_start
+                ? dayjs(filters.date_time_start).format('YYYY-MM-DD')
                 : undefined
-            const dateEnd = filters.date_end
-                ? dayjs(filters.date_end).format('YYYY-MM-DD')
+            const dateEnd = filters.date_time_end
+                ? dayjs(filters.date_time_end).format('YYYY-MM-DD')
                 : undefined
 
             navigate(getRefundDetailPath(returnId, dateStart, dateEnd))
@@ -118,9 +113,15 @@ export const RefundsPage = () => {
           )
         : []
 
-    const handleFilter = (
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const handleFilter = (date: Date | null, name: string) =>
+        setFilters((prev) => ({
+            ...prev,
+            [name]: dayjs(date).format('YYYY-MM-DD'),
+        }))
+    const selected = (name: FilterKey) =>
+        filters[name] ? dayjs(filters[name], 'YYYY-MM-DD').toDate() : null
+    const date_value = (name: FilterKey) =>
+        dayjs(filters[name]).format('DD.MM.YYYY')
 
     return (
         <div className="pb-32">
@@ -128,18 +129,43 @@ export const RefundsPage = () => {
                 <div className="mb-3">
                     <h2 className="text-lg font-semibold pb-2">Возврат</h2>
                     <div className="flex items-center justify-between gap-2 text-sm">
-                        <Input
-                            type="date"
-                            name="date_start"
-                            value={filters?.date_start}
-                            onChange={handleFilter}
+                        <DatePicker
+                            selected={selected('date_time_start')}
+                            dateFormat="dd.MM.yyyy"
+                            name="date_time_start"
+                            disabledKeyboardNavigation={true}
+                            placeholderText="от"
+                            popperPlacement="bottom-end"
+                            customInput={
+                                <Input
+                                    readOnly
+                                    value={date_value('date_time_start')}
+                                    inputMode="none"
+                                    onFocus={(e) => e.target.blur()}
+                                />
+                            }
+                            onChange={(date) =>
+                                handleFilter(date, 'date_time_start')
+                            }
                         />
 
-                        <Input
-                            type="date"
-                            name="date_end"
-                            value={filters?.date_end}
-                            onChange={handleFilter}
+                        <DatePicker
+                            selected={selected('date_time_end')}
+                            dateFormat="dd.MM.yyyy"
+                            disabledKeyboardNavigation={true}
+                            placeholderText="до"
+                            popperPlacement="bottom-start"
+                            customInput={
+                                <Input
+                                    readOnly
+                                    value={date_value('date_time_end')}
+                                    inputMode="none"
+                                    onFocus={(e) => e.target.blur()}
+                                />
+                            }
+                            onChange={(date) =>
+                                handleFilter(date, 'date_time_end')
+                            }
                         />
                     </div>
                 </div>

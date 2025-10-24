@@ -1,32 +1,48 @@
 import dayjs from 'dayjs'
-import { ChangeEvent, useState } from 'react'
+import DatePicker from 'react-datepicker'
+import { useEffect, useState } from 'react'
 import { usePayouts } from '@/entities/payout'
 import type { Payment } from '@/entities/payment'
+import { useSearchParams } from 'react-router-dom'
 import { Button, Alert, Spinner, Input } from '@/shared/ui/kit'
 import { PaymentViewBottomSheet } from '@/pages/PaymentsPage/ui/PaymentViewBottomSheet'
 
+type FilterKey = 'date_start' | 'date_end'
+
 export const PayoutsPage = () => {
-    const today = dayjs().startOf('day').format('YYYY-MM-DD')
-    const [filters, setFilters] = useState<{
-        date_start: string | null
-        date_end: string | null
-    }>({
-        date_start: today,
-        date_end: today,
+    const [searchParams, setSearchParams] = useSearchParams()
+    const today = dayjs().format('YYYY-MM-DD')
+    const urlDateStart = searchParams.get('date_start')
+    const urlDateEnd = searchParams.get('date_end')
+    const initialDateStart = urlDateStart ?? today
+    const initialDateEnd = urlDateEnd ?? today
+
+    const [filters, setFilters] = useState({
+        date_start: initialDateStart,
+        date_end: initialDateEnd,
     })
+
+    useEffect(() => {
+        const params: Record<string, string> = {}
+
+        if (filters.date_start) {
+            params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
+        }
+
+        if (filters.date_end) {
+            params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+        }
+
+        setSearchParams(params)
+    }, [filters, setSearchParams])
+
+    const apiParams = {
+        date_start: filters.date_start,
+        date_end: filters.date_end,
+    }
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null)
-
-    const params: Record<string, string> = {}
-
-    if (filters?.date_start && dayjs(filters.date_start).isValid()) {
-        params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
-    }
-
-    if (filters?.date_end && dayjs(filters.date_end).isValid()) {
-        params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
-    }
 
     const shouldFetch =
         !!filters.date_start &&
@@ -39,7 +55,7 @@ export const PayoutsPage = () => {
         isLoading,
         isError,
         error,
-    } = usePayouts(params, {
+    } = usePayouts(apiParams, {
         enabled: shouldFetch,
     })
 
@@ -92,9 +108,15 @@ export const PayoutsPage = () => {
 
     const totals = calculateTotalByCurrency()
 
-    const handleFilter = (
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const handleFilter = (date: Date | null, name: string) =>
+        setFilters((prev) => ({
+            ...prev,
+            [name]: dayjs(date).format('YYYY-MM-DD'),
+        }))
+    const selected = (name: FilterKey) =>
+        filters[name] ? dayjs(filters[name], 'YYYY-MM-DD').toDate() : null
+    const date_value = (name: FilterKey) =>
+        dayjs(filters[name]).format('DD.MM.YYYY')
 
     return (
         <div className="pb-32">
@@ -109,18 +131,41 @@ export const PayoutsPage = () => {
                 <div className="mb-3">
                     <h2 className="text-lg font-semibold pb-2">Выплаты</h2>
                     <div className="flex items-center justify-between gap-2 text-sm">
-                        <Input
-                            type="date"
+                        <DatePicker
+                            selected={selected('date_start')}
+                            dateFormat="dd.MM.yyyy"
                             name="date_start"
-                            value={filters?.date_start}
-                            onChange={handleFilter}
+                            disabledKeyboardNavigation={true}
+                            placeholderText="от"
+                            popperPlacement="bottom-end"
+                            customInput={
+                                <Input
+                                    readOnly
+                                    value={date_value('date_start')}
+                                    inputMode="none"
+                                    onFocus={(e) => e.target.blur()}
+                                />
+                            }
+                            onChange={(date) =>
+                                handleFilter(date, 'date_start')
+                            }
                         />
 
-                        <Input
-                            type="date"
-                            name="date_end"
-                            value={filters?.date_end}
-                            onChange={handleFilter}
+                        <DatePicker
+                            selected={selected('date_end')}
+                            dateFormat="dd.MM.yyyy"
+                            disabledKeyboardNavigation={true}
+                            placeholderText="до"
+                            popperPlacement="bottom-start"
+                            customInput={
+                                <Input
+                                    readOnly
+                                    value={date_value('date_end')}
+                                    inputMode="none"
+                                    onFocus={(e) => e.target.blur()}
+                                />
+                            }
+                            onChange={(date) => handleFilter(date, 'date_end')}
                         />
                     </div>
                 </div>

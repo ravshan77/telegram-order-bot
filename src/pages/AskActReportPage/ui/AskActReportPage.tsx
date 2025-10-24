@@ -1,29 +1,45 @@
 import dayjs from 'dayjs'
 import toast from 'react-hot-toast'
 import { Download } from 'lucide-react'
-import React, { ChangeEvent, useState } from 'react'
+import DatePicker from 'react-datepicker'
+import { useSearchParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 import { Alert, Button, Input, Spinner } from '@/shared/ui/kit'
 import { askActReportApi, useAskActReports } from '@/entities/askActReport'
 import { operationTypes } from '@/shared/config/constants/operationTypes.constant'
 
+type FilterKey = 'date_start' | 'date_end'
+
 export const AskActReportPage: React.FC = () => {
-    const today = dayjs().startOf('day').format('YYYY-MM-DD')
-    const [filters, setFilters] = useState<{
-        date_start: string | null
-        date_end: string | null
-    }>({
-        date_start: today,
-        date_end: today,
+    const [searchParams, setSearchParams] = useSearchParams()
+    const today = dayjs().format('YYYY-MM-DD')
+    const urlDateStart = searchParams.get('date_start')
+    const urlDateEnd = searchParams.get('date_end')
+    const initialDateStart = urlDateStart ?? today
+    const initialDateEnd = urlDateEnd ?? today
+
+    const [filters, setFilters] = useState({
+        date_start: initialDateStart,
+        date_end: initialDateEnd,
     })
 
-    const params: Record<string, string> = {}
+    useEffect(() => {
+        const params: Record<string, string> = {}
 
-    if (filters?.date_start && dayjs(filters.date_start).isValid()) {
-        params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
-    }
+        if (filters.date_start) {
+            params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
+        }
 
-    if (filters?.date_end && dayjs(filters.date_end).isValid()) {
-        params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+        if (filters.date_end) {
+            params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+        }
+
+        setSearchParams(params)
+    }, [filters, setSearchParams])
+
+    const apiParams = {
+        date_start: filters.date_start,
+        date_end: filters.date_end,
     }
 
     const shouldFetch =
@@ -37,7 +53,7 @@ export const AskActReportPage: React.FC = () => {
         isLoading,
         isError,
         error,
-    } = useAskActReports(params, {
+    } = useAskActReports(apiParams, {
         enabled: shouldFetch,
     })
 
@@ -59,10 +75,6 @@ export const AskActReportPage: React.FC = () => {
         )
     }
 
-    const handleFilter = (
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-
     const handleDownloadExcel = async () => {
         try {
             await askActReportApi.downloadAskActReportExcel({
@@ -76,25 +88,55 @@ export const AskActReportPage: React.FC = () => {
         }
     }
 
+    const handleFilter = (date: Date | null, name: string) =>
+        setFilters((prev) => ({
+            ...prev,
+            [name]: dayjs(date).format('YYYY-MM-DD'),
+        }))
+    const selected = (name: FilterKey) =>
+        filters[name] ? dayjs(filters[name], 'YYYY-MM-DD').toDate() : null
+    const date_value = (name: FilterKey) =>
+        dayjs(filters[name]).format('DD.MM.YYYY')
+
     return (
         <div className="pb-32">
             {/* Header */}
             <div className="mb-3">
                 <h2 className="text-lg font-semibold pb-2">АКТ сверка</h2>
                 <div className="flex items-center justify-between gap-2 text-sm">
-                    <Input
-                        type="date"
+                    <DatePicker
+                        selected={selected('date_start')}
+                        dateFormat="dd.MM.yyyy"
                         name="date_start"
-                        value={dayjs(filters?.date_start).format('DD.MM.YYYY')}
-                        onChange={handleFilter}
+                        disabledKeyboardNavigation={true}
+                        placeholderText="от"
+                        popperPlacement="bottom-end"
+                        customInput={
+                            <Input
+                                readOnly
+                                value={date_value('date_start')}
+                                inputMode="none"
+                                onFocus={(e) => e.target.blur()}
+                            />
+                        }
+                        onChange={(date) => handleFilter(date, 'date_start')}
                     />
 
-                    <Input
-                        type="date"
-                        name="date_end"
-                        // inputmode="none"
-                        value={filters?.date_end}
-                        onChange={handleFilter}
+                    <DatePicker
+                        selected={selected('date_end')}
+                        dateFormat="dd.MM.yyyy"
+                        disabledKeyboardNavigation={true}
+                        placeholderText="до"
+                        popperPlacement="bottom-start"
+                        customInput={
+                            <Input
+                                readOnly
+                                value={date_value('date_end')}
+                                inputMode="none"
+                                onFocus={(e) => e.target.blur()}
+                            />
+                        }
+                        onChange={(date) => handleFilter(date, 'date_end')}
                     />
                 </div>
             </div>
