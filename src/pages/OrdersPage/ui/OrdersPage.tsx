@@ -129,6 +129,9 @@ export const OrdersPage = () => {
                             selected={selected('date_start')}
                             dateFormat="dd.MM.yyyy"
                             name="date_start"
+                            disabledKeyboardNavigation={true}
+                            placeholderText="от"
+                            popperPlacement="bottom-end"
                             customInput={
                                 <Input
                                     readOnly
@@ -143,6 +146,9 @@ export const OrdersPage = () => {
                         <DatePicker
                             selected={selected('date_end')}
                             dateFormat="dd.MM.yyyy"
+                            disabledKeyboardNavigation={true}
+                            placeholderText="до"
+                            popperPlacement="bottom-start"
                             customInput={
                                 <Input
                                     readOnly
