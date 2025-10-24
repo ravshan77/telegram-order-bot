@@ -4,6 +4,7 @@ import { GoBack } from '@/shared/ui/kit-pro'
 import { useParams } from 'react-router-dom'
 import { Alert, Spinner } from '@/shared/ui/kit'
 import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 export const OrderDetailsPage = () => {
     const { orderId } = useParams<{ orderId: string }>()
@@ -114,7 +115,7 @@ export const OrderDetailsPage = () => {
                                             key={`${prc?.currency.name}`}
                                             className="text-sm font-semibold flex text-primary"
                                         >
-                                            {prc?.amount?.toLocaleString()}{' '}
+                                            {numericFormat(prc?.amount)}{' '}
                                             {prc?.currency.name}
                                         </span>
                                     )
@@ -168,7 +169,9 @@ export const OrderDetailsPage = () => {
                                                 Цена за единицу:
                                             </span>
                                             <span className="font-medium text-black">
-                                                {item.price?.amount?.toLocaleString()}{' '}
+                                                {numericFormat(
+                                                    item.price?.amount,
+                                                )}{' '}
                                                 {item.price?.currency?.name}
                                             </span>
                                         </div>
@@ -177,7 +180,9 @@ export const OrderDetailsPage = () => {
                                                 Стоимость:
                                             </span>
                                             <span className="font-semibold text-black">
-                                                {item.net_price.amount.toLocaleString()}{' '}
+                                                {numericFormat(
+                                                    item.net_price.amount,
+                                                )}{' '}
                                                 {item.net_price.currency.name}
                                             </span>
                                         </div>

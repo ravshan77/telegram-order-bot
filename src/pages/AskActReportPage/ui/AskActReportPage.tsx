@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { Alert, Button, Input, Spinner } from '@/shared/ui/kit'
 import { askActReportApi, useAskActReports } from '@/entities/askActReport'
 import { operationTypes } from '@/shared/config/constants/operationTypes.constant'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 type FilterKey = 'date_start' | 'date_end'
 
@@ -198,7 +199,7 @@ export const AskActReportPage: React.FC = () => {
                                         key={crn?.currency.id}
                                         className="text-lg font-semibold flex text-primary"
                                     >
-                                        {crn?.amount?.toLocaleString()}{' '}
+                                        {numericFormat(crn?.amount)}{' '}
                                         {crn?.currency.name}
                                     </span>
                                 )
@@ -221,7 +222,7 @@ export const AskActReportPage: React.FC = () => {
                                     key={crn?.currency.id}
                                     className="text-sm font-semibold flex text-primary"
                                 >
-                                    {crn?.amount?.toLocaleString()}{' '}
+                                    {numericFormat(crn?.amount)}{' '}
                                     {crn?.currency.name}
                                 </span>
                             )
@@ -240,7 +241,7 @@ export const AskActReportPage: React.FC = () => {
                                     key={crn?.currency.id}
                                     className="text-sm font-semibold flex text-primary"
                                 >
-                                    {crn?.amount?.toLocaleString()}{' '}
+                                    {numericFormat(crn.amount)}{' '}
                                     {crn?.currency?.name}
                                 </span>
                             )

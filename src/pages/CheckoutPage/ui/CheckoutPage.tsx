@@ -13,6 +13,8 @@ import { Button, Spinner, Alert } from '@/shared/ui/kit'
 import { useDeliveryAddresses } from '@/entities/deliveryAddress'
 import { useNotApprovedOrder, useApproveOrder } from '@/entities/order'
 import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
+import DatePicker from 'react-datepicker'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 interface FormDataType {
     paymentType: SelectOption<string> | null
@@ -143,7 +145,7 @@ export const CheckoutPage = () => {
                         </FormItem>
 
                         <FormItem label="Дата заказа">
-                            <Input
+                            {/* <Input
                                 type="date"
                                 placeholder="Введите"
                                 className="text-start"
@@ -152,6 +154,41 @@ export const CheckoutPage = () => {
                                     setFormData({
                                         ...formData,
                                         orderDate: e.target.value,
+                                    })
+                                }
+                            /> */}
+
+                            <DatePicker
+                                dateFormat="dd.MM.yyyy"
+                                name="orderDate"
+                                disabledKeyboardNavigation={true}
+                                placeholderText="от"
+                                popperPlacement="bottom-end"
+                                selected={
+                                    formData?.orderDate
+                                        ? dayjs(
+                                              formData?.orderDate,
+                                              'YYYY-MM-DD',
+                                          ).toDate()
+                                        : null
+                                }
+                                customInput={
+                                    <Input
+                                        readOnly
+                                        value={dayjs(formData.orderDate).format(
+                                            'DD.MM.YYYY',
+                                        )}
+                                        inputMode="none"
+                                        style={{ width: 'calc(100vw - 34px)' }}
+                                        className=""
+                                        onFocus={(e) => e.target.blur()}
+                                    />
+                                }
+                                onChange={(date) =>
+                                    setFormData({
+                                        ...formData,
+                                        orderDate:
+                                            dayjs(date).format('YYYY-MM-DD'),
                                     })
                                 }
                             />
@@ -204,7 +241,7 @@ export const CheckoutPage = () => {
                                         key={prc.currency.id}
                                         className="font-bold flex text-primary"
                                     >
-                                        {prc?.amount?.toLocaleString()}{' '}
+                                        {numericFormat(prc?.amount)}{' '}
                                         {prc?.currency?.name}
                                     </span>
                                 )

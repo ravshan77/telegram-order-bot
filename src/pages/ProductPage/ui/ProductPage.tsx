@@ -14,6 +14,7 @@ import { getBasketPath } from '@/shared/config'
 import { ProductSection } from '@/widgets/ProductSection'
 import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
@@ -205,7 +206,7 @@ export const ProductPage: React.FC = () => {
                                 Цена продажи:{' '}
                             </span>
                             <span className="text-base text-primary font-bold">
-                                {selectedProduct.price.toLocaleString()} UZS
+                                {numericFormat(selectedProduct.price)} UZS
                             </span>
                         </div>
                     </div>
@@ -220,7 +221,7 @@ export const ProductPage: React.FC = () => {
             <div className="fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
                 <div>
                     <p className="text-primary font-bold">
-                        {selectedProduct.price.toLocaleString()} UZS
+                        {numericFormat(selectedProduct.price)} UZS
                     </p>
                     <p className="text-xs font-light">Цена продажи</p>
                 </div>

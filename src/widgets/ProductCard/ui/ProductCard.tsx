@@ -18,6 +18,7 @@ import { ProductView } from '@/entities/product'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 interface ProductCardProps {
     product: ProductView
@@ -234,7 +235,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
             <div className="p-3">
                 <div className="text-primary font-bold text-sm">
-                    {product.price.toLocaleString()} UZS
+                    {numericFormat(product.price)} {product.currency.name}
                 </div>
                 <div
                     className="text-sm text-black mt-2 line-clamp-2 h-11"

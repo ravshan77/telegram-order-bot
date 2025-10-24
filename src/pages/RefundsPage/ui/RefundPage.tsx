@@ -6,6 +6,7 @@ import { getRefundDetailPath } from '@/shared/config'
 import { useCallback, useEffect, useState } from 'react'
 import { Button, Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 type FilterKey = 'date_time_start' | 'date_time_end'
 
@@ -240,7 +241,9 @@ export const RefundsPage = () => {
                                                         key={crn?.currency.id}
                                                         className="text-base font-bold text-gray-600"
                                                     >
-                                                        {crn?.amount?.toLocaleString()}{' '}
+                                                        {numericFormat(
+                                                            crn?.amount,
+                                                        )}{' '}
                                                         {crn?.currency.name}
                                                     </span>
                                                 )) ?? (
@@ -265,7 +268,9 @@ export const RefundsPage = () => {
                                                             }
                                                             className="text-base font-bold text-gray-600"
                                                         >
-                                                            {crn?.amount?.toLocaleString()}{' '}
+                                                            {numericFormat(
+                                                                crn?.amount,
+                                                            )}{' '}
                                                             {crn?.currency.name}
                                                         </span>
                                                     ),
@@ -286,9 +291,7 @@ export const RefundsPage = () => {
                                         </span>
                                         <span className="text-base font-bold text-red-500">
                                             {debtAmount > 0 ? '-' : ''}
-                                            {Math.abs(
-                                                debtAmount,
-                                            ).toLocaleString()}{' '}
+                                            {numericFormat(debtAmount)}{' '}
                                             {sale?.net_price[0]?.currency
                                                 ?.name || 'UZS'}
                                         </span>
@@ -311,7 +314,7 @@ export const RefundsPage = () => {
                                     key={crn?.currency_name}
                                     className="text-sm font-semibold text-primary"
                                 >
-                                    {crn?.total_sum?.toLocaleString()}{' '}
+                                    {numericFormat(crn?.total_sum)}{' '}
                                     {crn?.currency_name}
                                 </span>
                             ))}

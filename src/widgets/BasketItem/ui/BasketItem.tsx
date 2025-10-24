@@ -4,6 +4,7 @@ import { Button } from '@/shared/ui/kit'
 import { OrderItem } from '@/entities/order'
 import { useItemMap } from '@/shared/lib/hooks'
 import { Minus, Plus, Trash2, Image } from 'lucide-react'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 interface BasketItemProps {
     item: OrderItem
@@ -44,7 +45,7 @@ export const BasketItem = ({
                         {item?.item?.name}
                     </h3>
                     <p className="text-sm font-bold text-primary mb-1">
-                        {item?.net_price?.amount?.toLocaleString()}{' '}
+                        {numericFormat(item?.net_price?.amount)}{' '}
                         {item?.net_price?.currency?.name}
                     </p>
                     <p className="text-xs text-gray-500">Цена продажи</p>

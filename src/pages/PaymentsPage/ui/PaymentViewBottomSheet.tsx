@@ -6,6 +6,7 @@ import {
 } from '@/shared/ui/kit/Sheet'
 import type { Payment } from '@/entities/payment'
 import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 interface PaymentViewBottomSheetProps {
     isOpen: boolean
@@ -120,7 +121,7 @@ export function PaymentViewBottomSheet({
                                         {item.label}
                                     </span>
                                     <span className="font-semibold text-black">
-                                        {item.amount.toLocaleString()}{' '}
+                                        {numericFormat(item.amount)}{' '}
                                         {item.currency}
                                     </span>
                                 </div>

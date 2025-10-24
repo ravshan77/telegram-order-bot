@@ -6,6 +6,7 @@ import { Button, Alert, Spinner, Input } from '@/shared/ui/kit'
 import { PaymentViewBottomSheet } from './PaymentViewBottomSheet'
 import { useSearchParams } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 type FilterKey = 'date_start' | 'date_end'
 
@@ -208,7 +209,9 @@ export const PaymentsPage = () => {
                                                             key={idx}
                                                             className="text-base font-bold text-black"
                                                         >
-                                                            {debt.amount.toLocaleString()}{' '}
+                                                            {numericFormat(
+                                                                debt.amount,
+                                                            )}{' '}
                                                             {debt.currency.name}
                                                         </span>
                                                     ),
@@ -238,7 +241,9 @@ export const PaymentsPage = () => {
                                                             }
                                                             className="text-base font-bold text-gray-600"
                                                         >
-                                                            {crn?.amount?.toLocaleString()}{' '}
+                                                            {numericFormat(
+                                                                crn?.amount,
+                                                            )}{' '}
                                                             {crn?.currency.name}
                                                         </span>
                                                     ),
@@ -270,7 +275,7 @@ export const PaymentsPage = () => {
                                         key={total.currency}
                                         className="text-sm font-semibold text-primary"
                                     >
-                                        {total.amount.toLocaleString()}{' '}
+                                        {numericFormat(total.amount)}{' '}
                                         {total.currency}
                                     </span>
                                 ))}
@@ -281,7 +286,7 @@ export const PaymentsPage = () => {
                             className="w-full"
                             onClick={handleShowAllClick}
                         >
-                            Показать
+                            Подробнее
                         </Button>
                     </div>
                 )}

@@ -1,5 +1,6 @@
 import { Alert, Spinner } from '@/shared/ui/kit'
 import { useDeliveryAddresses } from '@/entities/deliveryAddress'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 export const DebtPage = () => {
     const {
@@ -51,7 +52,7 @@ export const DebtPage = () => {
                                     {debt.currency.name}
                                 </span>
                                 <span className="font-semibold text-black text-base">
-                                    {debt.amount.toLocaleString()}
+                                    {numericFormat(debt.amount)}
                                 </span>
                             </div>
                         ))}

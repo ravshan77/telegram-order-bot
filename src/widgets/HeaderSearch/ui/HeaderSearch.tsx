@@ -17,6 +17,7 @@ import { Input, ScrollBar } from '@/shared/ui/kit'
 import { Search, X, Loader2, Image } from 'lucide-react'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { useState, useEffect, useRef, useMemo } from 'react'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 interface HeaderSearchSheetProps {
     open: boolean
@@ -45,7 +46,6 @@ export function HeaderSearchSheet({
 
     const { setSelectedProduct } = useCartStore()
 
-    // Debounce search query
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedQuery(searchQuery)
@@ -54,7 +54,6 @@ export function HeaderSearchSheet({
         return () => clearTimeout(timer)
     }, [searchQuery])
 
-    // Focus input when drawer opens
     useEffect(() => {
         if (open) {
             setTimeout(() => {
@@ -201,7 +200,9 @@ export function HeaderSearchSheet({
                                                     </p>
                                                     <div className="flex items-center gap-2 mt-1">
                                                         <span className="font-semibold text-primary">
-                                                            {product.price.toLocaleString()}{' '}
+                                                            {numericFormat(
+                                                                product.price,
+                                                            )}{' '}
                                                             {
                                                                 product
                                                                     ?.currency
@@ -222,39 +223,3 @@ export function HeaderSearchSheet({
         </Drawer>
     )
 }
-
-// import {
-//     Drawer,
-//     DrawerTitle,
-//     DrawerHeader,
-//     DrawerContent,
-// } from '@/shared/ui/kit/Sheet'
-
-// interface HeaderSearchSheetProps {
-//     isOpen: boolean
-//     searchItemName: string
-//     setIsOpen: (open: boolean) => void
-// }
-
-// export function HeaderSearchSheet({
-//     isOpen,
-//     setIsOpen,
-//     searchItemName,
-// }: HeaderSearchSheetProps) {
-//     return (
-//         <Drawer open={isOpen} onOpenChange={setIsOpen}>
-//             <DrawerContent className="bg-white fixed inset-0 h-screen flex-1">
-//                 <div className="w-full px-4 flex flex-col h-full">
-//                     <DrawerHeader className="p-4 border-b">
-//                         <DrawerTitle className="text-start text-xl">
-//                             Header search
-//                         </DrawerTitle>
-//                     </DrawerHeader>
-//                     <div className="px-4 pb-8 h-screen border border-red-500">
-//                         <div>{searchItemName}</div>
-//                     </div>
-//                 </div>
-//             </DrawerContent>
-//         </Drawer>
-//     )
-// }

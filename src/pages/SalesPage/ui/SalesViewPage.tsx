@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { Alert, Button, Spinner } from '@/shared/ui/kit'
 import { salesApi } from '@/entities/sales/api/salesApi'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 export const SalesViewPage: React.FC = () => {
     const { saleId } = useParams<{ saleId: string }>()
@@ -32,55 +33,12 @@ export const SalesViewPage: React.FC = () => {
 
     const handleDownloadExcel = async () => {
         try {
-            const response = await salesApi.downloadSaleExcel(saleId!)
-            let base64: string | undefined
-
-            if (response instanceof Blob) {
-                base64 = await response.text()
-            } else if (typeof response === 'string') {
-                base64 = response
-            } else if (response?.data) {
-                base64 = response.data
-            } else if (response?.base64) {
-                base64 = response.base64
-            }
-
-            if (!base64) throw new Error('Server bo‘sh ma’lumot yubordi')
-            const cleanBase64 = base64.replace(/\s|"/g, '')
-            const binary = atob(cleanBase64)
-            const bytes = new Uint8Array(binary.length)
-            for (let i = 0; i < binary.length; i++) {
-                bytes[i] = binary.charCodeAt(i)
-            }
-
-            const blob = new Blob([bytes], {
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            })
-
-            const url = window.URL.createObjectURL(blob)
-            const link = document.createElement('a')
-            link.href = url
-            link.download = `sale_${saleId}.xlsx`
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-            window.URL.revokeObjectURL(url)
-
+            await salesApi.downloadSaleExcel(saleId!)
             toast.success('Файл успешно загружен')
         } catch (err: any) {
-            console.error('Excel yuklab olishda xato:', err)
-            toast.error(
-                'Excel yuklab olishda xato: ' +
-                    (err.message || 'noma’lum xato'),
-            )
+            toast.error(err.message)
         }
     }
-
-    // const handleGoBack = () => {
-    //     const dateStart = searchParams.get('date_start')
-    //     const dateEnd = searchParams.get('date_end')
-    //     navigate(getSalesPath(dateStart || undefined, dateEnd || undefined))
-    // }
 
     if (isLoading) {
         return (
@@ -98,10 +56,6 @@ export const SalesViewPage: React.FC = () => {
                 </Alert>
             </div>
         )
-    }
-
-    const formatNumber = (num: number) => {
-        return num.toLocaleString('en-US').replace(/,/g, ' ')
     }
 
     return (
@@ -205,7 +159,7 @@ export const SalesViewPage: React.FC = () => {
                                             Цена:
                                         </span>
                                         <span className="text-sm font-medium">
-                                            {item.price.amount.toLocaleString()}{' '}
+                                            {numericFormat(item.price.amount)}{' '}
                                             {item.price.currency.name}
                                         </span>
                                     </div>
@@ -224,7 +178,7 @@ export const SalesViewPage: React.FC = () => {
                                                     Цена со скидкой:
                                                 </span>
                                                 <span className="text-sm font-medium">
-                                                    {formatNumber(
+                                                    {numericFormat(
                                                         item.net_price.amount /
                                                             item.quantity,
                                                     )}{' '}
@@ -241,7 +195,9 @@ export const SalesViewPage: React.FC = () => {
                                             Итого:
                                         </span>
                                         <span className="text-sm font-medium">
-                                            {item.net_price.amount.toLocaleString()}{' '}
+                                            {numericFormat(
+                                                item.net_price.amount,
+                                            )}{' '}
                                             {item.net_price.currency.name}
                                         </span>
                                     </div>
@@ -266,7 +222,7 @@ export const SalesViewPage: React.FC = () => {
                                             key={crn?.currency.id}
                                             className="text-base font-bold text-gray-600"
                                         >
-                                            {crn?.amount?.toLocaleString()}{' '}
+                                            {numericFormat(crn?.amount)}{' '}
                                             {crn?.currency.name}
                                         </span>
                                     )) ?? (
@@ -289,7 +245,7 @@ export const SalesViewPage: React.FC = () => {
                                             key={crn?.currency.id}
                                             className="text-base font-bold text-gray-600"
                                         >
-                                            {crn?.amount?.toLocaleString()}{' '}
+                                            {numericFormat(crn?.amount)}{' '}
                                             {crn?.currency.name}
                                         </span>
                                     )) ?? (
@@ -314,7 +270,7 @@ export const SalesViewPage: React.FC = () => {
                                             key={crn?.currency.id}
                                             className="text-base font-bold text-gray-600"
                                         >
-                                            {crn?.amount?.toLocaleString()}{' '}
+                                            {numericFormat(crn?.amount)}{' '}
                                             {crn?.currency.name}
                                         </span>
                                     )) ?? (
@@ -337,7 +293,7 @@ export const SalesViewPage: React.FC = () => {
                                             key={crn?.currency.id}
                                             className="text-base font-bold text-gray-600"
                                         >
-                                            {crn?.amount?.toLocaleString()}{' '}
+                                            {numericFormat(crn?.amount)}{' '}
                                             {crn?.currency.name}
                                         </span>
                                     )) ?? (

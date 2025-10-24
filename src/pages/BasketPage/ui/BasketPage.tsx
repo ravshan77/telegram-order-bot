@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { BasketItem } from '@/widgets/BasketItem'
 import { getCheckoutPath } from '@/shared/config/'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 export const BasketPage: React.FC = () => {
     const navigate = useNavigate()
@@ -151,7 +152,7 @@ export const BasketPage: React.FC = () => {
                                     key={prc.currency.id}
                                     className="font-bold flex text-primary"
                                 >
-                                    {prc?.amount?.toLocaleString()}{' '}
+                                    {numericFormat(prc?.amount)}{' '}
                                     {prc?.currency?.name}
                                 </span>
                             )

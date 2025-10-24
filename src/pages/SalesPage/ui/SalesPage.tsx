@@ -6,6 +6,7 @@ import { getSaleDetailPath } from '@/shared/config'
 import { useCallback, useEffect, useState } from 'react'
 import { Button, Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 type FilterKey = 'date_start' | 'date_end'
 
@@ -234,7 +235,9 @@ export const SalesPage = () => {
                                                         key={crn?.currency.id}
                                                         className="text-base font-bold text-gray-600"
                                                     >
-                                                        {crn?.amount?.toLocaleString()}{' '}
+                                                        {numericFormat(
+                                                            crn?.amount,
+                                                        )}{' '}
                                                         {crn?.currency.name}
                                                     </span>
                                                 )) ?? (
@@ -259,7 +262,9 @@ export const SalesPage = () => {
                                                             }
                                                             className="text-base font-bold text-gray-600"
                                                         >
-                                                            {crn?.amount?.toLocaleString()}{' '}
+                                                            {numericFormat(
+                                                                crn?.amount,
+                                                            )}{' '}
                                                             {crn?.currency.name}
                                                         </span>
                                                     ),
@@ -280,9 +285,7 @@ export const SalesPage = () => {
                                         </span>
                                         <span className="text-base font-bold text-red-500">
                                             {debtAmount > 0 ? '-' : ''}
-                                            {Math.abs(
-                                                debtAmount,
-                                            ).toLocaleString()}{' '}
+                                            {numericFormat(debtAmount)}{' '}
                                             {sale.net_price[0]?.currency.name ||
                                                 'UZS'}
                                         </span>
@@ -305,7 +308,7 @@ export const SalesPage = () => {
                                     key={crn?.currency_name}
                                     className="text-sm font-semibold text-primary"
                                 >
-                                    {crn?.total_sum?.toLocaleString()}{' '}
+                                    {numericFormat(crn?.total_sum)}{' '}
                                     {crn?.currency_name}
                                 </span>
                             ))}

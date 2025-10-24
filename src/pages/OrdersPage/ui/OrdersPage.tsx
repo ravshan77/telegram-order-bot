@@ -6,6 +6,7 @@ import { getOrderDetailsPath } from '@/shared/config'
 import { useCallback, useEffect, useState } from 'react'
 import { Button, Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { numericFormat } from '@/shared/lib/numericFormat'
 
 type FilterKey = 'date_start' | 'date_end'
 
@@ -262,7 +263,9 @@ export const OrdersPage = () => {
                                                                 key={`${pric?.currency}-${ind}`}
                                                                 className="font-bold text-black"
                                                             >
-                                                                {pric.amount.toLocaleString()}{' '}
+                                                                {numericFormat(
+                                                                    pric.amount,
+                                                                )}{' '}
                                                                 {
                                                                     pric
                                                                         .currency
@@ -293,7 +296,7 @@ export const OrdersPage = () => {
                                         key={crn?.currency_name}
                                         className="text-sm font-semibold flex text-primary"
                                     >
-                                        {crn?.total_sum?.toLocaleString()}{' '}
+                                        {numericFormat(crn?.total_sum)}{' '}
                                         {crn?.currency_name}
                                     </span>
                                 )
