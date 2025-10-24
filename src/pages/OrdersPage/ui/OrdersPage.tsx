@@ -135,9 +135,9 @@ export const OrdersPage = () => {
                             customInput={
                                 <Input
                                     readOnly
-                                    disabled
                                     // type="date"
                                     value={date_value('date_start')}
+                                    inputMode="none"
                                     onFocus={(e) => e.target.blur()}
                                 />
                             }

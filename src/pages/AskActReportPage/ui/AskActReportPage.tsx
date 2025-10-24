@@ -85,13 +85,14 @@ export const AskActReportPage: React.FC = () => {
                     <Input
                         type="date"
                         name="date_start"
-                        value={filters?.date_start}
+                        value={dayjs(filters?.date_start).format('DD.MM.YYYY')}
                         onChange={handleFilter}
                     />
 
                     <Input
                         type="date"
                         name="date_end"
+                        // inputmode="none"
                         value={filters?.date_end}
                         onChange={handleFilter}
                     />
