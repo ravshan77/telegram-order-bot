@@ -65,7 +65,7 @@ export const useNotApprovedOrder = (
         queryFn: () => orderApi.getNotApprovedOrder(),
         // staleTime: 0, // 1 minute
         staleTime: 1 * 60 * 1000, // 1 minute
-        retry: 1, // Only retry once for 404 errors
+        retry: 1, // 404 bo'lganda qayta yana bir martta yuborsh
         refetchOnWindowFocus: false,
         ...options,
     })
@@ -92,7 +92,6 @@ export const useRegisterOrder = () => {
     return useMutation<Order, Error, RegisterOrderRequest>({
         mutationFn: (data) => orderApi.registerOrder(data),
         onSuccess: (newOrder) => {
-            // Update not approved order cache
             queryClient.setQueryData(ORDER_KEYS.notApproved(), newOrder)
             queryClient.invalidateQueries({
                 queryKey: ORDER_KEYS.notApproved(),
@@ -129,37 +128,71 @@ export const useAddOrderItem = () => {
     })
 }
 
+type UpdateOrderContext = {
+    previousOrder?: Order
+}
+
 export const useUpdateOrderItem = () => {
     const queryClient = useQueryClient()
 
-    return useMutation<Order, Error, UpdateOrderItemRequest>({
+    return useMutation<
+        Order,
+        Error,
+        UpdateOrderItemRequest,
+        UpdateOrderContext
+    >({
         mutationFn: (data) => orderApi.updateOrderItem(data),
-        onSuccess: (updatedOrder) => {
-            // Update not approved order cache
-            // queryClient.setQueryData(ORDER_KEYS.notApproved(), updatedOrder)
-
-            // // Update specific order cache
-            // queryClient.setQueryData(
-            //     ORDER_KEYS.detail(updatedOrder.id),
-            //     updatedOrder,
-            // )
-            queryClient.invalidateQueries({
+        onMutate: async (data) => {
+            await queryClient.cancelQueries({
                 queryKey: ORDER_KEYS.notApproved(),
             })
 
-            queryClient.setQueryData(
+            const previousOrder = queryClient.getQueryData<Order>(
                 ORDER_KEYS.notApproved(),
-                (old: Order) => ({
-                    ...old,
-                    items: old.items.map((i: OrderItem) =>
-                        i.id === updatedOrder.id ? updatedOrder : i,
-                    ),
-                }),
             )
-            toast.success('Количество обновлено')
+
+            if (previousOrder) {
+                const updatedItems = previousOrder.items.map((item) => {
+                    if (item.id === data.position_id) {
+                        return { ...item, quantity: data.item.quantity }
+                    }
+                    return item
+                })
+                const newOrder = { ...previousOrder, items: updatedItems }
+
+                queryClient.setQueryData<Order>(
+                    ORDER_KEYS.notApproved(),
+                    newOrder,
+                )
+            }
+
+            return { previousOrder }
         },
-        onError: (error: any) => {
-            toast.error(error.message || 'Ошибка при обновлении товара')
+
+        onSuccess: (updatedOrder) => {
+            queryClient.setQueryData(
+                ORDER_KEYS.detail(updatedOrder.id),
+                updatedOrder,
+            )
+
+            toast.success('Количество обновлено ✅')
+        },
+
+        onError: (error, _variables, context) => {
+            // rollback
+            if (context?.previousOrder !== undefined) {
+                queryClient.setQueryData<Order | null>(
+                    ORDER_KEYS.notApproved(),
+                    context.previousOrder ?? null,
+                )
+            }
+            toast.error(error.message || 'Ошибка при обновлении товара ❌')
+        },
+
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: ORDER_KEYS.notApproved(),
+            })
         },
     })
 }
@@ -171,13 +204,6 @@ export const useDeleteOrderItem = () => {
         mutationFn: (data) => orderApi.deleteOrderItem(data),
         onSuccess: (updatedOrder) => {
             queryClient.setQueryData(ORDER_KEYS.notApproved(), updatedOrder)
-
-            // Update specific order cache
-            // queryClient.setQueryData(
-            //     ORDER_KEYS.detail(updatedOrder.id),
-            //     updatedOrder,
-            // )
-
             queryClient.invalidateQueries({
                 queryKey: ORDER_KEYS.notApproved(),
             })
@@ -206,13 +232,6 @@ export const useApproveOrder = () => {
         mutationFn: (data) => orderApi.approveOrder(data),
         onSuccess: (approvedOrder) => {
             queryClient.setQueryData(ORDER_KEYS.notApproved(), null)
-
-            // Update orders list
-            // queryClient.invalidateQueries({
-            //     queryKey: ORDER_KEYS.lists(),
-            // })
-
-            // Update specific order cache
             queryClient.setQueryData(
                 ORDER_KEYS.detail(approvedOrder.id),
                 approvedOrder,

@@ -1,26 +1,24 @@
 import dayjs from 'dayjs'
+import DatePicker from 'react-datepicker'
 import { useOrders } from '@/entities/order'
 import { MoreHorizontal } from 'lucide-react'
 import { getOrderDetailsPath } from '@/shared/config'
+import { useCallback, useEffect, useState } from 'react'
 import { Button, Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+
+type FilterKey = 'date_start' | 'date_end'
 
 export const OrdersPage = () => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
-
-    const today = dayjs().startOf('day').format('YYYY-MM-DD')
+    const today = dayjs().format('YYYY-MM-DD')
     const urlDateStart = searchParams.get('date_start')
     const urlDateEnd = searchParams.get('date_end')
+    const initialDateStart = urlDateStart ?? today
+    const initialDateEnd = urlDateEnd ?? today
 
-    const initialDateStart = urlDateStart ? urlDateStart : today
-    const initialDateEnd = urlDateEnd ? urlDateEnd : today
-
-    const [filters, setFilters] = useState<{
-        date_start: string | null
-        date_end: string | null
-    }>({
+    const [filters, setFilters] = useState({
         date_start: initialDateStart,
         date_end: initialDateEnd,
     })
@@ -28,27 +26,20 @@ export const OrdersPage = () => {
     useEffect(() => {
         const params: Record<string, string> = {}
 
-        if (filters.date_start && dayjs(filters.date_start).isValid()) {
+        if (filters.date_start) {
             params.date_start = dayjs(filters.date_start).format('YYYY-MM-DD')
         }
 
-        if (filters.date_end && dayjs(filters.date_end).isValid()) {
+        if (filters.date_end) {
             params.date_end = dayjs(filters.date_end).format('YYYY-MM-DD')
         }
 
         setSearchParams(params)
     }, [filters, setSearchParams])
 
-    const apiParams: Record<string, string> = {}
-
-    if (filters?.date_start && dayjs(filters.date_start).isValid()) {
-        apiParams.date_time_start = dayjs(filters.date_start).format(
-            'YYYY-MM-DD',
-        )
-    }
-
-    if (filters?.date_end && dayjs(filters.date_end).isValid()) {
-        apiParams.date_time_end = dayjs(filters.date_end).format('YYYY-MM-DD')
+    const apiParams = {
+        date_start: filters.date_start,
+        date_end: filters.date_end,
     }
 
     const shouldFetch =
@@ -118,15 +109,15 @@ export const OrdersPage = () => {
           )
         : []
 
-    const handleFilter = (
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-        // if (e.target.name === 'date_start') {
-        //     setFilters({ date_start: e.target.value, date_end: null })
-        //     return
-        // }
-        setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-    }
+    const handleFilter = (date: Date | null, name: string) =>
+        setFilters((prev) => ({
+            ...prev,
+            [name]: dayjs(date).format('YYYY-MM-DD'),
+        }))
+    const selected = (name: FilterKey) =>
+        filters[name] ? dayjs(filters[name], 'YYYY-MM-DD').toDate() : null
+    const date_value = (name: FilterKey) =>
+        dayjs(filters[name]).format('DD.MM.YYYY')
 
     return (
         <div className="pb-16">
@@ -134,18 +125,31 @@ export const OrdersPage = () => {
                 <div className="mb-3">
                     <h2 className="text-lg font-semibold pb-2">Заказы</h2>
                     <div className="flex items-center justify-between gap-2 text-sm">
-                        <Input
-                            type="date"
+                        <DatePicker
+                            selected={selected('date_start')}
+                            dateFormat="dd.MM.yyyy"
                             name="date_start"
-                            value={filters?.date_start}
-                            onChange={handleFilter}
+                            customInput={
+                                <Input
+                                    readOnly
+                                    value={date_value('date_start')}
+                                />
+                            }
+                            onChange={(date) =>
+                                handleFilter(date, 'date_start')
+                            }
                         />
 
-                        <Input
-                            type="date"
-                            name="date_end"
-                            value={filters?.date_end}
-                            onChange={handleFilter}
+                        <DatePicker
+                            selected={selected('date_end')}
+                            dateFormat="dd.MM.yyyy"
+                            customInput={
+                                <Input
+                                    readOnly
+                                    value={date_value('date_end')}
+                                />
+                            }
+                            onChange={(date) => handleFilter(date, 'date_end')}
                         />
                     </div>
                 </div>

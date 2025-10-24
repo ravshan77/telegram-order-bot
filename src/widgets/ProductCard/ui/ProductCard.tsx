@@ -142,8 +142,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         variant="plain"
                         className="w-12 h-full flex items-center justify-center border-none outline-none"
                         icon={<Minus size={20} className="text-gray-700" />}
-                        disabled={isLoading}
-                        // loading={isLoading}
                         onClick={(e) => {
                             e.stopPropagation()
                             handleUpdateQuantity(cartItem.quantity - 1)
@@ -156,7 +154,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         variant="plain"
                         className="w-12 h-full flex items-center justify-center border-none outline-none"
                         icon={<Plus size={20} className="text-gray-700" />}
-                        disabled={isLoading}
                         onClick={(e) => {
                             e.stopPropagation()
                             handleUpdateQuantity(cartItem.quantity + 1)
@@ -188,7 +185,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     return (
         <div
             ref={cardRef}
-            className=" max-w-44 rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
+            className="max-w-44 rounded-lg overflow-hidden cursor-pointer border inset-shadow-2xs"
         >
             <div className="relative">
                 <Swiper

@@ -11,11 +11,13 @@ import React, { useState, useCallback, useMemo } from 'react'
 import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
 import { transformProductToView, useProducts } from '@/entities/product'
 
+const LIMIT_PAGINATION = 20
+
 export const CategoryPage: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>()
     const navigate = useNavigate()
     const [currentTab, setCurrentTab] = useState<string>(categoryId || '')
-    const [limit, setLimit] = useState(20)
+    const [limit, setLimit] = useState(LIMIT_PAGINATION)
 
     const {
         data: category,
@@ -33,7 +35,6 @@ export const CategoryPage: React.FC = () => {
     } = useProducts(
         {
             limit,
-            skip: 1,
             category_id: currentTab,
         },
         {
@@ -43,14 +44,14 @@ export const CategoryPage: React.FC = () => {
     )
 
     const handleLoadMore = useCallback(async () => {
-        setLimit((prev) => prev + 20)
+        setLimit((prev) => prev + LIMIT_PAGINATION)
     }, [])
 
     const { scrollContainerRef, sentinelRef, isDesktop } =
         useVerticalInfiniteScroll({
             onLoadMore: handleLoadMore,
             isLoading: isFetching,
-            threshold: 20,
+            threshold: LIMIT_PAGINATION,
         })
 
     const handleTabChange = (tabValue: string) => {
@@ -61,7 +62,7 @@ export const CategoryPage: React.FC = () => {
         }
 
         setCurrentTab(tabValue)
-        setLimit(20)
+        setLimit(LIMIT_PAGINATION)
     }
 
     const productViews = useMemo(() => {
@@ -139,6 +140,12 @@ export const CategoryPage: React.FC = () => {
                                     />
                                 ))}
                             </div>
+                            {isLoadingProducts || isFetching ? (
+                                <h4 className="text-center h-4 w-full">
+                                    {' '}
+                                    Загрузка ...{' '}
+                                </h4>
+                            ) : null}
                             <div
                                 ref={sentinelRef}
                                 className="h-1"

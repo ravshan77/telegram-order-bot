@@ -61,60 +61,18 @@ export const AskActReportPage: React.FC = () => {
 
     const handleFilter = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-        // if (e.target.name === 'date_start') {
-        //     setFilters({ date_start: e.target.value, date_end: null })
-        //     return
-        // }
-        setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-    }
+    ) => setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
 
     const handleDownloadExcel = async () => {
         try {
-            const response = await askActReportApi.downloadAskActReportExcel({
+            await askActReportApi.downloadAskActReportExcel({
                 date_start: filters.date_start!,
                 date_end: filters.date_end!,
             })
-            let base64: string | undefined
-
-            if (response instanceof Blob) {
-                base64 = await response.text()
-            } else if (typeof response === 'string') {
-                base64 = response
-            } else if (response?.data) {
-                base64 = response.data
-            } else if (response?.base64) {
-                base64 = response.base64
-            }
-
-            if (!base64) throw new Error('Server bo‘sh ma’lumot yubordi')
-            const cleanBase64 = base64.replace(/\s|"/g, '')
-            const binary = atob(cleanBase64)
-            const bytes = new Uint8Array(binary.length)
-            for (let i = 0; i < binary.length; i++) {
-                bytes[i] = binary.charCodeAt(i)
-            }
-
-            const blob = new Blob([bytes], {
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            })
-
-            const url = window.URL.createObjectURL(blob)
-            const link = document.createElement('a')
-            link.href = url
-            link.download = `АКТ_сверка_${filters.date_start}-${filters.date_end}.xlsx`
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-            window.URL.revokeObjectURL(url)
 
             toast.success('Файл успешно загружен')
         } catch (err: any) {
-            console.error('Excel yuklab olishda xato:', err)
-            toast.error(
-                'Excel yuklab olishda xato: ' +
-                    (err.message || 'noma’lum xato'),
-            )
+            toast.error(err.message)
         }
     }
 

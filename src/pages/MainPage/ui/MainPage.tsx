@@ -1,10 +1,8 @@
 import { FC } from 'react'
-import { ProductSection } from '@/widgets/ProductSection'
+import { AllProducts } from '@/widgets/AllProducts'
 import { CategoriesList } from '@/widgets/CategoriesList'
-// import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
 
 export const MainPage: FC = () => {
-    // const { searchItemName } = useHeaderSearchStore((store) => store)
     return (
         <div className="pb-0">
             <div>
@@ -12,11 +10,9 @@ export const MainPage: FC = () => {
                     <h2 className="text-lg font-semibold">Товары</h2>
                 </div>
                 <CategoriesList />
-                <ProductSection
-                    title="Рекомендуем"
-                    filters={{ is_favorite: true }}
-                />
-                <ProductSection title="Скидки на смартфоны" />
+                <AllProducts />
+                {/* <ProductSection title="Рекомендуем" filters={{ is_favorite: true }} /> */}
+                {/* <ProductSection title="Скидки на смартфоны" /> */}
             </div>
         </div>
     )

@@ -5,6 +5,7 @@ import { useTelegram } from '@/shared/lib/hooks'
 import Loading from '@/shared/ui/kit-pro/Loading'
 import type { CommonProps } from '@/@types/common'
 import { useThemeStore } from '@/shared/model/themeStore'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const Layout = ({ children }: CommonProps) => {
     const layoutType = useThemeStore((state) => state.layout.type)

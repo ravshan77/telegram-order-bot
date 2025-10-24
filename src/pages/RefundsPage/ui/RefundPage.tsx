@@ -120,13 +120,7 @@ export const RefundsPage = () => {
 
     const handleFilter = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-        // if (e.target.name === 'date_start') {
-        //     setFilters({ date_start: e.target.value, date_end: null })
-        //     return
-        // }
-        setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-    }
+    ) => setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }))
 
     return (
         <div className="pb-32">

@@ -96,6 +96,12 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
                         Товары не найдены
                     </div>
                 )}
+                {isLoadingProducts || isFetching ? (
+                    <h4 className="min-w-44 flex items-center justify-center h-72 text-gray-500">
+                        {' '}
+                        Загрузка ...{' '}
+                    </h4>
+                ) : null}
             </div>
         </div>
     )

@@ -83,6 +83,19 @@ export const BasketPage: React.FC = () => {
     }
 
     if (isError) {
+        if (error.message === 'Заказ не найден') {
+            return (
+                <div className="h-full">
+                    <div className="bg-white w-full">
+                        <GoBack />
+                    </div>
+                    <div className="h-full flex-1 flex flex-col items-center justify-around">
+                        <p className="text-gray-500">Корзина пуста</p>
+                    </div>
+                </div>
+            )
+        }
+
         return (
             <div className="p-4">
                 <Alert showIcon type="danger">

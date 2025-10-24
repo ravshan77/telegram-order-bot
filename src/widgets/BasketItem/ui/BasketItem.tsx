@@ -13,16 +13,14 @@ interface BasketItemProps {
         itemId: string,
         newQty: number,
     ) => void
-    updating: boolean
-    deleting: boolean
+    updating?: boolean
+    deleting?: boolean
 }
 
 export const BasketItem = ({
     item,
     onRemove,
     onUpdateQuantity,
-    updating,
-    deleting,
 }: BasketItemProps) => {
     const { getItemById } = useItemMap()
 
@@ -57,7 +55,6 @@ export const BasketItem = ({
                 <Button
                     variant="plain"
                     className="p-2 text-gray-400 hover:text-red-500"
-                    disabled={deleting}
                     onClick={(e) => {
                         e.stopPropagation()
                         onRemove(item?.id)
@@ -69,7 +66,6 @@ export const BasketItem = ({
                 <div className="flex items-center gap-3">
                     <Button
                         className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
-                        disabled={updating}
                         onClick={(e) => {
                             e.stopPropagation()
                             onUpdateQuantity(
@@ -86,7 +82,6 @@ export const BasketItem = ({
                     </span>
                     <Button
                         className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
-                        disabled={updating}
                         onClick={(e) => {
                             e.stopPropagation()
                             onUpdateQuantity(
