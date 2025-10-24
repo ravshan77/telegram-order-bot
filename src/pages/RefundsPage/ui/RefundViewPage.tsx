@@ -13,23 +13,6 @@ export const RefundViewPage: React.FC = () => {
 
     const { data: refund, isLoading, isError, error } = useRefund(refundId!)
 
-    // const handleDownloadExcel = async () => {
-    //     try {
-    //         const blob = await salesApi.downloadSaleExcel(refundId!)
-    //         const url = window.URL.createObjectURL(blob)
-    //         const link = document.createElement('a')
-    //         link.href = url
-    //         link.download = `sale_${sale?.number || refundId}.xlsx`
-    //         document.body.appendChild(link)
-    //         link.click()
-    //         document.body.removeChild(link)
-    //         window.URL.revokeObjectURL(url)
-    //         toast.success('Файл успешно загружен')
-    //     } catch (err: any) {
-    //         toast.error(err.message || 'Ошибка при скачивании файла')
-    //     }
-    // }
-
     const handleDownloadExcel = async () => {
         try {
             await refundsApi.downloadRefundExcel(refundId!)
@@ -180,13 +163,12 @@ export const RefundViewPage: React.FC = () => {
                                                 </span>
                                                 <span className="text-sm font-medium">
                                                     {numericFormat(
-                                                        item?.net_price
-                                                            ?.amount /
+                                                        item?.price?.amount /
                                                             item?.quantity,
                                                     )}{' '}
                                                     {
-                                                        item?.net_price
-                                                            ?.currency?.name
+                                                        item?.price?.currency
+                                                            ?.name
                                                     }
                                                 </span>
                                             </div>
@@ -197,10 +179,8 @@ export const RefundViewPage: React.FC = () => {
                                             Итого:
                                         </span>
                                         <span className="text-sm font-medium">
-                                            {numericFormat(
-                                                item?.net_price?.amount,
-                                            )}{' '}
-                                            {item?.net_price?.currency?.name}
+                                            {numericFormat(item?.price?.amount)}{' '}
+                                            {item?.price?.currency?.name}
                                         </span>
                                     </div>
                                 </div>

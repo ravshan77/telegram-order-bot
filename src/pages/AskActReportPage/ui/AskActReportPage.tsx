@@ -4,10 +4,10 @@ import { Download } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import { useSearchParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
+import { numericFormat } from '@/shared/lib/numericFormat'
 import { Alert, Button, Input, Spinner } from '@/shared/ui/kit'
 import { askActReportApi, useAskActReports } from '@/entities/askActReport'
 import { operationTypes } from '@/shared/config/constants/operationTypes.constant'
-import { numericFormat } from '@/shared/lib/numericFormat'
 
 type FilterKey = 'date_start' | 'date_end'
 
@@ -142,7 +142,12 @@ export const AskActReportPage: React.FC = () => {
                 </div>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-4 mb-4 shadow-sm border ">
+            <div
+                className="bg-gray-50 rounded-2xl p-4 mb-4 shadow-sm border"
+                hidden={
+                    dataAkt?.operations.length === 0 || isLoading || isError
+                }
+            >
                 <div className="flex justify-between">
                     <div className="mb-4">
                         <p className="text-xs text-gray-500 mb-1">
@@ -168,45 +173,57 @@ export const AskActReportPage: React.FC = () => {
 
             {/* Transaction Cards - Scrollable */}
             <div className="px-0 py-4 space-y-3">
-                {dataAkt?.operations?.map((oprs) => (
-                    <div
-                        key={oprs.id}
-                        className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
-                    >
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm font-medium text-gray-700">
-                                {oprs.contractor.name}
-                            </span>
-                            <span className="text-xs text-gray-400">
-                                {oprs.date}
-                            </span>
-                        </div>
-
-                        <div className="mb-3">
-                            <span className="text-base text-gray-900">
-                                {
-                                    operationTypes?.find(
-                                        (opt_t) => opt_t?.value === oprs?.type,
-                                    )?.label
-                                }
-                            </span>
-                        </div>
-
-                        <div className="text-right flex gap-1 justify-end [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                            {oprs.debt_states?.map((crn) => {
-                                return (
-                                    <span
-                                        key={crn?.currency.id}
-                                        className="text-lg font-semibold flex text-primary"
-                                    >
-                                        {numericFormat(crn?.amount)}{' '}
-                                        {crn?.currency.name}
-                                    </span>
-                                )
-                            })}
-                        </div>
+                {isLoading && (
+                    <div className="flex justify-center items-center">
+                        <Spinner size={40} />
                     </div>
-                ))}
+                )}
+                {dataAkt?.operations.length === 0 ? (
+                    <div className="h-72 flex flex-col items-center justify-center">
+                        <p className="text-gray-500">У вас пока нет заказов</p>
+                    </div>
+                ) : (
+                    dataAkt?.operations?.map((oprs) => (
+                        <div
+                            key={oprs.id}
+                            className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-sm font-medium text-gray-700">
+                                    {oprs.contractor.name}
+                                </span>
+                                <span className="text-xs text-gray-400">
+                                    {oprs.date}
+                                </span>
+                            </div>
+
+                            <div className="mb-3">
+                                <span className="text-base text-gray-900">
+                                    {
+                                        operationTypes?.find(
+                                            (opt_t) =>
+                                                opt_t?.value === oprs?.type,
+                                        )?.label
+                                    }
+                                </span>
+                            </div>
+
+                            <div className="text-right flex gap-1 justify-end [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {oprs.debt_states?.map((crn) => {
+                                    return (
+                                        <span
+                                            key={crn?.currency.id}
+                                            className="text-lg font-semibold flex text-primary"
+                                        >
+                                            {numericFormat(crn?.amount)}{' '}
+                                            {crn?.currency.name}
+                                        </span>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
 
             {/* fixed bar */}

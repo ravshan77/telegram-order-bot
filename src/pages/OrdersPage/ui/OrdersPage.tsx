@@ -4,9 +4,9 @@ import { useOrders } from '@/entities/order'
 import { MoreHorizontal } from 'lucide-react'
 import { getOrderDetailsPath } from '@/shared/config'
 import { useCallback, useEffect, useState } from 'react'
+import { numericFormat } from '@/shared/lib/numericFormat'
 import { Button, Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { numericFormat } from '@/shared/lib/numericFormat'
 
 type FilterKey = 'date_start' | 'date_end'
 
