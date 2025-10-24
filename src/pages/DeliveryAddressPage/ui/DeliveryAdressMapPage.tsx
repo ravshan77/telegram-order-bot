@@ -120,7 +120,12 @@ export const DeliveryAddressMapPage: React.FC = () => {
                     balloonContent: '',
                 },
                 {
-                    preset: 'islands#blueCircleDotIcon',
+                    // preset: 'islands#blueCircleDotIcon',
+                    iconImageHref:
+                        '../../../../public/img/others/placemark.svg',
+                    iconImageSize: [40, 40],
+                    iconImageOffset: [-20, -40],
+
                     draggable: true,
                     hideIconOnBalloonOpen: false,
                     openEmptyBalloon: false,
