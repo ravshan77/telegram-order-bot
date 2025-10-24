@@ -25,9 +25,11 @@ export const BasketItem = ({
 }: BasketItemProps) => {
     const { getItemById } = useItemMap()
 
-    const found_item = getItemById(item.item.id)
+    const found_item = getItemById(item?.item?.id)
 
-    const images = found_item?.item.images.map((img) => `${APP_CDN}${img.path}`)
+    const images = found_item?.item?.images?.map(
+        (img) => `${APP_CDN}${img?.path}`,
+    )
 
     return (
         <div className="bg-white rounded-2xl p-4 border cursor-pointer">
@@ -40,15 +42,30 @@ export const BasketItem = ({
                     )}
                 </div>
 
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 ">
                     <h3 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2">
                         {item?.item?.name}
                     </h3>
-                    <p className="text-sm font-bold text-primary mb-1">
-                        {numericFormat(item?.net_price?.amount)}{' '}
-                        {item?.net_price?.currency?.name}
-                    </p>
-                    <p className="text-xs text-gray-500">Цена продажи</p>
+                    <div className="flex justify-between gap-2">
+                        <div>
+                            <p className="text-sm font-bold text-primary mb-1">
+                                {numericFormat(item?.price?.amount)}{' '}
+                                {item?.net_price?.currency?.name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                                Цена продажи
+                            </p>
+                        </div>
+
+                        <div>
+                            <p className="text-sm font-bold text-primary mb-1">
+                                {item?.quantity}x{' '}
+                                {numericFormat(item?.net_price.amount)}{' '}
+                                {item?.net_price?.currency?.name}
+                            </p>
+                            <p className="text-xs text-gray-500">Общая сумма</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -71,7 +88,7 @@ export const BasketItem = ({
                             e.stopPropagation()
                             onUpdateQuantity(
                                 item?.id,
-                                item?.item.id,
+                                item?.item?.id,
                                 item?.quantity - 1,
                             )
                         }}
@@ -87,7 +104,7 @@ export const BasketItem = ({
                             e.stopPropagation()
                             onUpdateQuantity(
                                 item?.id,
-                                item?.item.id,
+                                item?.item?.id,
                                 item?.quantity + 1,
                             )
                         }}
@@ -103,9 +120,9 @@ export const BasketItem = ({
 export default memo(BasketItem, (prev, next) => {
     // faqat quantity yoki narx o'zgarsa render qilamiz
     return (
-        prev.item.quantity === next.item.quantity &&
-        prev.item.net_price.amount === next.item.net_price.amount &&
-        prev.updating === next.updating &&
-        prev.deleting === next.deleting
+        prev?.item?.quantity === next?.item?.quantity &&
+        prev?.item?.net_price?.amount === next?.item?.net_price?.amount &&
+        prev?.updating === next?.updating &&
+        prev?.deleting === next?.deleting
     )
 })

@@ -35,7 +35,7 @@ export const BasketPage: React.FC = () => {
 
         try {
             await updateItem.mutateAsync({
-                id: order.id,
+                id: order?.id,
                 position_id: positionId,
                 item: {
                     item_id: itemId,
@@ -58,7 +58,7 @@ export const BasketPage: React.FC = () => {
 
         try {
             await deleteItem.mutateAsync({
-                id: order.id,
+                id: order?.id,
                 position_id: positionId,
             })
             toast.success('Товар удален из корзины')
@@ -68,7 +68,7 @@ export const BasketPage: React.FC = () => {
     }
 
     const goToCheckout = () => {
-        if (!order || cart.length === 0) {
+        if (!order || cart?.length === 0) {
             toast.error('Корзина пуста')
             return
         }
@@ -146,7 +146,7 @@ export const BasketPage: React.FC = () => {
             <div className="fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
                 <div>
                     <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                        {order.net_price.map((prc) => {
+                        {order?.net_price?.map((prc) => {
                             return (
                                 <span
                                     key={prc.currency.id}

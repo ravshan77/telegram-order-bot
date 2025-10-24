@@ -101,7 +101,7 @@ export const DeliveryAddressMapPage: React.FC = () => {
                 mapContainerRef.current,
                 {
                     center: [selectedLocation.lat, selectedLocation.lng],
-                    zoom: 15,
+                    zoom: 12,
                     controls: [],
                 },
                 {
