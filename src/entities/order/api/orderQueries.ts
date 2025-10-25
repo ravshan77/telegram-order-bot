@@ -174,8 +174,6 @@ export const useUpdateOrderItem = () => {
                 ORDER_KEYS.detail(updatedOrder.id),
                 updatedOrder,
             )
-
-            toast.success('Количество обновлено ✅')
         },
 
         onError: (error, _variables, context) => {

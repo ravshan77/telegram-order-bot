@@ -5,22 +5,19 @@ import {
     transformProductToView,
 } from '@/entities/product'
 import { APP_CDN } from '@/shared/api'
+import { ScrollBar } from '@/shared/ui/kit'
+import { GoBack } from '@/shared/ui/kit-pro'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
-import { Input, ScrollBar } from '@/shared/ui/kit'
+import { useState, useEffect, useMemo } from 'react'
 import { Search, X, Loader2, Image } from 'lucide-react'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
-import { useState, useEffect, useRef, useMemo } from 'react'
 import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
 
 export const SearchProductPage = () => {
-    // const [searchQuery, setSearchQuery] = useState('')
-    const { setSearchItemName, searchItemName } = useHeaderSearchStore(
-        (store) => store,
-    )
+    const { searchItemName } = useHeaderSearchStore((store) => store)
     const [debouncedQuery, setDebouncedQuery] = useState('')
-    const inputRef = useRef<HTMLInputElement>(null)
     const navigate = useNavigate()
 
     const { data: products, isLoading } = useProducts(
@@ -44,27 +41,9 @@ export const SearchProductPage = () => {
         return () => clearTimeout(timer)
     }, [searchItemName])
 
-    // useEffect(() => {
-    //     if (open) {
-    //         setTimeout(() => {
-    //             inputRef.current?.focus()
-    //         }, 100)
-    //     } else {
-    //         setSearchQuery('')
-    //         setDebouncedQuery('')
-    //     }
-    // }, [open])
-
     const handleProductClick = (product: ProductView) => {
         setSelectedProduct(product)
-        // onOpenChange(false)
         navigate(getProductPath(product.id))
-    }
-
-    const handleClear = () => {
-        setSearchItemName('')
-        setDebouncedQuery('')
-        inputRef.current?.focus()
     }
 
     const productImages = (images: ImageType[]) => {
@@ -75,15 +54,12 @@ export const SearchProductPage = () => {
     }
 
     return (
-        <div>
-            <div className="rounded-none border-none outline-none focus:outline-none bg-white">
+        <div className="">
+            <div className="bg-white w-full flex justify-end">
+                <GoBack text="" icon={<X />} />
+            </div>
+            <div className="">
                 <div className="flex flex-col h-full">
-                    <div className="border-b px-4 py-3">
-                        <div className="flex items-center gap-3">
-                            <h2 className="sr-only">Поиск продукта</h2>
-                        </div>
-                    </div>
-
                     {/* Content */}
                     <div className="flex-1 overflow-hidden">
                         <ScrollBar className="h-full">
