@@ -179,79 +179,38 @@ export const SalesPage = () => {
                         </div>
                     ) : (
                         sales?.map((sale) => {
-                            // Calculate payment total
-                            const paymentTotal =
-                                sale.payment?.debt_states.reduce(
-                                    (sum, debt) => sum + debt.amount,
-                                    0,
-                                ) || 0
-
-                            // Calculate debt (total - payment)
-                            const totalAmount =
-                                sale?.net_price?.reduce(
-                                    (sum, debt) => sum + debt.amount,
-                                    0,
-                                ) || 0
-                            const debtAmount = totalAmount - paymentTotal
-
                             return (
                                 <div
                                     key={sale.id}
-                                    className="border p-3 rounded-2xl cursor-pointer"
-                                    onClick={() => goToSaleDetail(sale.id)}
+                                    className="bg-white border rounded-lg shadow-sm p-3"
                                 >
-                                    <div className="flex justify-between items-start mb-3">
+                                    <div className="flex items-start justify-between mb-3">
                                         <span
                                             className={`text-xs font-semibold px-3 py-1 rounded ${
-                                                sale?.is_approved
+                                                sale.is_approved
                                                     ? 'bg-green-100 text-green-700'
                                                     : 'bg-red-100 text-red-700'
                                             }`}
                                         >
-                                            {sale?.is_approved
+                                            {sale.is_approved
                                                 ? 'Подтверждён'
                                                 : 'Не подтверждён'}
                                         </span>
-                                        <span className="text-sm text-gray-600">
-                                            № {sale.number}
+
+                                        <span className="font-medium text-black">
+                                            {dayjs(sale?.date).format(
+                                                'DD.MM.YYYY',
+                                            )}
                                         </span>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm text-gray-600">
-                                                {dayjs(sale.date).format(
-                                                    'DD.MM.YYYY',
-                                                )}
-                                            </span>
-                                        </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-4 mb-3">
-                                        <div>
-                                            <span className="text-xs text-gray-500 block mb-1">
-                                                Сумма
-                                            </span>
-                                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                                {sale.net_price?.map((crn) => (
-                                                    <span
-                                                        key={crn?.currency.id}
-                                                        className="text-base font-bold text-gray-600"
-                                                    >
-                                                        {numericFormat(
-                                                            crn?.amount,
-                                                        )}{' '}
-                                                        {crn?.currency.name}
-                                                    </span>
-                                                )) ?? (
-                                                    <>
-                                                        <span className="text-base font-bold text-gray-600">
-                                                            0
-                                                        </span>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span className="text-xs text-gray-500 block mb-1">
-                                                Оплата
+                                    <div
+                                        className="space-y-2 text-sm cursor-pointer"
+                                        onClick={() => goToSaleDetail(sale?.id)}
+                                    >
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">
+                                                Оплата:
                                             </span>
                                             <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
                                                 {sale.payment?.debt_states?.map(
@@ -260,7 +219,7 @@ export const SalesPage = () => {
                                                             key={
                                                                 crn?.currency.id
                                                             }
-                                                            className="text-base font-bold text-gray-600"
+                                                            className="font-medium text-black"
                                                         >
                                                             {numericFormat(
                                                                 crn?.amount,
@@ -270,25 +229,71 @@ export const SalesPage = () => {
                                                     ),
                                                 ) ?? (
                                                     <>
-                                                        <span className="text-base font-bold text-gray-600">
+                                                        <span className="font-medium text-black">
                                                             0
                                                         </span>
                                                     </>
                                                 )}
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="flex justify-between items-center pt-3 border-t">
-                                        <span className="text-sm text-gray-600">
-                                            В долг:
-                                        </span>
-                                        <span className="text-base font-bold text-red-500">
-                                            {debtAmount > 0 ? '-' : ''}
-                                            {numericFormat(debtAmount)}{' '}
-                                            {sale.net_price[0]?.currency.name ||
-                                                'UZS'}
-                                        </span>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-500">
+                                                В долг:
+                                            </span>
+                                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                                {sale.net_price?.map((crn) => (
+                                                    <span
+                                                        key={crn?.currency.id}
+                                                        className="font-medium text-red-500"
+                                                    >
+                                                        {numericFormat(
+                                                            crn?.amount,
+                                                        )}{' '}
+                                                        {crn?.currency.name}
+                                                    </span>
+                                                )) ?? (
+                                                    <>
+                                                        <span className="font-medium text-black">
+                                                            0
+                                                        </span>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            className="flex justify-between pt-2 border-t border-dashed mt-3"
+                                            style={{
+                                                borderImage:
+                                                    'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
+                                            }}
+                                        >
+                                            <span className="text-gray-500">
+                                                Общая сумма:
+                                            </span>
+                                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                                {sale.net_price.map(
+                                                    (pric, ind) => {
+                                                        return (
+                                                            <span
+                                                                key={`${pric?.currency}-${ind}`}
+                                                                className="font-bold text-black"
+                                                            >
+                                                                {numericFormat(
+                                                                    pric.amount,
+                                                                )}{' '}
+                                                                {
+                                                                    pric
+                                                                        .currency
+                                                                        .name
+                                                                }
+                                                            </span>
+                                                        )
+                                                    },
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             )

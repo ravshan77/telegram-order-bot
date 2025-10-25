@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import DatePicker from 'react-datepicker'
-import { useOrders } from '@/entities/order'
-import { getOrderDetailsPath } from '@/shared/config'
+import { useSales } from '@/entities/sales'
+import { getSaleDetailPath } from '@/shared/config'
 import { Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useCallback, useEffect, useState } from 'react'
 import { numericFormat } from '@/shared/lib/numericFormat'
@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 type FilterKey = 'date_start' | 'date_end'
 
-export const OrdersPage = () => {
+export const SalesPage = () => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
     const today = dayjs().format('YYYY-MM-DD')
@@ -38,8 +38,8 @@ export const OrdersPage = () => {
     }, [filters, setSearchParams])
 
     const apiParams = {
-        date_start: filters.date_start,
-        date_end: filters.date_end,
+        date_time_start: filters.date_start,
+        date_time_end: filters.date_end,
     }
 
     const shouldFetch =
@@ -49,16 +49,16 @@ export const OrdersPage = () => {
         dayjs(filters.date_end).isValid()
 
     const {
-        data: orders,
+        data: sales,
         isLoading,
         isError,
         error,
-    } = useOrders(apiParams, {
+    } = useSales(apiParams, {
         enabled: shouldFetch,
     })
 
-    const goToOrderDetails = useCallback(
-        (orderId: string) => {
+    const goToSaleDetail = useCallback(
+        (saleId: string) => {
             const dateStart = filters.date_start
                 ? dayjs(filters.date_start).format('YYYY-MM-DD')
                 : undefined
@@ -66,7 +66,7 @@ export const OrdersPage = () => {
                 ? dayjs(filters.date_end).format('YYYY-MM-DD')
                 : undefined
 
-            navigate(getOrderDetailsPath(orderId, dateStart, dateEnd))
+            navigate(getSaleDetailPath(saleId, dateStart, dateEnd))
         },
         [navigate, filters],
     )
@@ -75,15 +75,15 @@ export const OrdersPage = () => {
         return (
             <div className="p-4">
                 <Alert showIcon type="danger">
-                    Ошибка загрузки заказов: {error?.message}
+                    Ошибка загрузки продаж: {error?.message}
                 </Alert>
             </div>
         )
     }
 
-    const total_currency_sum = orders?.length
+    const total_currency_sum = sales?.length
         ? Object.values(
-              orders.reduce(
+              sales.reduce(
                   (acc, order) => {
                       order.net_price.forEach((net) => {
                           const currencyName = net.currency.name
@@ -120,10 +120,10 @@ export const OrdersPage = () => {
         dayjs(filters[name]).format('DD.MM.YYYY')
 
     return (
-        <div className="pb-16">
+        <div className="pb-32">
             <div>
                 <div className="mb-3">
-                    <h2 className="text-lg font-semibold pb-2">Заказы</h2>
+                    <h2 className="text-lg font-semibold pb-2">Продажи</h2>
                     <div className="flex items-center justify-between gap-2 text-sm">
                         <DatePicker
                             selected={selected('date_start')}
@@ -163,108 +163,132 @@ export const OrdersPage = () => {
                         />
                     </div>
                 </div>
+
                 <div className="space-y-4 mb-4 overflow-y-auto">
                     {isLoading && (
-                        <div className="flex justify-center items-center">
+                        <div className="flex justify-center items-center h-72">
                             <Spinner size={40} />
                         </div>
                     )}
-                    {orders?.length === 0 ? (
+
+                    {!isLoading && sales?.length === 0 ? (
                         <div className="h-72 flex flex-col items-center justify-center">
                             <p className="text-gray-500">
-                                У вас пока нет заказов
+                                У вас пока нет продаж
                             </p>
                         </div>
                     ) : (
-                        orders?.map((order) => {
+                        sales?.map((sale) => {
+                            // Calculate payment total
+                            const paymentTotal =
+                                sale.payment?.debt_states.reduce(
+                                    (sum, debt) => sum + debt.amount,
+                                    0,
+                                ) || 0
+
+                            // Calculate debt (total - payment)
+                            const totalAmount =
+                                sale?.net_price?.reduce(
+                                    (sum, debt) => sum + debt.amount,
+                                    0,
+                                ) || 0
+                            const debtAmount = totalAmount - paymentTotal
+
                             return (
                                 <div
-                                    key={order.id}
-                                    className="bg-white border rounded-lg shadow-sm p-3"
+                                    key={sale.id}
+                                    className="border p-3 rounded-2xl cursor-pointer"
+                                    onClick={() => goToSaleDetail(sale.id)}
                                 >
-                                    <div className="flex items-start justify-between mb-3">
+                                    <div className="flex justify-between items-start mb-3">
                                         <span
                                             className={`text-xs font-semibold px-3 py-1 rounded ${
-                                                order.is_approved
+                                                sale?.is_approved
                                                     ? 'bg-green-100 text-green-700'
                                                     : 'bg-red-100 text-red-700'
                                             }`}
                                         >
-                                            {order.is_approved
+                                            {sale?.is_approved
                                                 ? 'Подтверждён'
                                                 : 'Не подтверждён'}
                                         </span>
-                                        <span className="font-medium text-black">
-                                            {dayjs(order.date).format(
-                                                'DD.MM.YYYY',
-                                            )}
+                                        <span className="text-sm text-gray-600">
+                                            № {sale.number}
                                         </span>
-                                    </div>
-
-                                    <h2 className="text-lg font-bold mb-3">
-                                        {order?.contractor?.name || 'Заказ'}
-                                    </h2>
-
-                                    <div
-                                        className="space-y-2 text-sm cursor-pointer"
-                                        onClick={() =>
-                                            goToOrderDetails(order?.id)
-                                        }
-                                    >
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-500">
-                                                Продажа:
-                                            </span>
-                                            <span className="font-medium text-black">
-                                                {order.sale_info?.number || '-'}
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm text-gray-600">
+                                                {dayjs(sale.date).format(
+                                                    'DD.MM.YYYY',
+                                                )}
                                             </span>
                                         </div>
+                                    </div>
 
-                                        {order.approved_at && (
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-500">
-                                                    Дата подтверждена:
-                                                </span>
-                                                <span className="font-medium text-black">
-                                                    {dayjs(
-                                                        order?.approved_at,
-                                                    ).format('DD.MM.YYYY')}
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        <div
-                                            className="flex justify-between pt-2 border-t border-dashed mt-3"
-                                            style={{
-                                                borderImage:
-                                                    'repeating-linear-gradient(to right, #9ca3af 0 10px, transparent 10px 15px) 1',
-                                            }}
-                                        >
-                                            <span className="text-gray-500">
-                                                Общая сумма:
+                                    <div className="grid grid-cols-2 gap-4 mb-3">
+                                        <div>
+                                            <span className="text-xs text-gray-500 block mb-1">
+                                                Сумма
                                             </span>
                                             <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                                {order.net_price.map(
-                                                    (pric, ind) => {
-                                                        return (
-                                                            <span
-                                                                key={`${pric?.currency}-${ind}`}
-                                                                className="font-bold text-black"
-                                                            >
-                                                                {numericFormat(
-                                                                    pric.amount,
-                                                                )}{' '}
-                                                                {
-                                                                    pric
-                                                                        .currency
-                                                                        .name
-                                                                }
-                                                            </span>
-                                                        )
-                                                    },
+                                                {sale.net_price?.map((crn) => (
+                                                    <span
+                                                        key={crn?.currency.id}
+                                                        className="text-base font-bold text-gray-600"
+                                                    >
+                                                        {numericFormat(
+                                                            crn?.amount,
+                                                        )}{' '}
+                                                        {crn?.currency.name}
+                                                    </span>
+                                                )) ?? (
+                                                    <>
+                                                        <span className="text-base font-bold text-gray-600">
+                                                            0
+                                                        </span>
+                                                    </>
                                                 )}
                                             </div>
                                         </div>
+                                        <div>
+                                            <span className="text-xs text-gray-500 block mb-1">
+                                                Оплата
+                                            </span>
+                                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                                {sale.payment?.debt_states?.map(
+                                                    (crn) => (
+                                                        <span
+                                                            key={
+                                                                crn?.currency.id
+                                                            }
+                                                            className="text-base font-bold text-gray-600"
+                                                        >
+                                                            {numericFormat(
+                                                                crn?.amount,
+                                                            )}{' '}
+                                                            {crn?.currency.name}
+                                                        </span>
+                                                    ),
+                                                ) ?? (
+                                                    <>
+                                                        <span className="text-base font-bold text-gray-600">
+                                                            0
+                                                        </span>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-between items-center pt-3 border-t">
+                                        <span className="text-sm text-gray-600">
+                                            В долг:
+                                        </span>
+                                        <span className="text-base font-bold text-red-500">
+                                            {debtAmount > 0 ? '-' : ''}
+                                            {numericFormat(debtAmount)}{' '}
+                                            {sale.net_price[0]?.currency.name ||
+                                                'UZS'}
+                                        </span>
                                     </div>
                                 </div>
                             )
@@ -272,23 +296,22 @@ export const OrdersPage = () => {
                     )}
                 </div>
 
+                {/* Total Summary */}
                 <div className="w-full bg-white fixed flex flex-col justify-between items-start bottom-0 left-0 right-0 py-2 pb-6 px-4 border-t">
                     <div className="w-full h-10 my-2 px-3 flex justify-between items-center rounded-md bg-primary-subtle">
                         <span className="text-sm font-semibold">
-                            Всего заказов:
+                            Общая сумма:
                         </span>
                         <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                            {total_currency_sum?.map((crn) => {
-                                return (
-                                    <span
-                                        key={crn?.currency_name}
-                                        className="text-sm font-semibold flex text-primary"
-                                    >
-                                        {numericFormat(crn?.total_sum)}{' '}
-                                        {crn?.currency_name}
-                                    </span>
-                                )
-                            })}
+                            {total_currency_sum?.map((crn) => (
+                                <span
+                                    key={crn?.currency_name}
+                                    className="text-sm font-semibold text-primary"
+                                >
+                                    {numericFormat(crn?.total_sum)}{' '}
+                                    {crn?.currency_name}
+                                </span>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -296,3 +319,5 @@ export const OrdersPage = () => {
         </div>
     )
 }
+
+export default SalesPage
