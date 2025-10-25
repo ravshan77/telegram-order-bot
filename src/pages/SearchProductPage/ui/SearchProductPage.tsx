@@ -63,7 +63,7 @@ export const SearchProductPage = () => {
                     {/* Content */}
                     <div className="flex-1 overflow-hidden">
                         <ScrollBar className="h-full">
-                            <div className="p-4">
+                            <div className="">
                                 {isLoading && (
                                     <div className="flex items-center justify-center py-12">
                                         <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
@@ -101,7 +101,7 @@ export const SearchProductPage = () => {
                                         {productViews?.map((product) => (
                                             <button
                                                 key={product.id}
-                                                className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left"
+                                                className="w-full flex items-center gap-3 py-1 hover:bg-gray-50 rounded-lg transition-colors text-left"
                                                 onClick={() =>
                                                     handleProductClick(product)
                                                 }

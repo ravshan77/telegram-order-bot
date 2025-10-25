@@ -96,7 +96,7 @@ export const useRegisterOrder = () => {
             queryClient.invalidateQueries({
                 queryKey: ORDER_KEYS.notApproved(),
             })
-            toast.success('Товар добавлен в корзину')
+            // toast.success('Товар добавлен в корзину')
         },
         onError: (error: any) => {
             toast.error(error.message || 'Ошибка при создании заказа')
@@ -120,7 +120,7 @@ export const useAddOrderItem = () => {
             queryClient.invalidateQueries({
                 queryKey: ORDER_KEYS.notApproved(),
             })
-            toast.success('Товар добавлен в корзину')
+            // toast.success('Товар добавлен в корзину')
         },
         onError: (error: any) => {
             toast.error(error.message || 'Ошибка при добавлении товара')
@@ -215,7 +215,7 @@ export const useDeleteOrderItem = () => {
                     ),
                 }),
             )
-            toast.success('Товар удален из корзины')
+            // toast.success('Товар удален из корзины')
         },
         onError: (error: any) => {
             toast.error(error.message || 'Ошибка при удалении товара')
