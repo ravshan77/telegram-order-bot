@@ -212,8 +212,8 @@ export const useDeleteOrderItem = () => {
                 ORDER_KEYS.notApproved(),
                 (old: Order) => ({
                     ...old,
-                    items: old.items.map((i: OrderItem) =>
-                        i.id === updatedOrder.id ? updatedOrder : i,
+                    items: old?.items?.map((i: OrderItem) =>
+                        i?.id === updatedOrder?.id ? updatedOrder : i,
                     ),
                 }),
             )

@@ -2,15 +2,15 @@ import {
     useAddOrderItem,
     useRegisterOrder,
     useNotApprovedOrder,
+    useUpdateOrderItem,
+    useDeleteOrderItem,
 } from '@/entities/order'
-import toast from 'react-hot-toast'
-import { Image } from 'lucide-react'
 import { APP_CDN } from '@/shared/api'
-import React, { useState } from 'react'
 import { Button } from '@/shared/ui/kit'
-import { BoxSvg } from '@/shared/ui/svg'
-import { useNavigate } from 'react-router-dom'
-import { getBasketPath } from '@/shared/config'
+import React, { useRef, useState } from 'react'
+import { Image, Minus, Plus } from 'lucide-react'
+import { useFlyToCart } from '@/shared/lib/hooks'
+import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { ProductSection } from '@/widgets/ProductSection'
 import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
 import { useCartStore } from '@/shared/store/useCartStore'
@@ -19,11 +19,17 @@ import { numericFormat } from '@/shared/lib/numericFormat'
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
     const selectedProduct = useCartStore((state) => state.selectedProduct)
-    const navigate = useNavigate()
 
     const { data: order } = useNotApprovedOrder()
     const registerOrder = useRegisterOrder()
     const addItem = useAddOrderItem()
+    const updateItem = useUpdateOrderItem()
+    const deleteItem = useDeleteOrderItem()
+
+    if (!selectedProduct) return null
+
+    const cardRef = useRef<HTMLDivElement>(null)
+    const flyToCart = useFlyToCart('#cart-icon', { duration: 0.8, scale: 0.2 })
 
     const handleAddToCart = async (
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -32,28 +38,134 @@ export const ProductPage: React.FC = () => {
 
         try {
             if (!order) {
+                // 1-product savatga qo'shilganda yangi order ochish uchun register qilinadi
                 await registerOrder.mutateAsync({
-                    items: [
-                        { item_id: String(selectedProduct?.id), quantity: 1 },
-                    ],
+                    items: [{ item_id: selectedProduct.id, quantity: 1 }],
                 })
             } else {
+                // order bo'lsa savatga yangi product qo'shiladi
                 await addItem.mutateAsync({
                     id: order.id,
-                    item: { item_id: String(selectedProduct?.id), quantity: 1 },
+                    item: { item_id: selectedProduct.id, quantity: 1 },
                 })
             }
 
-            toast.success('Товар добавлен в корзину')
-            navigate(getBasketPath())
+            // animatsiya sabvtga
+            if (cardRef.current) {
+                flyToCart(cardRef.current)
+            }
         } catch (err: any) {
-            toast.error(err.message || 'Ошибка при добавлении в корзину')
+            console.log(err)
         }
     }
 
-    const images = selectedProduct?.images.map((img) => `${APP_CDN}${img.path}`)
+    const handleRemove = async (positionId: string) => {
+        if (!order) return
 
-    if (!selectedProduct) return null
+        const confirmed = confirm(
+            'Вы действительно собираетесь удалить этот продукт?',
+        )
+
+        if (!confirmed) return
+
+        try {
+            await deleteItem.mutateAsync({
+                id: order.id,
+                position_id: positionId,
+            })
+        } catch (err: any) {
+            console.log(err)
+        }
+    }
+
+    const handleUpdateQuantity = async (newQuantity: number) => {
+        if (!order || !cartItem) return
+
+        if (newQuantity === 0) {
+            handleRemove(cartItem.id)
+            return
+        }
+
+        try {
+            await updateItem.mutateAsync({
+                id: order.id,
+                position_id: cartItem.id,
+                item: {
+                    item_id: selectedProduct.id,
+                    quantity: newQuantity,
+                },
+            })
+        } catch (err: any) {
+            console.log(err)
+        }
+    }
+
+    const images = selectedProduct?.images?.map(
+        (img) => `${APP_CDN}${img?.path}`,
+    )
+
+    const cartItem = order?.items
+        ?.filter((item) => !item?.is_deleted)
+        ?.find((item) => item.item.id === selectedProduct.id)
+
+    const renderActionButton = () => {
+        const isLoading =
+            registerOrder.isPending || addItem.isPending || updateItem.isPending
+
+        // astatkalar 0 bo'lsa
+        if (selectedProduct?.stock === 0) {
+            return (
+                <p className="w-full justify-center flex items-center h-10 text-red-400 text-xs italic">
+                    Товар нет в наличии
+                </p>
+            )
+        }
+
+        // +/- buttonlar
+        if (cartItem) {
+            return (
+                <div className="flex items-center justify-between h-10 rounded border overflow-hidden">
+                    <Button
+                        variant="plain"
+                        className="w-12 h-full flex items-center justify-center border-none outline-none"
+                        icon={<Minus size={20} className="text-gray-700" />}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            handleUpdateQuantity(cartItem.quantity - 1)
+                        }}
+                    />
+                    <span className="text-base font-medium w-8 text-center">
+                        {cartItem.quantity}
+                    </span>
+                    <Button
+                        variant="plain"
+                        className="w-12 h-full flex items-center justify-center border-none outline-none"
+                        icon={<Plus size={20} className="text-gray-700" />}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            handleUpdateQuantity(cartItem.quantity + 1)
+                        }}
+                    />
+                </div>
+            )
+        }
+
+        // yangi tavar qo'shish
+        return (
+            <Button
+                variant="primary"
+                type="button"
+                className="w-full h-10 flex items-center justify-center rounded border"
+                disabled={isLoading}
+                onClick={handleAddToCart}
+                // loading={isLoading}
+            >
+                <span className="text-base font-medium flex items-center gap-2">
+                    в корзину <BasketSvg width={20} height={20} />
+                </span>
+            </Button>
+        )
+    }
 
     return (
         <div className="pb-16">
@@ -61,7 +173,7 @@ export const ProductPage: React.FC = () => {
                 <GoBack />
             </div>
 
-            <div className="bg-white mt-4">
+            <div ref={cardRef} className="bg-white mt-4">
                 {images?.length === 0 ? (
                     <div className="w-full flex justify-center">
                         <Image
@@ -218,20 +330,14 @@ export const ProductPage: React.FC = () => {
             </div>
 
             {/* Bottom fixed bar */}
-            <div className="fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
+            <div className="fixed z-10 flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
                 <div>
-                    <p className="text-primary font-bold">
+                    <p className="text-primary font-bold ">
                         {numericFormat(selectedProduct.price)} UZS
                     </p>
                     <p className="text-xs font-light">Цена продажи</p>
                 </div>
-                <Button
-                    variant="solid"
-                    className="w-auto min-w-32 rounded-lg font-medium"
-                    onClick={handleAddToCart}
-                >
-                    в корзину
-                </Button>
+                <div>{renderActionButton()}</div>
             </div>
         </div>
     )

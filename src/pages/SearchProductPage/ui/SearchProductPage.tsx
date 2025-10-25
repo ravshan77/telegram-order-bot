@@ -12,9 +12,13 @@ import { Search, X, Loader2, Image } from 'lucide-react'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import { useState, useEffect, useRef, useMemo } from 'react'
+import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
 
 export const SearchProductPage = () => {
-    const [searchQuery, setSearchQuery] = useState('')
+    // const [searchQuery, setSearchQuery] = useState('')
+    const { setSearchItemName, searchItemName } = useHeaderSearchStore(
+        (store) => store,
+    )
     const [debouncedQuery, setDebouncedQuery] = useState('')
     const inputRef = useRef<HTMLInputElement>(null)
     const navigate = useNavigate()
@@ -34,11 +38,11 @@ export const SearchProductPage = () => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setDebouncedQuery(searchQuery)
+            setDebouncedQuery(searchItemName)
         }, 1000)
 
         return () => clearTimeout(timer)
-    }, [searchQuery])
+    }, [searchItemName])
 
     // useEffect(() => {
     //     if (open) {
@@ -58,7 +62,7 @@ export const SearchProductPage = () => {
     }
 
     const handleClear = () => {
-        setSearchQuery('')
+        setSearchItemName('')
         setDebouncedQuery('')
         inputRef.current?.focus()
     }
@@ -77,28 +81,6 @@ export const SearchProductPage = () => {
                     <div className="border-b px-4 py-3">
                         <div className="flex items-center gap-3">
                             <h2 className="sr-only">Поиск продукта</h2>
-
-                            <div className="flex-1 relative">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                <Input
-                                    ref={inputRef}
-                                    type="text"
-                                    placeholder="Поиск продукта..."
-                                    value={searchQuery}
-                                    className="pl-10 pr-10 h-11 text-base"
-                                    onChange={(e) =>
-                                        setSearchQuery(e.target.value)
-                                    }
-                                />
-                                {searchQuery && (
-                                    <button
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                                        onClick={handleClear}
-                                    >
-                                        <X className="h-4 w-4 text-gray-500" />
-                                    </button>
-                                )}
-                            </div>
                         </div>
                     </div>
 
@@ -112,7 +94,7 @@ export const SearchProductPage = () => {
                                     </div>
                                 )}
 
-                                {!searchQuery && !isLoading && (
+                                {!searchItemName && !isLoading && (
                                     <div className="flex flex-col items-center justify-center py-12 text-center">
                                         <Search className="h-16 w-16 text-gray-300 mb-4" />
                                         <p className="text-gray-500 text-lg">
@@ -124,7 +106,7 @@ export const SearchProductPage = () => {
                                     </div>
                                 )}
 
-                                {searchQuery &&
+                                {searchItemName &&
                                     !isLoading &&
                                     productViews?.length === 0 && (
                                         <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -133,7 +115,7 @@ export const SearchProductPage = () => {
                                                 Товары не найдены.
                                             </p>
                                             <p className="text-gray-400 text-sm mt-2">
-                                                {searchQuery}
+                                                {searchItemName}
                                             </p>
                                         </div>
                                     )}

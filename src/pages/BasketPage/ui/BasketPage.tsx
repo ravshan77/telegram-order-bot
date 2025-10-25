@@ -43,7 +43,7 @@ export const BasketPage: React.FC = () => {
                 },
             })
         } catch (err: any) {
-            toast.error(err.message || 'Ошибка при обновлении количества')
+            console.log(err)
         }
     }
 
@@ -61,9 +61,8 @@ export const BasketPage: React.FC = () => {
                 id: order?.id,
                 position_id: positionId,
             })
-            toast.success('Товар удален из корзины')
         } catch (err: any) {
-            toast.error(err.message || 'Ошибка при удалении товара')
+            console.log(err)
         }
     }
 

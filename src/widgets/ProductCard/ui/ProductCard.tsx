@@ -5,7 +5,6 @@ import {
     useDeleteOrderItem,
     useNotApprovedOrder,
 } from '@/entities/order'
-import toast from 'react-hot-toast'
 import React, { useRef } from 'react'
 import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
@@ -70,10 +69,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             if (cardRef.current) {
                 flyToCart(cardRef.current)
             }
-
-            toast.success('Товар добавлен в корзину')
         } catch (err: any) {
-            toast.error(err.message || 'Ошибка при добавлении в корзину')
+            console.log(err)
         }
     }
 
@@ -91,9 +88,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 id: order.id,
                 position_id: positionId,
             })
-            toast.success('Товар удален из корзины')
         } catch (err: any) {
-            toast.error(err.message || 'Ошибка при удалении товара')
+            console.log(err)
         }
     }
 
@@ -115,7 +111,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 },
             })
         } catch (err: any) {
-            toast.error(err.message || 'Ошибка при обновлении количества')
+            console.log(err)
         }
     }
 
@@ -181,7 +177,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )
     }
 
-    const images = product.images.map((img) => `${APP_CDN}${img.path}`)
+    const images = product?.images?.map((img) => `${APP_CDN}${img?.path}`)
 
     return (
         <div

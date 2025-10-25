@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, Input } from '@/shared/ui/kit'
 import Header from '@/shared/ui/template/Header'
 import { useTelegram } from '@/shared/lib/hooks'
@@ -9,19 +9,33 @@ import MobileNav from '@/shared/ui/template/MobileNav'
 import { useNotApprovedOrder } from '@/entities/order'
 import LayoutBase from '@/shared/ui/template/LayoutBase'
 import { Search, ShoppingCart, User } from 'lucide-react'
-import { HeaderSearchSheet } from '@/widgets/HeaderSearch'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
-import { getBasketPath, getProfilePath } from '@/shared/config'
+import {
+    getBasketPath,
+    getProfilePath,
+    getSearchHeaderProductPath,
+} from '@/shared/config'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
+import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
+    const navigate = useNavigate()
     const tg = useTelegram()
     const { larger, smaller } = useResponsive()
     const { data: order } = useNotApprovedOrder()
     const cart = order?.items?.filter((item) => !item?.is_deleted) || []
     const totalItems = cart?.length
     const [isOpenSheet, setIsopenSheet] = useState(false)
+    const { setSearchItemName, searchItemName } = useHeaderSearchStore(
+        (store) => store,
+    )
+
+    useEffect(() => {
+        if (isOpenSheet) {
+            navigate(getSearchHeaderProductPath())
+        }
+    }, [isOpenSheet])
 
     return (
         <LayoutBase
@@ -41,21 +55,22 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                         }
                         headerMiddle={
                             <>
-                                {!isOpenSheet ? (
-                                    <div className="flex items-center gap-2 bg-gray-100 rounded-md px-3">
-                                        <Search
-                                            size={20}
-                                            className="text-gray-400"
-                                        />
-                                        <Input
-                                            readOnly
-                                            type="text"
-                                            placeholder="Поиск"
-                                            className="h-full bg-transparent flex-1 outline-none focus:outline-none focus:ring-0"
-                                            onFocus={() => setIsopenSheet(true)}
-                                        />
-                                    </div>
-                                ) : null}
+                                <div className="flex items-center gap-2 bg-gray-100 rounded-md px-3">
+                                    <Search
+                                        size={20}
+                                        className="text-gray-400"
+                                    />
+                                    <Input
+                                        type="text"
+                                        placeholder="Поиск"
+                                        value={searchItemName}
+                                        className="h-full bg-transparent flex-1 outline-none focus:outline-none focus:ring-0"
+                                        onFocus={() => setIsopenSheet(true)}
+                                        onChange={(e) =>
+                                            setSearchItemName(e.target.value)
+                                        }
+                                    />
+                                </div>
                             </>
                         }
                         headerEnd={
@@ -98,10 +113,10 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                     <div className="h-full flex flex-auto flex-col">
                         {children}
                     </div>
-                    <HeaderSearchSheet
+                    {/* <HeaderSearchSheet
                         open={isOpenSheet}
                         onOpenChange={setIsopenSheet}
-                    />
+                    /> */}
                 </div>
             </div>
         </LayoutBase>

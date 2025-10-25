@@ -17,14 +17,14 @@ export const operationTypes: OperationType[] = [
         apiType: 'OperationTypePayout',
         label: 'Выплаты',
         value: 2,
-        textColor: 'text-red-300',
+        textColor: 'text-red-500',
         upArrowIcon: true,
     },
     {
         apiType: 'OperationTypeSale',
         label: 'Продажи',
         value: 3,
-        textColor: 'text-red-300',
+        textColor: 'text-red-500',
         upArrowIcon: true,
     },
     {
@@ -43,7 +43,7 @@ export const operationTypes: OperationType[] = [
         apiType: 'OperationTypeReturn',
         label: 'Возврат',
         value: 6,
-        textColor: 'text-red-300',
+        textColor: 'text-red-500',
         upArrowIcon: true,
     },
 ]

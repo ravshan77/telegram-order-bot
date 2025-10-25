@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 import toast from 'react-hot-toast'
 import DatePicker from 'react-datepicker'
-import { ArrowUp, Download } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import { ArrowDown, ArrowUp, Download } from 'lucide-react'
 import { Alert, Button, Input, Spinner } from '@/shared/ui/kit'
 import { askActReportApi, useAskActReports } from '@/entities/askActReport'
 import {
@@ -173,7 +173,7 @@ export const AskActReportPage: React.FC = () => {
 
                     <div className="mb-4">
                         <p className="text-xs text-gray-500 mb-1">
-                            Сумма уменьшения долга:
+                            Сумма уменьшения задолженности:
                         </p>
                         {/* Сумма уменьшения долга */}
                         {/* qarzdorlikni kamayish summasi */}
@@ -200,12 +200,12 @@ export const AskActReportPage: React.FC = () => {
                         </p>
                         <div>
                             {totalDifference(
-                                totalDebitAmount(dataAkt),
                                 totalCreditAmount(dataAkt),
+                                totalDebitAmount(dataAkt),
                             )?.map((cures) => (
                                 <p
                                     key={cures?.currency}
-                                    className="text-sm font-medium"
+                                    className={`text-sm font-medium ${cures?.amount > 0 ? 'text-primary' : 'text-red-500'}`}
                                 >
                                     {numericFormat(cures?.amount)}{' '}
                                     {cures?.currency}
@@ -260,7 +260,7 @@ export const AskActReportPage: React.FC = () => {
                                                     {Operation?.upArrowIcon ? (
                                                         <ArrowUp size={20} />
                                                     ) : (
-                                                        ''
+                                                        <ArrowDown size={20} />
                                                     )}{' '}
                                                     {numericFormat(crn?.amount)}{' '}
                                                     {crn?.currency.name}

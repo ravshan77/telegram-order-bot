@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import toast from 'react-hot-toast'
 import { SingleValue } from 'react-select'
+import DatePicker from 'react-datepicker'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useEffect, useState } from 'react'
 import { Input } from '@/shared/ui/kit/Input'
@@ -10,11 +11,10 @@ import { useNavigate } from 'react-router-dom'
 import { getOrdersPath } from '@/shared/config'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
+import { numericFormat } from '@/shared/lib/numericFormat'
 import { useDeliveryAddresses } from '@/entities/deliveryAddress'
 import { useNotApprovedOrder, useApproveOrder } from '@/entities/order'
 import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
-import DatePicker from 'react-datepicker'
-import { numericFormat } from '@/shared/lib/numericFormat'
 
 interface FormDataType {
     paymentType: SelectOption<string> | null
@@ -85,11 +85,9 @@ export const CheckoutPage = () => {
                     ? Number(formData?.paymentType?.value)
                     : null,
             })
-
-            toast.success('Заказ успешно оформлен!')
             navigate(getOrdersPath())
         } catch (err: any) {
-            toast.error(err?.message || 'Ошибка при оформлении заказа')
+            console.log(err)
         }
     }
 
