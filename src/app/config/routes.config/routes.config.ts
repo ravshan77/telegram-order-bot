@@ -21,6 +21,7 @@ import {
     getDeliveryAddressPath,
     getAskActReportPath,
     getDeliveryAddressMapPath,
+    getSearchHeaderProductPath,
 } from '@/shared/config'
 
 export const publicRoutes: Routes = [...authRoute]
@@ -51,6 +52,15 @@ export const protectedRoutes: Routes = [
         component: lazy(() => import('@/pages/RefundsPage')),
         authority: [],
     },
+    {
+        key: 'refunds',
+        path: getSearchHeaderProductPath(),
+        component: lazy(
+            () => import('@/pages/SearchProductPage/ui/SearchProductPage'),
+        ),
+        authority: [],
+    },
+
     {
         key: 'refunds-detail',
         path: getRefundDetailPath(),

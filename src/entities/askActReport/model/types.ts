@@ -9,6 +9,11 @@ export interface DebtState {
     currency: DebtCurrency
 }
 
+export interface DebtViwe {
+    currency: string
+    amount: number
+}
+
 export interface Contact {
     type: number
     value: string

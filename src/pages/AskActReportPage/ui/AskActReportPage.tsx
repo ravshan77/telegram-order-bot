@@ -1,13 +1,18 @@
 import dayjs from 'dayjs'
 import toast from 'react-hot-toast'
-import { Download } from 'lucide-react'
 import DatePicker from 'react-datepicker'
+import { ArrowUp, Download } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import { Alert, Button, Input, Spinner } from '@/shared/ui/kit'
 import { askActReportApi, useAskActReports } from '@/entities/askActReport'
-import { operationTypes } from '@/shared/config/constants/operationTypes.constant'
+import {
+    findOperationType,
+    totalCreditAmount,
+    totalDebitAmount,
+    totalDifference,
+} from '@/entities/askActReport/lib/calculateAktReport'
 
 type FilterKey = 'date_start' | 'date_end'
 
@@ -82,7 +87,6 @@ export const AskActReportPage: React.FC = () => {
                 date_start: filters.date_start!,
                 date_end: filters.date_end!,
             })
-
             toast.success('Файл успешно загружен')
         } catch (err: any) {
             toast.error(err.message)
@@ -101,7 +105,6 @@ export const AskActReportPage: React.FC = () => {
 
     return (
         <div className="pb-32">
-            {/* Header */}
             <div className="mb-3">
                 <h2 className="text-lg font-semibold pb-2">АКТ сверка</h2>
                 <div className="flex items-center justify-between gap-2 text-sm">
@@ -151,14 +154,64 @@ export const AskActReportPage: React.FC = () => {
                 <div className="flex justify-between">
                     <div className="mb-4">
                         <p className="text-xs text-gray-500 mb-1">
-                            Общая разница:
+                            Сумма увеличения задолженности:
+                            {/* Сумма увеличения задолженности */}
+                            {/* qarzdorlikni oshish summasi */}
                         </p>
-                        <p className="text-sm font-medium">{'dataAkt.'}</p>
+                        <div>
+                            {totalCreditAmount(dataAkt)?.map((cures) => (
+                                <p
+                                    key={cures?.currency}
+                                    className="text-sm font-medium"
+                                >
+                                    {numericFormat(cures?.amount)}{' '}
+                                    {cures?.currency}
+                                </p>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="mb-4">
-                        <p className="text-xs text-gray-500 mb-1">Итого:</p>
-                        <p className="text-sm font-medium">{'dataAkt.'}</p>
+                        <p className="text-xs text-gray-500 mb-1">
+                            Сумма уменьшения долга:
+                        </p>
+                        {/* Сумма уменьшения долга */}
+                        {/* qarzdorlikni kamayish summasi */}
+
+                        <div>
+                            {totalDebitAmount(dataAkt)?.map((cures) => (
+                                <p
+                                    key={cures?.currency}
+                                    className="text-sm font-medium"
+                                >
+                                    {numericFormat(cures?.amount)}{' '}
+                                    {cures?.currency}
+                                </p>
+                            ))}
+                        </div>
+                    </div>
+                    {/* obshi raznesa ikkalsini ayizmrasi, oshishdan kamayish sumasini ayirib obshi valyutalr buyicha chiqarib quyamnan */}
+                </div>
+                <div className="flex justify-center items-center">
+                    <div className="mb-4">
+                        <p className="text-xs text-gray-500 mb-1">
+                            Общая разница:
+                            {/* qarzdorlik oshish - qarzdorlik kamayish = разница */}
+                        </p>
+                        <div>
+                            {totalDifference(
+                                totalDebitAmount(dataAkt),
+                                totalCreditAmount(dataAkt),
+                            )?.map((cures) => (
+                                <p
+                                    key={cures?.currency}
+                                    className="text-sm font-medium"
+                                >
+                                    {numericFormat(cures?.amount)}{' '}
+                                    {cures?.currency}
+                                </p>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
@@ -183,46 +236,52 @@ export const AskActReportPage: React.FC = () => {
                         <p className="text-gray-500">У вас пока нет заказов</p>
                     </div>
                 ) : (
-                    dataAkt?.operations?.map((oprs) => (
-                        <div
-                            key={oprs.id}
-                            className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
-                        >
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="text-sm font-medium text-gray-700">
-                                    {oprs.contractor.name}
-                                </span>
-                                <span className="text-xs text-gray-400">
-                                    {oprs.date}
-                                </span>
-                            </div>
+                    dataAkt?.operations?.map((oprs) => {
+                        const Operation = findOperationType(oprs?.type)
 
-                            <div className="mb-3">
-                                <span className="text-base text-gray-900">
-                                    {
-                                        operationTypes?.find(
-                                            (opt_t) =>
-                                                opt_t?.value === oprs?.type,
-                                        )?.label
-                                    }
-                                </span>
-                            </div>
-
-                            <div className="text-right flex gap-1 justify-end [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                {oprs.debt_states?.map((crn) => {
-                                    return (
-                                        <span
-                                            key={crn?.currency.id}
-                                            className="text-lg font-semibold flex text-primary"
-                                        >
-                                            {numericFormat(crn?.amount)}{' '}
-                                            {crn?.currency.name}
+                        return (
+                            <div
+                                key={oprs.id}
+                                className="bg-white rounded-2xl p-4 py-2 shadow-sm border border-gray-100"
+                            >
+                                <div className="flex items-center justify-between mb-3">
+                                    <span
+                                        className={`text-base font-medium text-gray-700`}
+                                    >
+                                        {Operation?.label}
+                                    </span>
+                                    <div className="text-right flex gap-1 justify-end [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                        {oprs.debt_states?.map((crn) => {
+                                            return (
+                                                <span
+                                                    key={crn?.currency.id}
+                                                    className={`text-lg font-semibold flex items-center text-primary ${Operation?.textColor}`}
+                                                >
+                                                    {Operation?.upArrowIcon ? (
+                                                        <ArrowUp size={20} />
+                                                    ) : (
+                                                        ''
+                                                    )}{' '}
+                                                    {numericFormat(crn?.amount)}{' '}
+                                                    {crn?.currency.name}
+                                                </span>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                                <div className="flex justify-between">
+                                    <div className="mb-3">
+                                        <span className="text-sm text-gray-600">
+                                            {oprs.contractor.name}
                                         </span>
-                                    )
-                                })}
+                                    </div>
+                                    <span className="text-xs text-gray-400">
+                                        {oprs.date}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        )
+                    })
                 )}
             </div>
 

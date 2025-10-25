@@ -1,5 +1,6 @@
 import Layout from '@/app/layouts'
 import { Routes } from '@/app/ui/Routes'
+import { Toaster } from 'react-hot-toast'
 import Theme from '@/shared/ui/template/Theme'
 import { BrowserRouter } from 'react-router-dom'
 // import { useAlerts } from '@/features/Alert'
@@ -20,6 +21,7 @@ function App() {
                     </Layout>
                 </BrowserRouter>
             </QueryProvider>
+            <Toaster position="top-center" reverseOrder={false} />
         </Theme>
     )
 }
