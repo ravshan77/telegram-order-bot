@@ -129,6 +129,7 @@ export const OrdersPage = () => {
                             selected={selected('date_start')}
                             dateFormat="dd.MM.yyyy"
                             name="date_start"
+                            maxDate={dayjs().toDate()}
                             disabledKeyboardNavigation={true}
                             placeholderText="от"
                             popperPlacement="bottom-end"
@@ -150,6 +151,8 @@ export const OrdersPage = () => {
                             dateFormat="dd.MM.yyyy"
                             disabledKeyboardNavigation={true}
                             placeholderText="до"
+                            maxDate={dayjs().toDate()}
+                            minDate={dayjs(filters?.date_start).toDate()}
                             popperPlacement="bottom-start"
                             customInput={
                                 <Input
@@ -187,7 +190,7 @@ export const OrdersPage = () => {
                                             className={`text-xs font-semibold px-3 py-1 rounded ${
                                                 order.is_approved
                                                     ? 'bg-green-100 text-green-700'
-                                                    : 'bg-red-100 text-red-700'
+                                                    : 'bg-yellow-300 text-yellow-700'
                                             }`}
                                         >
                                             {order.is_approved

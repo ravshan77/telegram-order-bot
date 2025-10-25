@@ -7,7 +7,7 @@ import {
 } from '@/entities/order'
 import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Image, Minus, Plus } from 'lucide-react'
 import { useFlyToCart } from '@/shared/lib/hooks'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
@@ -27,6 +27,13 @@ export const ProductPage: React.FC = () => {
     const deleteItem = useDeleteOrderItem()
 
     if (!selectedProduct) return null
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        })
+    }, [selectedProduct?.id])
 
     const cardRef = useRef<HTMLDivElement>(null)
     const flyToCart = useFlyToCart('#cart-icon', { duration: 0.8, scale: 0.2 })

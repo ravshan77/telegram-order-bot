@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
-import React from 'react'
 import toast from 'react-hot-toast'
 import { Download } from 'lucide-react'
+import React, { useEffect } from 'react'
 import { useSale } from '@/entities/sales'
 import { useParams } from 'react-router-dom'
 import { GoBack } from '@/shared/ui/kit-pro'
@@ -14,22 +14,12 @@ export const SalesViewPage: React.FC = () => {
 
     const { data: sale, isLoading, isError, error } = useSale(saleId!)
 
-    // const handleDownloadExcel = async () => {
-    //     try {
-    //         const blob = await salesApi.downloadSaleExcel(saleId!)
-    //         const url = window.URL.createObjectURL(blob)
-    //         const link = document.createElement('a')
-    //         link.href = url
-    //         link.download = `sale_${sale?.number || saleId}.xlsx`
-    //         document.body.appendChild(link)
-    //         link.click()
-    //         document.body.removeChild(link)
-    //         window.URL.revokeObjectURL(url)
-    //         toast.success('Файл успешно загружен')
-    //     } catch (err: any) {
-    //         toast.error(err.message || 'Ошибка при скачивании файла')
-    //     }
-    // }
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        })
+    }, [saleId])
 
     const handleDownloadExcel = async () => {
         try {

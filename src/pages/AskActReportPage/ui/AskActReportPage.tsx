@@ -112,6 +112,7 @@ export const AskActReportPage: React.FC = () => {
                         selected={selected('date_start')}
                         dateFormat="dd.MM.yyyy"
                         name="date_start"
+                        maxDate={dayjs().toDate()}
                         disabledKeyboardNavigation={true}
                         placeholderText="от"
                         popperPlacement="bottom-end"
@@ -129,6 +130,8 @@ export const AskActReportPage: React.FC = () => {
                     <DatePicker
                         selected={selected('date_end')}
                         dateFormat="dd.MM.yyyy"
+                        maxDate={dayjs().toDate()}
+                        minDate={dayjs(filters?.date_start).toDate()}
                         disabledKeyboardNavigation={true}
                         placeholderText="до"
                         popperPlacement="bottom-start"
@@ -233,7 +236,7 @@ export const AskActReportPage: React.FC = () => {
                 )}
                 {dataAkt?.operations.length === 0 ? (
                     <div className="h-72 flex flex-col items-center justify-center">
-                        <p className="text-gray-500">У вас пока нет заказов</p>
+                        <p className="text-gray-500">Пока данных нет.</p>
                     </div>
                 ) : (
                     dataAkt?.operations?.map((oprs) => {

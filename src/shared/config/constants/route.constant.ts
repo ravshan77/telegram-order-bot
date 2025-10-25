@@ -49,7 +49,6 @@ export const getRefundDetailPath = (
 }
 
 export const getProfilePath = () => '/profile'
-export const getSearchHeaderProductPath = () => '/search-header-product'
 
 export const getPaymentsPath = () => '/payments'
 export const getPayoutsPath = () => '/payouts'

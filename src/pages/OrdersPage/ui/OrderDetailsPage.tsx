@@ -5,10 +5,18 @@ import { useParams } from 'react-router-dom'
 import { Alert, Spinner } from '@/shared/ui/kit'
 import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import { useEffect } from 'react'
 
 export const OrderDetailsPage = () => {
     const { orderId } = useParams<{ orderId: string }>()
     const { data: order, isLoading, isError, error } = useOrder(orderId!)
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        })
+    }, [orderId])
 
     if (isLoading) {
         return (
@@ -41,7 +49,7 @@ export const OrderDetailsPage = () => {
                             className={`text-xs font-semibold px-3 py-1 rounded ${
                                 order?.is_approved
                                     ? 'bg-green-100 text-green-700'
-                                    : 'bg-red-100 text-red-700'
+                                    : 'bg-yellow-300 text-yellow-700'
                             }`}
                         >
                             {order.is_approved

@@ -51,7 +51,7 @@ export const CategoryPage: React.FC = () => {
         useVerticalInfiniteScroll({
             onLoadMore: handleLoadMore,
             isLoading: isFetching,
-            threshold: LIMIT_PAGINATION,
+            threshold: 70,
         })
 
     const handleTabChange = (tabValue: string) => {
@@ -141,10 +141,10 @@ export const CategoryPage: React.FC = () => {
                                 ))}
                             </div>
                             {isLoadingProducts || isFetching ? (
-                                <h4 className="text-center h-4 w-full">
+                                <p className="text-center h-4 w-full text-gray-500">
                                     {' '}
                                     Загрузка ...{' '}
-                                </h4>
+                                </p>
                             ) : null}
                             <div
                                 ref={sentinelRef}

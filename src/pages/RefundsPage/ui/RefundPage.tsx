@@ -135,6 +135,7 @@ export const RefundsPage = () => {
                             name="date_time_start"
                             disabledKeyboardNavigation={true}
                             placeholderText="от"
+                            maxDate={dayjs().toDate()}
                             popperPlacement="bottom-end"
                             customInput={
                                 <Input
@@ -154,6 +155,8 @@ export const RefundsPage = () => {
                             dateFormat="dd.MM.yyyy"
                             disabledKeyboardNavigation={true}
                             placeholderText="до"
+                            maxDate={dayjs().toDate()}
+                            minDate={dayjs(filters?.date_time_start).toDate()}
                             popperPlacement="bottom-start"
                             customInput={
                                 <Input
@@ -195,7 +198,7 @@ export const RefundsPage = () => {
                                             className={`text-xs font-semibold px-3 py-1 rounded ${
                                                 sale.is_approved
                                                     ? 'bg-green-100 text-green-700'
-                                                    : 'bg-red-100 text-red-700'
+                                                    : 'bg-yellow-300 text-yellow-700'
                                             }`}
                                         >
                                             {sale.is_approved

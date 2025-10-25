@@ -9,7 +9,7 @@ interface UseVerticalInfiniteScrollProps {
 export const useVerticalInfiniteScroll = ({
     onLoadMore,
     isLoading = false,
-    // threshold = 300,
+    // threshold = 0.2,
 }: UseVerticalInfiniteScrollProps) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null)
     const observerRef = useRef<IntersectionObserver | null>(null)

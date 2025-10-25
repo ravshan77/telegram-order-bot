@@ -14,11 +14,13 @@ interface ProductSectionProps {
     filters?: ProductFilters
 }
 
+const LIMIT_PAGINATION = 50
+
 export const ProductSection: React.FC<ProductSectionProps> = ({
     title,
     filters,
 }) => {
-    const [limit, setLimit] = useState(50)
+    const [limit, setLimit] = useState(LIMIT_PAGINATION)
 
     const {
         data,
@@ -37,14 +39,14 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
     )
 
     const handleLoadMore = useCallback(async () => {
-        setLimit((prev) => prev + 50)
+        setLimit((prev) => prev + LIMIT_PAGINATION)
     }, [])
 
     const { scrollContainerRef, handleScroll, isDesktop } =
         useHorizontalInfiniteScroll({
             onLoadMore: handleLoadMore,
             isLoading: isFetching,
-            threshold: 100,
+            threshold: 70,
         })
 
     const productViews = useMemo(() => {
@@ -97,10 +99,10 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
                     </div>
                 )}
                 {isLoadingProducts || isFetching ? (
-                    <h4 className="min-w-44 flex items-center justify-center h-72 text-gray-500">
+                    <p className="min-w-44 flex items-center justify-center h-72 text-gray-500">
                         {' '}
                         Загрузка ...{' '}
-                    </h4>
+                    </p>
                 ) : null}
             </div>
         </div>

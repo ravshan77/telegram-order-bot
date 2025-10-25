@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
-import React from 'react'
 import toast from 'react-hot-toast'
 import { Download } from 'lucide-react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { Alert, Button, Spinner } from '@/shared/ui/kit'
@@ -12,6 +12,13 @@ export const RefundViewPage: React.FC = () => {
     const { refundId } = useParams<{ refundId: string }>()
 
     const { data: refund, isLoading, isError, error } = useRefund(refundId!)
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        })
+    }, [refundId])
 
     const handleDownloadExcel = async () => {
         try {

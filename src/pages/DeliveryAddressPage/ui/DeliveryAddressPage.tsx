@@ -98,7 +98,6 @@ export const DeliveryAddressPage = () => {
                             <div
                                 key={address.id}
                                 className="bg-white rounded-2xl gap-3 border py-4 px-4 flex items-center justify-between"
-                                onClick={() => goToMap(address.id)}
                             >
                                 <div className="flex items-center min-h-10">
                                     <input
@@ -135,7 +134,16 @@ export const DeliveryAddressPage = () => {
                                                 handleDelete(address)
                                             }}
                                         >
-                                            Ўчириш
+                                            Удалить
+                                        </Dropdown.Item>
+                                        <Dropdown.Item
+                                            eventKey="edit"
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                goToMap(address.id)
+                                            }}
+                                        >
+                                            Редактировать
                                         </Dropdown.Item>
                                     </Dropdown>
                                 </div>

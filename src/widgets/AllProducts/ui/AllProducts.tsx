@@ -3,11 +3,13 @@ import { ProductCard } from '@/widgets/ProductCard'
 import { useCallback, useMemo, useState } from 'react'
 import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
 import { transformProductToView, useProducts } from '@/entities/product'
+import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
 
 const LIMIT_PAGINATION = 50
 
 export const AllProducts = () => {
     const [limit, setLimit] = useState(LIMIT_PAGINATION)
+    const searchItemName = useHeaderSearchStore((store) => store.searchItemName)
 
     const {
         data: productsData,
@@ -16,7 +18,7 @@ export const AllProducts = () => {
         error: productsError,
         isFetching,
     } = useProducts(
-        { limit },
+        { limit, name: searchItemName },
         { placeholderData: (previousData) => previousData },
     )
 
@@ -29,7 +31,7 @@ export const AllProducts = () => {
         useVerticalInfiniteScroll({
             onLoadMore: handleLoadMore,
             isLoading: isFetching,
-            threshold: LIMIT_PAGINATION,
+            threshold: 50,
         })
 
     const productViews = useMemo(() => {
@@ -45,6 +47,8 @@ export const AllProducts = () => {
             </div>
         )
     }
+
+    console.log(isFetching)
 
     return (
         <div
@@ -66,10 +70,10 @@ export const AllProducts = () => {
                         ))}
                     </div>
                     {isLoadingProducts || isFetching ? (
-                        <h4 className="text-center h-4 w-full">
+                        <p className="text-center h-4 w-full text-gray-500">
                             {' '}
                             Загрузка ...{' '}
-                        </h4>
+                        </p>
                     ) : null}
                     <div ref={sentinelRef} className="h-1" aria-hidden="true" />
                 </div>

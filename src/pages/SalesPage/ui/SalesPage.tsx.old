@@ -205,7 +205,7 @@ export const SalesPage = () => {
                                             className={`text-xs font-semibold px-3 py-1 rounded ${
                                                 sale?.is_approved
                                                     ? 'bg-green-100 text-green-700'
-                                                    : 'bg-red-100 text-red-700'
+                                                    : 'bg-yellow-300 text-yellow-700'
                                             }`}
                                         >
                                             {sale?.is_approved
