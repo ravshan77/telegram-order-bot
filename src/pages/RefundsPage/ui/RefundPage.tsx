@@ -1,12 +1,11 @@
 import dayjs from 'dayjs'
 import DatePicker from 'react-datepicker'
-import { MoreHorizontal } from 'lucide-react'
 import { useRefunds } from '@/entities/refund'
 import { getRefundDetailPath } from '@/shared/config'
+import { Spinner, Alert, Input } from '@/shared/ui/kit'
 import { useCallback, useEffect, useState } from 'react'
-import { Button, Spinner, Alert, Input } from '@/shared/ui/kit'
-import { useNavigate, useSearchParams } from 'react-router-dom'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 type FilterKey = 'date_time_start' | 'date_time_end'
 
@@ -207,7 +206,18 @@ export const RefundsPage = () => {
                                     className="border p-3 rounded-2xl cursor-pointer"
                                     onClick={() => goToRefundDetail(sale.id)}
                                 >
-                                    <div className="flex justify-between items-start mb-4">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <span
+                                            className={`text-xs font-semibold px-3 py-1 rounded ${
+                                                sale?.is_approved
+                                                    ? 'bg-green-100 text-green-700'
+                                                    : 'bg-red-100 text-red-700'
+                                            }`}
+                                        >
+                                            {sale?.is_approved
+                                                ? 'Подтверждён'
+                                                : 'Не подтверждён'}
+                                        </span>
                                         <span className="text-sm text-gray-600">
                                             № {sale.number}
                                         </span>
@@ -217,16 +227,6 @@ export const RefundsPage = () => {
                                                     'DD.MM.YYYY',
                                                 )}
                                             </span>
-                                            <Button
-                                                variant="plain"
-                                                size="xs"
-                                                icon={
-                                                    <MoreHorizontal size={20} />
-                                                }
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                }}
-                                            />
                                         </div>
                                     </div>
 

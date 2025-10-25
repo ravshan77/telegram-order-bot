@@ -47,24 +47,12 @@ export const BasketItem = ({
                         {item?.item?.name}
                     </h3>
                     <div className="flex justify-between gap-2">
-                        <div>
-                            <p className="text-sm font-bold text-primary mb-1">
-                                {numericFormat(item?.price?.amount)}{' '}
-                                {item?.net_price?.currency?.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                                Цена продажи
-                            </p>
-                        </div>
-
-                        <div>
-                            <p className="text-sm font-bold text-primary mb-1">
-                                {item?.quantity}x{' '}
-                                {numericFormat(item?.net_price.amount)}{' '}
-                                {item?.net_price?.currency?.name}
-                            </p>
-                            <p className="text-xs text-gray-500">Общая сумма</p>
-                        </div>
+                        <p className="text-sm font-bold text-primary mb-1">
+                            {item?.quantity} шт x{' '}
+                            {numericFormat(item?.price?.amount)} ={' '}
+                            {numericFormat(item?.net_price.amount)}{' '}
+                            {item?.net_price?.currency?.name}
+                        </p>
                     </div>
                 </div>
             </div>
