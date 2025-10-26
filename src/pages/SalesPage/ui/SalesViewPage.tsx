@@ -95,29 +95,14 @@ export const SalesViewPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {sale.approved_at && (
-                            <div className="mb-4">
-                                <p className="text-xs text-gray-500 mb-1">
-                                    Дата подтверждения:
-                                </p>
-                                <p className="text-sm font-medium">
-                                    {dayjs(sale.approved_at).format(
-                                        'DD.MM.YYYY HH:mm',
-                                    )}
-                                </p>
-                            </div>
-                        )}
-
-                        {sale.payment?.notes && (
-                            <div className="mb-4">
-                                <p className="text-xs text-gray-500 mb-1">
-                                    Информация:
-                                </p>
-                                <p className="text-sm font-medium">
-                                    {sale.payment.notes}
-                                </p>
-                            </div>
-                        )}
+                        <div className="mb-4">
+                            <p className="text-xs text-gray-500 mb-1">
+                                Информация:
+                            </p>
+                            <p className="text-sm font-medium">
+                                {sale?.payment?.notes || 'Не введено'}
+                            </p>
+                        </div>
 
                         <Button
                             className="w-full flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"

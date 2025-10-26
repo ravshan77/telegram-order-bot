@@ -30,6 +30,7 @@ export const BasketItem = ({
     const images = found_item?.item?.images?.map(
         (img) => `${APP_CDN}${img?.path}`,
     )
+    console.log(found_item)
 
     return (
         <div className="bg-white rounded-2xl p-4 border cursor-pointer">

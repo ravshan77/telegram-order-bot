@@ -20,6 +20,7 @@ export const BasketPage: React.FC = () => {
     const deleteItem = useDeleteOrderItem()
 
     const cart = order?.items ?? []
+    const is_active_products = cart?.filter((itm) => !itm?.is_deleted)
 
     const handleUpdateQuantity = async (
         positionId: string,
@@ -105,7 +106,7 @@ export const BasketPage: React.FC = () => {
         )
     }
 
-    if (!order || cart.length === 0) {
+    if (!order || cart.length === 0 || is_active_products.length === 0) {
         return (
             <div className="h-full">
                 <div className="bg-white w-full">
@@ -126,18 +127,16 @@ export const BasketPage: React.FC = () => {
 
             <div className="flex-1 overflow-y-auto">
                 <div className="py-2 space-y-3">
-                    {cart
-                        ?.filter((orderItem) => !orderItem?.is_deleted)
-                        .map((orderItem) => (
-                            <BasketItem
-                                key={orderItem?.id}
-                                item={orderItem}
-                                updating={updateItem.isPending}
-                                deleting={deleteItem.isPending}
-                                onRemove={handleRemove}
-                                onUpdateQuantity={handleUpdateQuantity}
-                            />
-                        ))}
+                    {is_active_products?.map((orderItem) => (
+                        <BasketItem
+                            key={orderItem?.id}
+                            item={orderItem}
+                            updating={updateItem.isPending}
+                            deleting={deleteItem.isPending}
+                            onRemove={handleRemove}
+                            onUpdateQuantity={handleUpdateQuantity}
+                        />
+                    ))}
                 </div>
             </div>
 

@@ -58,7 +58,7 @@ export const RefundViewPage: React.FC = () => {
                     <div className="bg-gray-50 rounded-2xl p-4 mb-4 shadow-sm border">
                         <div className="flex items-start justify-between mb-4">
                             <h2 className="text-base font-semibold">
-                                Продажа № {refund?.number}
+                                Продавец № {refund?.number}
                             </h2>
                             <span
                                 className={`px-3 py-1 text-xs font-medium rounded-full ${
@@ -94,29 +94,14 @@ export const RefundViewPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {refund.approved_at && (
-                            <div className="mb-4">
-                                <p className="text-xs text-gray-500 mb-1">
-                                    Дата подтверждения:
-                                </p>
-                                <p className="text-sm font-medium">
-                                    {dayjs(refund?.approved_at)?.format(
-                                        'DD.MM.YYYY HH:mm',
-                                    )}
-                                </p>
-                            </div>
-                        )}
-
-                        {refund?.payment?.notes && (
-                            <div className="mb-4">
-                                <p className="text-xs text-gray-500 mb-1">
-                                    Информация:
-                                </p>
-                                <p className="text-sm font-medium">
-                                    {refund?.payment?.notes}
-                                </p>
-                            </div>
-                        )}
+                        <div className="mb-4">
+                            <p className="text-xs text-gray-500 mb-1">
+                                Информация:
+                            </p>
+                            <p className="text-sm font-medium">
+                                {refund?.notes || 'Не введено'}
+                            </p>
+                        </div>
 
                         <Button
                             className="w-full flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
@@ -138,6 +123,9 @@ export const RefundViewPage: React.FC = () => {
                                     <span>
                                         Количество: {item?.quantity} шт.
                                     </span>
+                                    {/* <span>
+                                        Количество упаковок: {item.quantity}
+                                    </span> */}
                                 </div>
 
                                 <h3 className="text-sm font-semibold text-gray-900 mb-3 leading-snug">
@@ -154,39 +142,36 @@ export const RefundViewPage: React.FC = () => {
                                             {item?.price?.currency?.name}
                                         </span>
                                     </div>
-                                    {item?.discount && (
-                                        <>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-sm text-gray-600">
-                                                    Скидка:
-                                                </span>
-                                                <span className="text-sm font-medium">
-                                                    {item?.discount?.value}%
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-sm text-gray-600">
-                                                    Цена со скидкой:
-                                                </span>
-                                                <span className="text-sm font-medium">
-                                                    {numericFormat(
-                                                        item?.price?.amount /
-                                                            item?.quantity,
-                                                    )}{' '}
-                                                    {
-                                                        item?.price?.currency
-                                                            ?.name
-                                                    }
-                                                </span>
-                                            </div>
-                                        </>
-                                    )}
+
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-600">
-                                            Итого:
+                                            Скидка:
                                         </span>
                                         <span className="text-sm font-medium">
-                                            {numericFormat(item?.price?.amount)}{' '}
+                                            {item?.discount?.value || 0}%
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-600">
+                                            Цена со скидкой:
+                                        </span>
+                                        <span className="text-sm font-medium">
+                                            {numericFormat(
+                                                item?.price?.amount /
+                                                    item?.quantity,
+                                            )}{' '}
+                                            {item?.price?.currency?.name}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-600">
+                                            Количество:
+                                        </span>
+                                        <span className="text-sm font-medium">
+                                            {numericFormat(
+                                                item?.price.amount *
+                                                    item.quantity,
+                                            )}{' '}
                                             {item?.price?.currency?.name}
                                         </span>
                                     </div>

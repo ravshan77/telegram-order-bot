@@ -12,6 +12,7 @@ import { DIR_RTL } from '@/shared/config/constants/theme.constant'
 import withHeaderItem, {
     WithHeaderItemProps,
 } from '@/shared/lib/hoc/withHeaderItem'
+import Logo from './Logo'
 
 const VerticalMenuContent = lazy(
     () => import('@/shared/ui/template/VerticalMenuContent'),
@@ -31,10 +32,11 @@ const MobileNavToggle = withHeaderItem<
 
 const NavTitle = () => {
     return (
-        <div>
-            <p>Время работы</p>
-            <p className="text-base">07:00 - 24:00</p>
-        </div>
+        // <div className="border border-red-500">
+        //     <p>Время работы</p>
+        //     <p className="text-base">07:00 - 24:00</p>
+        // </div>
+        <Logo size={30} />
     )
 }
 

@@ -160,7 +160,6 @@ export const CheckoutPage = () => {
                                 dateFormat="dd.MM.yyyy"
                                 name="orderDate"
                                 disabledKeyboardNavigation={true}
-                                maxDate={dayjs().toDate()}
                                 popperPlacement="bottom-end"
                                 selected={
                                     formData?.orderDate

@@ -5,7 +5,7 @@ import {
     useDeleteOrderItem,
     useNotApprovedOrder,
 } from '@/entities/order'
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { Pagination } from 'swiper/modules'
@@ -39,15 +39,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     const cartItem = order?.items
         ?.filter((item) => !item?.is_deleted)
-        ?.find((item) => item.item.id === product.id)
+        ?.find((item) => item?.item?.id === product?.id)
 
     const goShowProduct = () => {
         setSelectedProduct(product)
-        navigate(getProductPath(product.id))
+        navigate(getProductPath(product?.id))
     }
 
     const handleAddToCart = async (
-        e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        e:
+            | React.MouseEvent<HTMLButtonElement, MouseEvent>
+            | React.MouseEvent<HTMLDivElement, MouseEvent>,
+        quantity?: number,
     ) => {
         e.stopPropagation()
 
@@ -55,13 +58,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             if (!order) {
                 // 1-product savatga qo'shilganda yangi order ochish uchun register qilinadi
                 await registerOrder.mutateAsync({
-                    items: [{ item_id: product.id, quantity: 1 }],
+                    items: [
+                        {
+                            item_id: product.id,
+                            quantity: quantity ? quantity : 1,
+                        },
+                    ],
                 })
             } else {
                 // order bo'lsa savatga yangi product qo'shiladi
                 await addItem.mutateAsync({
                     id: order.id,
-                    item: { item_id: product.id, quantity: 1 },
+                    item: {
+                        item_id: product.id,
+                        quantity: quantity ? quantity : 1,
+                    },
                 })
             }
 
@@ -114,6 +125,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             console.log(err)
         }
     }
+
+    const handlePackageQuantity = useCallback(
+        (
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            pkg_quantity: number,
+        ) => {
+            const is_cart = cartItem?.quantity ? cartItem?.quantity : 0
+            if (cartItem) {
+                handleUpdateQuantity(is_cart + pkg_quantity)
+            } else {
+                handleAddToCart(e, pkg_quantity)
+            }
+        },
+        [product],
+    )
 
     const renderActionButton = () => {
         const isLoading =
@@ -239,17 +265,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 >
                     {product.name}
                 </div>
-                <div className="flex gap-1 h-7">
-                    {product.package_measurements?.map((pkg) => (
-                        <div
-                            key={pkg.name}
-                            className="w-14 border flex justify-between items-center rounded-xl py-0 px-2"
-                        >
-                            <BoxSvg width={18} height={18} />
-                            <span className="text-xs">{pkg.quantity}</span>
-                        </div>
-                    ))}
-                </div>
+                {!(product?.stock === 0) ? (
+                    <div className="flex gap-1 h-7">
+                        {product.package_measurements?.map((pkg) => (
+                            <div
+                                key={pkg.name}
+                                className="w-14 border flex justify-between items-center rounded-xl py-0 px-2"
+                                onClick={(e) =>
+                                    handlePackageQuantity(e, pkg.quantity)
+                                }
+                            >
+                                <BoxSvg width={18} height={18} />
+                                <span className="text-xs">{pkg.quantity}</span>
+                            </div>
+                        ))}
+                    </div>
+                ) : null}
                 <div className="mt-3">{renderActionButton()}</div>
             </div>
         </div>

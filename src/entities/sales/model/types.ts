@@ -45,6 +45,7 @@ export interface Sale {
     created_at: string
     approved_at: string | null
     is_approved: boolean
+    notes?: string // for refund
     items: SaleItem[]
     payment: Payment | null
     net_price: CurrencyAmount[]

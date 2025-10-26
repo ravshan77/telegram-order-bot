@@ -1,11 +1,11 @@
-import { GoBack } from '@/shared/ui/kit-pro'
+import { GoBack, ScrollToTop } from '@/shared/ui/kit-pro'
 import { Alert, Tabs } from '@/shared/ui/kit'
-import React, { useState, useMemo } from 'react'
 import TabNav from '@/shared/ui/kit/Tabs/TabNav'
 import { useCategory } from '@/entities/category'
 import { getCategoryPath } from '@/shared/config'
 import TabList from '@/shared/ui/kit/Tabs/TabList'
 import { ProductCard } from '@/widgets/ProductCard'
+import React, { useState, useMemo, useRef } from 'react'
 import TabContent from '@/shared/ui/kit/Tabs/TabContent'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
@@ -15,9 +15,10 @@ const LIMIT_PAGINATION = 50
 
 export const CategoryPage: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>()
-    const navigate = useNavigate()
-    const [currentTab, setCurrentTab] = useState<string>(categoryId || '')
     const [limit, setLimit] = useState(LIMIT_PAGINATION)
+    const [currentTab, setCurrentTab] = useState<string>(categoryId || '')
+    const navigate = useNavigate()
+    const scrollContainerElementRef = useRef<HTMLDivElement>(null)
 
     const {
         data: category,
@@ -93,6 +94,16 @@ export const CategoryPage: React.FC = () => {
 
     const categoryChilds = category?.childs ?? []
 
+    const combinedRef = (node: HTMLDivElement | null) => {
+        scrollContainerElementRef.current = node
+        const hookRef = scrollContainerRef as any
+        if (hookRef && typeof hookRef === 'function') {
+            hookRef(node)
+        } else if (hookRef && 'current' in hookRef) {
+            hookRef.current = node
+        }
+    }
+
     return (
         <div className="pb-16">
             <div className="bg-white w-full sticky top-0 z-10">
@@ -120,7 +131,8 @@ export const CategoryPage: React.FC = () => {
                 </TabList>
 
                 <div
-                    ref={scrollContainerRef}
+                    // ref={scrollContainerRef}
+                    ref={combinedRef}
                     className={`py-4 overflow-y-auto ${isDesktop ? ' scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
                     style={{ maxHeight: 'calc(100vh - 200px)' }}
                 >
@@ -164,6 +176,10 @@ export const CategoryPage: React.FC = () => {
                     )}
                 </div>
             </Tabs>
+            <ScrollToTop
+                containerRef={scrollContainerElementRef}
+                offset={1000}
+            />
         </div>
     )
 }
