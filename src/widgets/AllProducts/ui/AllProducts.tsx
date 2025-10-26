@@ -1,9 +1,9 @@
 import { Alert } from '@/shared/ui/kit'
+import { useMemo, useState } from 'react'
 import { ProductCard } from '@/widgets/ProductCard'
-import { useCallback, useMemo, useState } from 'react'
 import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
-import { transformProductToView, useProducts } from '@/entities/product'
 import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
+import { transformProductToView, useProducts } from '@/entities/product'
 
 const LIMIT_PAGINATION = 50
 
@@ -16,22 +16,26 @@ export const AllProducts = () => {
         isLoading: isLoadingProducts,
         isError: isErrorProducts,
         error: productsError,
+        isPending,
         isFetching,
     } = useProducts(
         { limit, name: searchItemName },
         { placeholderData: (previousData) => previousData },
     )
 
-    const handleLoadMore = useCallback(
-        async () => setLimit((prev) => prev + LIMIT_PAGINATION),
-        [],
-    )
+    const handleLoadMore = async () => {
+        if (
+            productsData?.filtered_count &&
+            productsData?.filtered_count >= limit
+        ) {
+            setLimit((prev) => prev + LIMIT_PAGINATION)
+        }
+    }
 
     const { scrollContainerRef, sentinelRef, isDesktop } =
         useVerticalInfiniteScroll({
             onLoadMore: handleLoadMore,
             isLoading: isFetching,
-            threshold: 50,
         })
 
     const productViews = useMemo(() => {
@@ -48,8 +52,6 @@ export const AllProducts = () => {
         )
     }
 
-    console.log(isFetching)
-
     return (
         <div
             ref={scrollContainerRef}
@@ -57,25 +59,34 @@ export const AllProducts = () => {
             style={{ maxHeight: 'calc(100vh - 200px)' }}
         >
             {productViews.length === 0 && isLoadingProducts ? (
-                <div className="h-96" />
+                <div className="h-96">
+                    <p className="flex justify-center items-center text-center h-full w-full text-gray-500">
+                        {' '}
+                        Загрузка ...{' '}
+                    </p>{' '}
+                </div>
             ) : productViews.length === 0 ? (
                 <div className="flex justify-center items-center h-96 text-gray-500">
                     Товары не найдены
                 </div>
             ) : (
                 <div>
-                    <div className="grid grid-cols-2 gap-2 mb-6">
+                    <div className="grid grid-cols-2 gap-2">
                         {productViews.map((product) => (
                             <ProductCard key={product.id} product={product} />
                         ))}
+                        <div
+                            ref={sentinelRef}
+                            className="h-2"
+                            aria-hidden="true"
+                        />
                     </div>
-                    {isLoadingProducts || isFetching ? (
+                    {isLoadingProducts || isFetching || isPending ? (
                         <p className="text-center h-4 w-full text-gray-500">
                             {' '}
                             Загрузка ...{' '}
                         </p>
                     ) : null}
-                    <div ref={sentinelRef} className="h-1" aria-hidden="true" />
                 </div>
             )}
         </div>

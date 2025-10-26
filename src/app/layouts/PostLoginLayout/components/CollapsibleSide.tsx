@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom'
-import { Button, Input } from '@/shared/ui/kit'
+import { Button } from '@/shared/ui/kit'
 import Header from '@/shared/ui/template/Header'
 import { useTelegram } from '@/shared/lib/hooks'
+import { ShoppingCart, User } from 'lucide-react'
 import SideNav from '@/shared/ui/template/SideNav'
 import type { CommonProps } from '@/@types/common'
 import MobileNav from '@/shared/ui/template/MobileNav'
 import { useNotApprovedOrder } from '@/entities/order'
 import LayoutBase from '@/shared/ui/template/LayoutBase'
-import { Search, ShoppingCart, User } from 'lucide-react'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import { getBasketPath, getProfilePath } from '@/shared/config'
-import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
+// import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
@@ -22,10 +22,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
     // const isMainPage = location.pathname === getMainPath()
     const cart = order?.items?.filter((item) => !item?.is_deleted) || []
     const totalItems = cart?.length
-
-    const { setSearchItemName, searchItemName } = useHeaderSearchStore(
-        (store) => store,
-    )
+    // const { setSearchItemName, searchItemName } = useHeaderSearchStore((store) => store)
 
     return (
         <LayoutBase
@@ -41,27 +38,6 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                             <>
                                 {smaller.lg && <MobileNav />}
                                 {larger.lg && <SideNavToggle />}
-                            </>
-                        }
-                        headerMiddle={
-                            <>
-                                <div
-                                    className={`flex items-center gap-2 bg-gray-100 rounded-md px-3`}
-                                >
-                                    <Search
-                                        size={20}
-                                        className="text-gray-400"
-                                    />
-                                    <Input
-                                        type="text"
-                                        placeholder="Поиск"
-                                        value={searchItemName}
-                                        className="h-full bg-transparent flex-1 outline-none focus:outline-none focus:ring-0"
-                                        onChange={(e) =>
-                                            setSearchItemName(e.target.value)
-                                        }
-                                    />
-                                </div>
                             </>
                         }
                         headerEnd={

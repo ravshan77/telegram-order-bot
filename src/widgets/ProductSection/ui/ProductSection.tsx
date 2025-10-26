@@ -5,9 +5,9 @@ import {
 } from '@/entities/product'
 import { ChevronRight } from 'lucide-react'
 import { Alert, Button } from '@/shared/ui/kit'
+import React, { useState, useMemo } from 'react'
 import { ProductCard } from '@/widgets/ProductCard'
-import React, { useState, useCallback, useMemo } from 'react'
-import { useHorizontalInfiniteScroll } from '@/shared/lib/hooks'
+import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
 
 interface ProductSectionProps {
     title: string
@@ -38,15 +38,16 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
         },
     )
 
-    const handleLoadMore = useCallback(async () => {
-        setLimit((prev) => prev + LIMIT_PAGINATION)
-    }, [])
+    const handleLoadMore = async () => {
+        if (data?.filtered_count && data?.filtered_count >= limit) {
+            setLimit((prev) => prev + LIMIT_PAGINATION)
+        }
+    }
 
-    const { scrollContainerRef, handleScroll, isDesktop } =
-        useHorizontalInfiniteScroll({
+    const { scrollContainerRef, sentinelRef, isDesktop } =
+        useVerticalInfiniteScroll({
             onLoadMore: handleLoadMore,
             isLoading: isFetching,
-            threshold: 70,
         })
 
     const productViews = useMemo(() => {
@@ -82,7 +83,7 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
             <div
                 ref={scrollContainerRef}
                 className={`flex gap-3 overflow-x-auto pb-3 ${isDesktop ? ' scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
-                onScroll={handleScroll}
+                // onScroll={handleScroll}
             >
                 {productViews.length > 0 ? (
                     productViews.map((product) => (
@@ -98,6 +99,7 @@ export const ProductSection: React.FC<ProductSectionProps> = ({
                         Товары не найдены
                     </div>
                 )}
+                <div ref={sentinelRef} className="h-2" aria-hidden="true" />
                 {isLoadingProducts || isFetching ? (
                     <p className="min-w-44 flex items-center justify-center h-72 text-gray-500">
                         {' '}

@@ -1,62 +1,100 @@
+// useInfiniteScroll.ts
 import { LegacyRef, useEffect, useRef, useState } from 'react'
 
 type Options = {
     offset?: string
     shouldStop?: boolean
-    onLoadMore?: () => Promise<void>
+    onLoadMore?: () => Promise<void> | void
 }
 
 function useInfiniteScroll(options?: Options) {
     const { offset = '0px', shouldStop = false, onLoadMore } = options ?? {}
 
     const [isLoading, setIsLoading] = useState(false)
-    const observerRef = useRef<IntersectionObserver>(null)
-    const targetRef = useRef(document.createElement('div'))
+    const observerRef = useRef<IntersectionObserver | null>(null)
+    const targetRef = useRef<HTMLDivElement>(document.createElement('div'))
+    const containerElementRef = useRef<HTMLElement | null>(null)
 
     const containerRef: LegacyRef<HTMLElement> = (container) => {
-        if (container) {
-            container.append(targetRef.current)
+        if (container && containerElementRef.current !== container) {
+            containerElementRef.current = container
+
+            // Eski targetni olib tashlash
+            const oldTarget = container.querySelector(
+                '[data-infinite-scroll-detector]',
+            )
+            if (oldTarget && oldTarget !== targetRef.current) {
+                oldTarget.remove()
+            }
+
+            // Yangi targetni qo'shish
+            if (!container.contains(targetRef.current)) {
+                container.append(targetRef.current)
+            }
+
             container.style.position = 'relative'
         }
     }
 
+    // Target elementni sozlash
     useEffect(() => {
         const target = targetRef.current
-        target.toggleAttribute('data-infinite-scroll-detector', true)
+        target.setAttribute('data-infinite-scroll-detector', 'true')
         target.style.position = 'absolute'
         target.style.bottom = offset
-        if (target.offsetTop < 0) target.style.bottom = '0px'
-    }, [offset, isLoading])
+        target.style.width = '100%'
+        target.style.height = '1px'
+        target.style.pointerEvents = 'none'
 
+        // Agar offset manfiy bo'lsa, pastki qismga joylashtirish
+        if (target.offsetTop < 0) {
+            target.style.bottom = '0px'
+        }
+    }, [offset])
+
+    // Observer sozlash
     useEffect(() => {
-        const observe = observerRef.current
-        if (observe) {
-            observe.disconnect()
+        // Eski observerni tozalash
+        if (observerRef.current) {
+            observerRef.current.disconnect()
         }
 
-        async function handler([
-            { isIntersecting },
-        ]: IntersectionObserverEntry[]) {
+        async function handler([entry]: IntersectionObserverEntry[]) {
             if (
-                isIntersecting &&
+                entry.isIntersecting &&
                 !isLoading &&
                 !shouldStop &&
                 typeof onLoadMore === 'function'
             ) {
                 setIsLoading(true)
-                await onLoadMore()
-                setIsLoading(false)
+                try {
+                    await onLoadMore()
+                } catch (error) {
+                    console.error('Error loading more:', error)
+                } finally {
+                    setIsLoading(false)
+                }
             }
         }
 
-        observerRef.current = new IntersectionObserver(
-            handler as IntersectionObserverCallback,
-            { threshold: 0 },
-        )
+        // Yangi observer yaratish
+        observerRef.current = new IntersectionObserver(handler, {
+            threshold: 0,
+            root: null, // viewport ni root sifatida ishlatish
+            rootMargin: '100px', // 100px oldinroq trigger qilish
+        })
 
-        observerRef.current.observe(targetRef.current)
+        const target = targetRef.current
+        if (target) {
+            observerRef.current.observe(target)
+        }
 
-        return () => observe?.disconnect()
+        // Cleanup
+        return () => {
+            if (observerRef.current) {
+                observerRef.current.disconnect()
+            }
+        }
     }, [isLoading, onLoadMore, shouldStop])
 
     return {
@@ -66,3 +104,72 @@ function useInfiniteScroll(options?: Options) {
 }
 
 export default useInfiniteScroll
+
+// import { LegacyRef, useEffect, useRef, useState } from 'react'
+
+// type Options = {
+//     offset?: string
+//     shouldStop?: boolean
+//     onLoadMore?: () => Promise<void>
+// }
+
+// function useInfiniteScroll(options?: Options) {
+//     const { offset = '0px', shouldStop = false, onLoadMore } = options ?? {}
+
+//     const [isLoading, setIsLoading] = useState(false)
+//     const observerRef = useRef<IntersectionObserver>(null)
+//     const targetRef = useRef(document.createElement('div'))
+
+//     const containerRef: LegacyRef<HTMLElement> = (container) => {
+//         if (container) {
+//             container.append(targetRef.current)
+//             container.style.position = 'relative'
+//         }
+//     }
+
+//     useEffect(() => {
+//         const target = targetRef.current
+//         target.toggleAttribute('data-infinite-scroll-detector', true)
+//         target.style.position = 'absolute'
+//         target.style.bottom = offset
+//         if (target.offsetTop < 0) target.style.bottom = '0px'
+//     }, [offset, isLoading])
+
+//     useEffect(() => {
+//         const observe = observerRef.current
+//         if (observe) {
+//             observe.disconnect()
+//         }
+
+//         async function handler([
+//             { isIntersecting },
+//         ]: IntersectionObserverEntry[]) {
+//             if (
+//                 isIntersecting &&
+//                 !isLoading &&
+//                 !shouldStop &&
+//                 typeof onLoadMore === 'function'
+//             ) {
+//                 setIsLoading(true)
+//                 await onLoadMore()
+//                 setIsLoading(false)
+//             }
+//         }
+
+//         observerRef.current = new IntersectionObserver(
+//             handler as IntersectionObserverCallback,
+//             { threshold: 0 },
+//         )
+
+//         observerRef.current.observe(targetRef.current)
+
+//         return () => observe?.disconnect()
+//     }, [isLoading, onLoadMore, shouldStop])
+
+//     return {
+//         isLoading,
+//         containerRef,
+//     }
+// }
+
+// export default useInfiniteScroll

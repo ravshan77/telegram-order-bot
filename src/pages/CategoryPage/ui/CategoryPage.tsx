@@ -1,5 +1,6 @@
 import { GoBack } from '@/shared/ui/kit-pro'
 import { Alert, Tabs } from '@/shared/ui/kit'
+import React, { useState, useMemo } from 'react'
 import TabNav from '@/shared/ui/kit/Tabs/TabNav'
 import { useCategory } from '@/entities/category'
 import { getCategoryPath } from '@/shared/config'
@@ -7,11 +8,10 @@ import TabList from '@/shared/ui/kit/Tabs/TabList'
 import { ProductCard } from '@/widgets/ProductCard'
 import TabContent from '@/shared/ui/kit/Tabs/TabContent'
 import { useNavigate, useParams } from 'react-router-dom'
-import React, { useState, useCallback, useMemo } from 'react'
 import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
 import { transformProductToView, useProducts } from '@/entities/product'
 
-const LIMIT_PAGINATION = 20
+const LIMIT_PAGINATION = 50
 
 export const CategoryPage: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>()
@@ -43,15 +43,19 @@ export const CategoryPage: React.FC = () => {
         },
     )
 
-    const handleLoadMore = useCallback(async () => {
-        setLimit((prev) => prev + LIMIT_PAGINATION)
-    }, [])
+    const handleLoadMore = async () => {
+        if (
+            productsData?.filtered_count &&
+            productsData?.filtered_count >= limit
+        ) {
+            setLimit((prev) => prev + LIMIT_PAGINATION)
+        }
+    }
 
     const { scrollContainerRef, sentinelRef, isDesktop } =
         useVerticalInfiniteScroll({
             onLoadMore: handleLoadMore,
             isLoading: isFetching,
-            threshold: 70,
         })
 
     const handleTabChange = (tabValue: string) => {
@@ -125,14 +129,19 @@ export const CategoryPage: React.FC = () => {
                             {productsError?.message}
                         </Alert>
                     ) : productViews.length === 0 && isLoadingProducts ? (
-                        <div className="h-96" />
+                        <div className="h-96">
+                            <p className="flex justify-center items-center text-center h-full w-full text-gray-500">
+                                {' '}
+                                Загрузка ...{' '}
+                            </p>{' '}
+                        </div>
                     ) : productViews.length === 0 ? (
                         <div className="flex justify-center items-center h-96 text-gray-500">
                             Товары не найдены
                         </div>
                     ) : (
                         <TabContent value={currentTab}>
-                            <div className="grid grid-cols-2 gap-2 mb-6">
+                            <div className="grid grid-cols-2 gap-2">
                                 {productViews.map((product) => (
                                     <ProductCard
                                         key={product.id}

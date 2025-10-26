@@ -110,6 +110,8 @@ export interface ItemResponse {
     categories: Category[]
     categoriesTree: CategoryTree[]
     data: Items[]
+    filtered_count: number
+    total_count: number
 }
 
 export interface ProductFilters {

@@ -222,9 +222,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         ))
                     )}
                 </Swiper>
-                {product.discount && (
+                {product?.discount && (
                     <div className="absolute bottom-0 left-0 bg-red-500 text-white px-2 py-1 rounded-se-lg text-xs font-bold">
-                        -{product.discount}%
+                        -{product?.discount}%
                     </div>
                 )}
             </div>

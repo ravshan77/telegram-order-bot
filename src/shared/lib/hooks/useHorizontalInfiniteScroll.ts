@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 interface UseHorizontalInfiniteScrollProps {
     onLoadMore: () => Promise<void> | void
@@ -9,7 +9,7 @@ interface UseHorizontalInfiniteScrollProps {
 export const useHorizontalInfiniteScroll = ({
     onLoadMore,
     isLoading = false,
-    threshold = 100,
+    threshold = 0.1,
 }: UseHorizontalInfiniteScrollProps) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null)
     const [isAtEnd, setIsAtEnd] = useState(false)
@@ -19,39 +19,31 @@ export const useHorizontalInfiniteScroll = ({
 
     useEffect(() => {
         const userAgent = navigator.userAgent.toLowerCase()
-
         const isMobile = /iphone|ipad|android|mobile|ipod/.test(userAgent)
-
-        // console.log({ userAgent })
-        // console.log({ isMobile })
-
         setIsDesktop(!isMobile)
     }, [])
 
-    const handleScroll = useCallback(
-        async (e: React.UIEvent<HTMLDivElement>) => {
-            if (isLoadingRef.current || isAtEnd) return
+    const handleScroll = async (e: React.UIEvent<HTMLDivElement>) => {
+        if (isLoadingRef.current || isAtEnd) return
 
-            const element = e.currentTarget
-            const isNearEnd =
-                element.scrollLeft + element.clientWidth >=
-                element.scrollWidth - threshold
+        const element = e.currentTarget
+        const isNearEnd =
+            element.scrollLeft + element.clientWidth >=
+            element.scrollWidth - threshold
 
-            if (isNearEnd && !isLoadingRef.current) {
-                isLoadingRef.current = true
-                setIsAtEnd(true)
-                try {
-                    await onLoadMore()
-                } finally {
-                    setTimeout(() => {
-                        isLoadingRef.current = false
-                        setIsAtEnd(false)
-                    }, 100)
-                }
+        if (isNearEnd && !isLoadingRef.current) {
+            isLoadingRef.current = true
+            setIsAtEnd(true)
+            try {
+                await onLoadMore()
+            } finally {
+                setTimeout(() => {
+                    isLoadingRef.current = false
+                    setIsAtEnd(false)
+                }, 100)
             }
-        },
-        [isAtEnd, onLoadMore, threshold],
-    )
+        }
+    }
 
     useEffect(() => {
         isLoadingRef.current = isLoading
