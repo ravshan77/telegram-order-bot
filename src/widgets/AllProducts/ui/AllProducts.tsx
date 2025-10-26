@@ -1,5 +1,6 @@
 import { Alert } from '@/shared/ui/kit'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { ScrollToTop } from '@/shared/ui/kit-pro'
 import { ProductCard } from '@/widgets/ProductCard'
 import { useVerticalInfiniteScroll } from '@/shared/lib/hooks'
 import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
@@ -9,6 +10,7 @@ const LIMIT_PAGINATION = 50
 
 export const AllProducts = () => {
     const [limit, setLimit] = useState(LIMIT_PAGINATION)
+    const scrollContainerElementRef = useRef<HTMLDivElement>(null)
     const searchItemName = useHeaderSearchStore((store) => store.searchItemName)
 
     const {
@@ -52,9 +54,19 @@ export const AllProducts = () => {
         )
     }
 
+    const combinedRef = (node: HTMLDivElement | null) => {
+        scrollContainerElementRef.current = node
+        const hookRef = scrollContainerRef as any
+        if (hookRef && typeof hookRef === 'function') {
+            hookRef(node)
+        } else if (hookRef && 'current' in hookRef) {
+            hookRef.current = node
+        }
+    }
+
     return (
         <div
-            ref={scrollContainerRef}
+            ref={combinedRef}
             className={`py-4 overflow-y-auto ${isDesktop ? ' scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100' : ''}`}
             style={{ maxHeight: 'calc(100vh - 200px)' }}
         >
@@ -89,6 +101,10 @@ export const AllProducts = () => {
                     ) : null}
                 </div>
             )}
+            <ScrollToTop
+                containerRef={scrollContainerElementRef}
+                offset={1000}
+            />
         </div>
     )
 }
