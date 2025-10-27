@@ -35,7 +35,11 @@ export const BasketItem = ({
 
     return (
         <div className="bg-white rounded-2xl p-2 border cursor-pointer">
-            <QuantitySheet isOpen={isOpenSheet} setIsOpen={setIsOpenSheet} />
+            <QuantitySheet
+                isOpen={isOpenSheet}
+                item={found_item}
+                setIsOpen={setIsOpenSheet}
+            />
             <div className="flex gap-3">
                 <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
                     {!images?.length ? (
