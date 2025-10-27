@@ -3,8 +3,8 @@ import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { OrderItem } from '@/entities/order'
 import { useItemMap } from '@/shared/lib/hooks'
+import { Minus, Plus, Trash2, Image } from 'lucide-react'
 import { numericFormat } from '@/shared/lib/numericFormat'
-import { Minus, Plus, Trash2, Image, ArrowRight } from 'lucide-react'
 import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 
 interface BasketItemProps {
@@ -66,33 +66,22 @@ export const BasketItem = ({
                 <div className="gap-2">
                     <span className="border bg-gray-100 p-1 px-2 rounded-md inline-flex items-center">
                         {item?.quantity} шт
-                        {found_item?.item?.package_measurements?.length ? (
-                            <>
-                                &ensp; <ArrowRight size={'14'} /> &ensp;
-                                {
-                                    found_item?.item.package_measurements[0]
-                                        ?.quantity
-                                }{' '}
-                                {
-                                    found_item?.item?.package_measurements[0]
-                                        ?.name
-                                }
-                            </>
-                        ) : null}
                     </span>
                     <span> x </span>
                     <span className="border bg-gray-100 p-1 px-2 rounded-md">
                         {numericFormat(item?.price?.amount)}{' '}
                         {item?.net_price?.currency?.name}
                     </span>
-                    <p className="text-base font-bold mt-1">
-                        = {numericFormat(item?.net_price.amount)}{' '}
+                    <span> = </span>
+
+                    <span className="border bg-gray-100 p-1 px-2 rounded-md">
+                        {numericFormat(item?.net_price.amount)}{' '}
                         {item?.net_price?.currency?.name}
-                    </p>
+                    </span>
                 </div>
             </div>
 
-            <div className="flex justify-between h-10">
+            <div className="flex justify-between h-10 mt-3">
                 <Button
                     variant="plain"
                     className="text-gray-400 h-full0 hover:text-red-500"
