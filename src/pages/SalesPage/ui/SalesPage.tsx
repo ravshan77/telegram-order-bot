@@ -189,6 +189,7 @@ export const SalesPage = () => {
                                 <div
                                     key={sale.id}
                                     className="bg-white border rounded-lg shadow-sm p-3"
+                                    onClick={() => goToSaleDetail(sale?.id)}
                                 >
                                     <div className="flex items-start justify-between mb-3">
                                         <Tag
@@ -218,10 +219,7 @@ export const SalesPage = () => {
                                         </span>
                                     </div>
 
-                                    <div
-                                        className="space-y-2 text-sm cursor-pointer"
-                                        onClick={() => goToSaleDetail(sale?.id)}
-                                    >
+                                    <div className="space-y-2 text-sm cursor-pointer">
                                         <div className="space-y-3">
                                             <div className="flex items-start justify-between">
                                                 <span className="text-xs text-gray-600">

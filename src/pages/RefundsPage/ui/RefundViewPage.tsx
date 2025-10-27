@@ -4,9 +4,10 @@ import { Download } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { GoBack } from '@/shared/ui/kit-pro'
-import { Alert, Button, Spinner } from '@/shared/ui/kit'
+import { Alert, Button, Spinner, Tag } from '@/shared/ui/kit'
 import { refundsApi, useRefund } from '@/entities/refund'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import { ApprovedStatus } from '@/shared/config'
 
 export const RefundViewPage: React.FC = () => {
     const { refundId } = useParams<{ refundId: string }>()
@@ -60,17 +61,23 @@ export const RefundViewPage: React.FC = () => {
                             <h2 className="text-base font-semibold">
                                 Возврат № {refund?.number}
                             </h2>
-                            <span
-                                className={`px-3 py-1 text-xs font-medium rounded-full ${
-                                    refund?.is_approved
-                                        ? 'bg-green-50 text-green-500'
-                                        : 'bg-red-50 text-red-500'
-                                }`}
+
+                            <Tag
+                                className={
+                                    ApprovedStatus[Number(refund?.is_approved)]
+                                        .bgClass
+                                }
                             >
-                                {refund?.is_approved
-                                    ? 'Подтвержден'
-                                    : 'Не подтвержден'}
-                            </span>
+                                <span
+                                    className={`capitalize font-semibold ${ApprovedStatus[Number(refund?.is_approved)].textClass}`}
+                                >
+                                    {
+                                        ApprovedStatus[
+                                            Number(refund?.is_approved)
+                                        ].label
+                                    }
+                                </span>
+                            </Tag>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-4">

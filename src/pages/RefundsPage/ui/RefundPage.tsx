@@ -192,6 +192,7 @@ export const RefundsPage = () => {
                                 <div
                                     key={sale.id}
                                     className="bg-white border rounded-lg shadow-sm p-3"
+                                    onClick={() => goToRefundDetail(sale?.id)}
                                 >
                                     <div className="flex items-start justify-between mb-3">
                                         <Tag
@@ -221,12 +222,7 @@ export const RefundsPage = () => {
                                         </span>
                                     </div>
 
-                                    <div
-                                        className="space-y-2 text-sm cursor-pointer"
-                                        onClick={() =>
-                                            goToRefundDetail(sale?.id)
-                                        }
-                                    >
+                                    <div className="space-y-2 text-sm cursor-pointer">
                                         <div className="flex justify-between">
                                             <span className="text-gray-500">
                                                 Оплата:

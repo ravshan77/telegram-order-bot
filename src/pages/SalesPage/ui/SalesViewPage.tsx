@@ -5,10 +5,10 @@ import React, { useEffect } from 'react'
 import { useSale } from '@/entities/sales'
 import { useParams } from 'react-router-dom'
 import { GoBack } from '@/shared/ui/kit-pro'
-import { Alert, Button, Spinner } from '@/shared/ui/kit'
+import { Alert, Button, Spinner, Tag } from '@/shared/ui/kit'
 import { salesApi } from '@/entities/sales/api/salesApi'
 import { numericFormat } from '@/shared/lib/numericFormat'
-import { DiscountType } from '@/shared/config'
+import { ApprovedStatus, DiscountType } from '@/shared/config'
 
 export const SalesViewPage: React.FC = () => {
     const { saleId } = useParams<{ saleId: string }>()
@@ -65,17 +65,23 @@ export const SalesViewPage: React.FC = () => {
                             <h2 className="text-base font-semibold">
                                 Продажа № {sale.number}
                             </h2>
-                            <span
-                                className={`px-3 py-1 text-xs font-medium rounded-full ${
-                                    sale.is_approved
-                                        ? 'bg-green-50 text-green-500'
-                                        : 'bg-red-50 text-red-500'
-                                }`}
+
+                            <Tag
+                                className={
+                                    ApprovedStatus[Number(sale?.is_approved)]
+                                        .bgClass
+                                }
                             >
-                                {sale.is_approved
-                                    ? 'Подтвержден'
-                                    : 'Не подтвержден'}
-                            </span>
+                                <span
+                                    className={`capitalize font-semibold ${ApprovedStatus[Number(sale?.is_approved)].textClass}`}
+                                >
+                                    {
+                                        ApprovedStatus[
+                                            Number(sale?.is_approved)
+                                        ].label
+                                    }
+                                </span>
+                            </Tag>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
