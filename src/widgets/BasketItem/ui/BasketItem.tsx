@@ -3,8 +3,12 @@ import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { OrderItem } from '@/entities/order'
 import { useItemMap } from '@/shared/lib/hooks'
+import { useNavigate } from 'react-router-dom'
+import { getProductPath } from '@/shared/config'
 import { Minus, Plus, Trash2, Image } from 'lucide-react'
+import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import { transformProductToView } from '@/entities/product'
 import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 
 interface BasketItemProps {
@@ -26,6 +30,8 @@ export const BasketItem = ({
 }: BasketItemProps) => {
     const { getItemById } = useItemMap()
     const [isOpenSheet, setIsOpenSheet] = useState(false)
+    const navigate = useNavigate()
+    const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
 
     const found_item = getItemById(item?.item?.id)
 
@@ -33,8 +39,15 @@ export const BasketItem = ({
         (img) => `${APP_CDN}${img?.path}`,
     )
 
+    const productView = () => transformProductToView(found_item!)
+
     const updateQuantity = (quantity: number) => {
         onUpdateQuantity(item?.id, item?.item?.id, quantity)
+    }
+
+    const goShowProduct = () => {
+        setSelectedProduct(productView())
+        navigate(getProductPath(item?.id))
     }
 
     return (
@@ -50,7 +63,7 @@ export const BasketItem = ({
                     }
                 />
             )}
-            <div className="flex gap-3">
+            <div className="flex gap-3" onClick={() => goShowProduct()}>
                 <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
                     {!images?.length ? (
                         <Image size={40} className="w-full h-full" />
