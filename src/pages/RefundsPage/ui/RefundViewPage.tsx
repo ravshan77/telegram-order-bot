@@ -143,15 +143,15 @@ export const RefundViewPage: React.FC = () => {
                                         </span>
                                     </div>
 
-                                    <div className="flex items-center justify-between">
+                                    {/* <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-600">
                                             Скидка:
                                         </span>
                                         <span className="text-sm font-medium">
                                             {item?.discount?.value || 0}%
                                         </span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
+                                    </div> */}
+                                    {/* <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-600">
                                             Цена со скидкой:
                                         </span>
@@ -162,7 +162,7 @@ export const RefundViewPage: React.FC = () => {
                                             )}{' '}
                                             {item?.price?.currency?.name}
                                         </span>
-                                    </div>
+                                    </div> */}
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-600">
                                             Количество:
@@ -190,7 +190,7 @@ export const RefundViewPage: React.FC = () => {
                                     Общая сумма:
                                 </span>
                                 <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {refund?.totals?.map((total) => (
+                                    {refund?.net_price?.map((total) => (
                                         <span
                                             key={total.currency.id}
                                             className="text-sm font-semibold text-primary"
@@ -198,24 +198,7 @@ export const RefundViewPage: React.FC = () => {
                                             {numericFormat(total.amount)}{' '}
                                             {total.currency.name}
                                         </span>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="flex flex-col items-start justify-between w-1/2">
-                                <span className="text-xs text-gray-600">
-                                    Скидка:
-                                </span>
-
-                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {refund?.exact_discounts?.map((total) => (
-                                        <span
-                                            key={total.currency.id}
-                                            className="text-sm font-semibold text-primary"
-                                        >
-                                            {numericFormat(total.amount)}{' '}
-                                            {total.currency.name}
-                                        </span>
-                                    ))}
+                                    )) ?? 0}
                                 </div>
                             </div>
                         </div>
@@ -226,7 +209,7 @@ export const RefundViewPage: React.FC = () => {
                                 </span>
 
                                 <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {refund?.payment?.debt_states?.map(
+                                    {refund?.payout?.debt_states?.map(
                                         (total) => (
                                             <span
                                                 key={total.currency.id}
@@ -236,7 +219,7 @@ export const RefundViewPage: React.FC = () => {
                                                 {total.currency.name}
                                             </span>
                                         ),
-                                    )}
+                                    ) ?? 0}
                                 </div>
                             </div>
                             <div className="flex flex-col items-start justify-between w-1/2">
@@ -252,7 +235,7 @@ export const RefundViewPage: React.FC = () => {
                                             {numericFormat(total.amount)}{' '}
                                             {total.currency.name}
                                         </span>
-                                    ))}
+                                    )) ?? 0}
                                 </div>
                             </div>
                         </div>

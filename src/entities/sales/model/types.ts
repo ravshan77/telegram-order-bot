@@ -47,7 +47,8 @@ export interface Sale {
     is_approved: boolean
     notes?: string // for refund
     items: SaleItem[]
-    payment: Payment | null
+    payment?: Payment | null
+    payout?: Payment | null
     net_price: CurrencyAmount[]
     totals: CurrencyAmount[]
     totals_after_exact_discount: CurrencyAmount[]

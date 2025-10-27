@@ -8,6 +8,7 @@ import { GoBack } from '@/shared/ui/kit-pro'
 import { Alert, Button, Spinner } from '@/shared/ui/kit'
 import { salesApi } from '@/entities/sales/api/salesApi'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import { DiscountType } from '@/shared/config'
 
 export const SalesViewPage: React.FC = () => {
     const { saleId } = useParams<{ saleId: string }>()
@@ -48,8 +49,11 @@ export const SalesViewPage: React.FC = () => {
         )
     }
 
+    const is_excat_discount =
+        sale.exact_discounts.length > 0 || Number(sale?.percent_discount) > 0
+
     return (
-        <div className="pb-32">
+        <div className="pb-44">
             <div>
                 <div className="bg-white w-full">
                     <GoBack navigatePath={-1} />
@@ -138,33 +142,33 @@ export const SalesViewPage: React.FC = () => {
                                             {item.price.currency.name}
                                         </span>
                                     </div>
-                                    {item.discount && (
-                                        <>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-sm text-gray-600">
-                                                    Скидка:
-                                                </span>
-                                                <span className="text-sm font-medium">
-                                                    {item.discount.value}%
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-sm text-gray-600">
-                                                    Цена со скидкой:
-                                                </span>
-                                                <span className="text-sm font-medium">
-                                                    {numericFormat(
-                                                        item.net_price.amount /
-                                                            item.quantity,
-                                                    )}{' '}
-                                                    {
-                                                        item.net_price.currency
-                                                            .name
-                                                    }
-                                                </span>
-                                            </div>
-                                        </>
-                                    )}
+
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-600">
+                                            Скидка:
+                                        </span>
+                                        <span className="text-sm font-medium">
+                                            {item?.discount?.value}{' '}
+                                            {item?.discount?.type &&
+                                            item?.discount?.value
+                                                ? DiscountType[
+                                                      item?.discount?.type
+                                                  ]?.label
+                                                : ''}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-600">
+                                            Цена со скидкой:
+                                        </span>
+                                        <span className="text-sm font-medium">
+                                            {numericFormat(
+                                                item.net_price.amount /
+                                                    item.quantity,
+                                            )}{' '}
+                                            {item.net_price.currency.name}
+                                        </span>
+                                    </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-600">
                                             Итого:
@@ -183,16 +187,16 @@ export const SalesViewPage: React.FC = () => {
 
                 {/* Fixed Footer - Summary */}
 
-                <div className="fixed bottom-0 h-40 left-0 right-0 bg-white border-t shadow-2xl">
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-2xl">
                     <div className="m-4 px-4 py-4 space-y-3 rounded-md bg-primary-subtle">
-                        <div className="flex justify-between">
-                            <div className="flex flex-col items-start justify-between w-1/2">
-                                <span className="text-xs text-gray-600">
-                                    Общая сумма:
-                                </span>
+                        <div className="flex items-start justify-between">
+                            <span className="text-xs text-gray-600">
+                                Общая сумма:
+                            </span>
 
-                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {sale.totals?.map((crn) => (
+                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {sale.totals.length ? (
+                                    sale.totals?.map((crn) => (
                                         <span
                                             key={crn?.currency.id}
                                             className="text-base font-bold text-gray-600"
@@ -200,47 +204,24 @@ export const SalesViewPage: React.FC = () => {
                                             {numericFormat(crn?.amount)}{' '}
                                             {crn?.currency.name}
                                         </span>
-                                    )) ?? (
-                                        <>
-                                            <span className="text-base font-bold text-gray-600">
-                                                0
-                                            </span>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="flex flex-col items-start justify-between w-1/2">
-                                <span className="text-xs text-gray-600">
-                                    Скидка:
-                                </span>
-
-                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {sale.exact_discounts?.map((crn) => (
-                                        <span
-                                            key={crn?.currency.id}
-                                            className="text-base font-bold text-gray-600"
-                                        >
-                                            {numericFormat(crn?.amount)}{' '}
-                                            {crn?.currency.name}
+                                    ))
+                                ) : (
+                                    <>
+                                        <span className="text-base font-bold text-gray-600">
+                                            0
                                         </span>
-                                    )) ?? (
-                                        <>
-                                            <span className="text-base font-bold text-gray-600">
-                                                0
-                                            </span>
-                                        </>
-                                    )}
-                                </div>
+                                    </>
+                                )}
                             </div>
                         </div>
-                        <div className="flex justify-between">
-                            <div className="flex flex-col items-start justify-between w-1/2">
-                                <span className="text-xs text-gray-600">
-                                    Оплата:
-                                </span>
+                        <div className="flex items-start justify-between">
+                            <span className="text-xs text-gray-600">
+                                Скидка:
+                            </span>
 
-                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {sale.payment?.debt_states?.map((crn) => (
+                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {sale.exact_discounts.length ? (
+                                    sale.exact_discounts?.map((crn) => (
                                         <span
                                             key={crn?.currency.id}
                                             className="text-base font-bold text-gray-600"
@@ -248,22 +229,72 @@ export const SalesViewPage: React.FC = () => {
                                             {numericFormat(crn?.amount)}{' '}
                                             {crn?.currency.name}
                                         </span>
-                                    )) ?? (
-                                        <>
-                                            <span className="text-base font-bold text-gray-600">
+                                    ))
+                                ) : (
+                                    <>
+                                        <span className="text-base font-bold text-gray-600">
+                                            {sale?.percent_discount ? (
+                                                <>
+                                                    {numericFormat(
+                                                        sale?.percent_discount,
+                                                    )}{' '}
+                                                    %
+                                                </>
+                                            ) : (
                                                 0
-                                            </span>
-                                        </>
-                                    )}
+                                            )}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+
+                        {is_excat_discount ? (
+                            <div className="flex items-start justify-between">
+                                <span className="text-xs text-gray-600">
+                                    Цена со скидкой:
+                                </span>
+
+                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                    {sale.percent_discount
+                                        ? sale.after_exact_discounts_and_percent_discount?.map(
+                                              (crn) => (
+                                                  <span
+                                                      key={crn?.currency.id}
+                                                      className="text-base font-bold text-gray-600"
+                                                  >
+                                                      {numericFormat(
+                                                          crn?.amount,
+                                                      )}{' '}
+                                                      {crn?.currency.name}
+                                                  </span>
+                                              ),
+                                          )
+                                        : sale.totals_after_exact_discount?.map(
+                                              (crn) => (
+                                                  <span
+                                                      key={crn?.currency.id}
+                                                      className="text-base font-bold text-gray-600"
+                                                  >
+                                                      {numericFormat(
+                                                          crn?.amount,
+                                                      )}{' '}
+                                                      {crn?.currency.name}
+                                                  </span>
+                                              ),
+                                          )}
                                 </div>
                             </div>
-                            <div className="flex flex-col items-start justify-between w-1/2">
-                                <span className="text-xs text-gray-600">
-                                    Долг:
-                                </span>
+                        ) : null}
 
-                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {sale.debts?.map((crn) => (
+                        <div className="flex items-start justify-between">
+                            <span className="text-xs text-gray-600">
+                                Оплата:
+                            </span>
+
+                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {sale.payment?.debt_states.length ? (
+                                    sale.payment?.debt_states?.map((crn) => (
                                         <span
                                             key={crn?.currency.id}
                                             className="text-base font-bold text-gray-600"
@@ -271,14 +302,37 @@ export const SalesViewPage: React.FC = () => {
                                             {numericFormat(crn?.amount)}{' '}
                                             {crn?.currency.name}
                                         </span>
-                                    )) ?? (
-                                        <>
-                                            <span className="text-base font-bold text-gray-600">
-                                                0
-                                            </span>
-                                        </>
-                                    )}
-                                </div>
+                                    ))
+                                ) : (
+                                    <>
+                                        <span className="text-base font-bold text-gray-600">
+                                            0
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        <div className="flex items-start justify-between">
+                            <span className="text-xs text-gray-600">Долг:</span>
+
+                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {sale.debts.length ? (
+                                    sale.debts?.map((crn) => (
+                                        <span
+                                            key={crn?.currency.id}
+                                            className="text-base font-bold text-red-500"
+                                        >
+                                            {numericFormat(crn?.amount)}{' '}
+                                            {crn?.currency.name}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <>
+                                        <span className="text-base font-bold text-gray-600">
+                                            0
+                                        </span>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
