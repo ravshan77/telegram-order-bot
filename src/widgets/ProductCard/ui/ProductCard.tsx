@@ -5,28 +5,29 @@ import {
     useDeleteOrderItem,
     useNotApprovedOrder,
 } from '@/entities/order'
-import React, { useCallback, useRef } from 'react'
 import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { Pagination } from 'swiper/modules'
 import { useNavigate } from 'react-router-dom'
 import { getProductPath } from '@/shared/config'
+import { ProductView } from '@/entities/product'
 import { useFlyToCart } from '@/shared/lib/hooks'
 import { Image, Minus, Plus } from 'lucide-react'
-import { ProductView } from '@/entities/product'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import React, { useCallback, useRef, useState } from 'react'
+import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 
 interface ProductCardProps {
     product: ProductView
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+    const [isOpenSheet, setIsOpenSheet] = useState(false)
     const navigate = useNavigate()
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
-
     const { data: order, isPending } = useNotApprovedOrder()
 
     const registerOrder = useRegisterOrder()
@@ -160,29 +161,45 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         // +/- buttonlar
         if (cartItem) {
             return (
-                <div className="flex items-center justify-between h-10 rounded border overflow-hidden">
-                    <Button
-                        variant="plain"
-                        className="w-12 h-full flex items-center justify-center border-none outline-none"
-                        icon={<Minus size={20} className="text-gray-700" />}
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            handleUpdateQuantity(cartItem.quantity - 1)
-                        }}
-                    />
-                    <span className="text-base font-medium w-8 text-center">
-                        {cartItem.quantity}
-                    </span>
-                    <Button
-                        variant="plain"
-                        className="w-12 h-full flex items-center justify-center border-none outline-none"
-                        icon={<Plus size={20} className="text-gray-700" />}
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            handleUpdateQuantity(cartItem.quantity + 1)
-                        }}
-                    />
-                </div>
+                <>
+                    {isOpenSheet && (
+                        <UpdateQuantityDrawer
+                            isOpen={isOpenSheet}
+                            quantity={cartItem?.quantity}
+                            setIsOpen={setIsOpenSheet}
+                            updateQuantity={handleUpdateQuantity}
+                            package_measurements={
+                                product?.package_measurements ?? []
+                            }
+                        />
+                    )}
+                    <div className="flex items-center justify-between h-10 rounded border overflow-hidden">
+                        <Button
+                            variant="plain"
+                            className="w-12 h-full flex items-center justify-center border-none outline-none"
+                            icon={<Minus size={20} className="text-gray-700" />}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleUpdateQuantity(cartItem.quantity - 1)
+                            }}
+                        />
+                        <span
+                            className="text-base font-medium w-8 text-center"
+                            onClick={() => setIsOpenSheet(true)}
+                        >
+                            {cartItem.quantity}
+                        </span>
+                        <Button
+                            variant="plain"
+                            className="w-12 h-full flex items-center justify-center border-none outline-none"
+                            icon={<Plus size={20} className="text-gray-700" />}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleUpdateQuantity(cartItem.quantity + 1)
+                            }}
+                        />
+                    </div>
+                </>
             )
         }
 

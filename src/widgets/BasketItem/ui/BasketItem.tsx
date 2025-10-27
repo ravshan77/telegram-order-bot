@@ -5,7 +5,7 @@ import { OrderItem } from '@/entities/order'
 import { useItemMap } from '@/shared/lib/hooks'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import { Minus, Plus, Trash2, Image, ArrowRight } from 'lucide-react'
-import QuantitySheet from './QuantitySheet'
+import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 
 interface BasketItemProps {
     item: OrderItem
@@ -33,13 +33,23 @@ export const BasketItem = ({
         (img) => `${APP_CDN}${img?.path}`,
     )
 
+    const updateQuantity = (quantity: number) => {
+        onUpdateQuantity(item?.id, item?.item?.id, quantity)
+    }
+
     return (
         <div className="bg-white rounded-2xl p-2 border cursor-pointer">
-            <QuantitySheet
-                isOpen={isOpenSheet}
-                item={found_item}
-                setIsOpen={setIsOpenSheet}
-            />
+            {isOpenSheet && (
+                <UpdateQuantityDrawer
+                    isOpen={isOpenSheet}
+                    quantity={item.quantity}
+                    setIsOpen={setIsOpenSheet}
+                    updateQuantity={updateQuantity}
+                    package_measurements={
+                        found_item?.item?.package_measurements ?? []
+                    }
+                />
+            )}
             <div className="flex gap-3">
                 <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
                     {!images?.length ? (

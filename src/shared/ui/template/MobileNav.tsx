@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Apple } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Drawer } from '@/shared/ui/kit'
 import Loading from '../kit-pro/Loading'
 import appConfig from '@/app/config/app.config'
@@ -13,7 +13,6 @@ import { DIR_RTL } from '@/shared/config/constants/theme.constant'
 import withHeaderItem, {
     WithHeaderItemProps,
 } from '@/shared/lib/hoc/withHeaderItem'
-import { Link } from 'react-router-dom'
 
 const VerticalMenuContent = lazy(
     () => import('@/shared/ui/template/VerticalMenuContent'),
@@ -34,7 +33,7 @@ const MobileNavToggle = withHeaderItem<
 const NavTitle = () => {
     return (
         <div className="rounded-full">
-            <Apple size={35} />
+            <img src="/public/hippo-logo-150x41.png" className="w-30 h-8" />
         </div>
     )
 }

@@ -57,7 +57,7 @@ interface Price {
     currency: Currency
 }
 
-interface Package_measurements {
+export interface Package_measurements {
     name: string
     quantity: number
 }
