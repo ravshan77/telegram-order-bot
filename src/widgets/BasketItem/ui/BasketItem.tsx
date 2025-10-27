@@ -3,7 +3,7 @@ import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { OrderItem } from '@/entities/order'
 import { useItemMap } from '@/shared/lib/hooks'
-import { Minus, Plus, Trash2, Image } from 'lucide-react'
+import { Minus, Plus, Trash2, Image, ArrowRight } from 'lucide-react'
 import { numericFormat } from '@/shared/lib/numericFormat'
 
 interface BasketItemProps {
@@ -30,49 +30,67 @@ export const BasketItem = ({
     const images = found_item?.item?.images?.map(
         (img) => `${APP_CDN}${img?.path}`,
     )
-    console.log(found_item)
 
     return (
-        <div className="bg-white rounded-2xl p-4 border cursor-pointer">
+        <div className="bg-white rounded-2xl p-2 border cursor-pointer">
             <div className="flex gap-3">
-                <div className="w-20 h-20 flex-shrink-0 border rounded-lg overflow-hidden">
+                <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
                     {!images?.length ? (
                         <Image size={40} className="w-full h-full" />
                     ) : (
                         <img src={images[0]} alt="Mahsulot" />
                     )}
                 </div>
-
-                <div className="flex-1 min-w-0 ">
-                    <h3 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2">
-                        {item?.item?.name}
-                    </h3>
-                    <div className="flex justify-between gap-2">
-                        <p className="text-sm font-bold text-primary mb-1">
-                            {item?.quantity} шт x{' '}
-                            {numericFormat(item?.price?.amount)} ={' '}
-                            {numericFormat(item?.net_price.amount)}{' '}
-                            {item?.net_price?.currency?.name}
-                        </p>
-                    </div>
+                <h3 className="text-sm font-medium text-gray-900 line-clamp-3">
+                    {item?.item?.name}
+                </h3>
+            </div>
+            <div className="flex-1 min-w-0 mt-3">
+                <div className="gap-2">
+                    <span className="border bg-gray-50 p-1 px-2 rounded-md inline-flex items-center">
+                        {item?.quantity}(шт)
+                        {found_item?.item.package_measurements[0]?.quantity ? (
+                            <>
+                                &ensp; <ArrowRight size={'14'} className="" />{' '}
+                                &ensp;
+                                {
+                                    found_item?.item.package_measurements[0]
+                                        ?.quantity
+                                }
+                                (
+                                {found_item?.item.package_measurements[0]?.name}
+                                )
+                            </>
+                        ) : null}
+                    </span>
+                    <span> x </span>
+                    <span className="border bg-gray-50 p-1 px-2 rounded-md">
+                        {numericFormat(item?.price?.amount)}{' '}
+                        {item?.net_price?.currency?.name}
+                    </span>
+                    <p className="text-base font-bold mt-1">
+                        = {numericFormat(item?.net_price.amount)}{' '}
+                        {item?.net_price?.currency?.name}
+                    </p>
                 </div>
             </div>
 
-            <div className="flex items-center justify-evenly mt-4">
+            <div className="flex justify-between h-10">
                 <Button
                     variant="plain"
-                    className="p-2 text-gray-400 hover:text-red-500"
+                    className="text-gray-400 h-full0 hover:text-red-500"
+                    icon={<Trash2 size={20} />}
                     onClick={(e) => {
                         e.stopPropagation()
                         onRemove(item?.id)
                     }}
-                >
-                    <Trash2 size={20} />
-                </Button>
+                />
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between border rounded overflow-hidden">
                     <Button
-                        className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
+                        variant="plain"
+                        className="w-12 h-full flex items-center justify-center border-none outline-none"
+                        icon={<Minus size={16} className="text-gray-700" />}
                         onClick={(e) => {
                             e.stopPropagation()
                             onUpdateQuantity(
@@ -81,14 +99,14 @@ export const BasketItem = ({
                                 item?.quantity - 1,
                             )
                         }}
-                    >
-                        <Minus size={16} className="text-gray-700" />
-                    </Button>
+                    />
                     <span className="text-base font-medium w-8 text-center">
                         {item?.quantity}
                     </span>
                     <Button
-                        className="w-8 h-8 rounded-lg flex items-center p-0 justify-center"
+                        variant="plain"
+                        className="w-12 h-full flex items-center justify-center border-none outline-none"
+                        icon={<Plus size={16} className="text-gray-700" />}
                         onClick={(e) => {
                             e.stopPropagation()
                             onUpdateQuantity(
@@ -97,9 +115,7 @@ export const BasketItem = ({
                                 item?.quantity + 1,
                             )
                         }}
-                    >
-                        <Plus size={16} className="text-gray-700" />
-                    </Button>
+                    />
                 </div>
             </div>
         </div>

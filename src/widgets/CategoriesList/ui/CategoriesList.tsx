@@ -1,15 +1,14 @@
 import { APP_CDN } from '@/shared/api'
 import { Link } from 'react-router-dom'
+import { Alert, Button } from '@/shared/ui/kit'
 import { getCategoryPath } from '@/shared/config'
 import { useCategories } from '@/entities/category'
-import { Alert, Button, Spinner } from '@/shared/ui/kit'
 import { useHorizontalInfiniteScroll } from '@/shared/lib/hooks'
 import { capitalizeFirstLetter } from '@/shared/ui/kit/utils/capitalize'
 
 export const CategoriesList = () => {
     const {
         data,
-        isLoading: isLoadingProducts,
         isError: isErrorProducts,
         error: productsError,
     } = useCategories()
@@ -17,14 +16,6 @@ export const CategoriesList = () => {
     const { isDesktop } = useHorizontalInfiniteScroll({ onLoadMore: () => {} })
 
     const categoriesTree = data?.categoriesTree ?? []
-
-    if (isLoadingProducts) {
-        return (
-            <div className="flex justify-center items-center">
-                <Spinner size={40} />
-            </div>
-        )
-    }
 
     if (isErrorProducts) {
         return (

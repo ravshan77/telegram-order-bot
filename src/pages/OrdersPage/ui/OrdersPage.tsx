@@ -190,7 +190,7 @@ export const OrdersPage = () => {
                                             className={`text-xs font-semibold px-3 py-1 rounded ${
                                                 order.is_approved
                                                     ? 'bg-green-100 text-green-700'
-                                                    : 'bg-yellow-300 text-yellow-700'
+                                                    : 'bg-yellow-50 text-yellow-400'
                                             }`}
                                         >
                                             {order.is_approved
