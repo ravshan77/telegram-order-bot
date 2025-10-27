@@ -1,10 +1,11 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { OrderItem } from '@/entities/order'
 import { useItemMap } from '@/shared/lib/hooks'
-import { Minus, Plus, Trash2, Image, ArrowRight } from 'lucide-react'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import { Minus, Plus, Trash2, Image, ArrowRight } from 'lucide-react'
+import QuantitySheet from './QuantitySheet'
 
 interface BasketItemProps {
     item: OrderItem
@@ -24,6 +25,7 @@ export const BasketItem = ({
     onUpdateQuantity,
 }: BasketItemProps) => {
     const { getItemById } = useItemMap()
+    const [isOpenSheet, setIsOpenSheet] = useState(false)
 
     const found_item = getItemById(item?.item?.id)
 
@@ -33,6 +35,7 @@ export const BasketItem = ({
 
     return (
         <div className="bg-white rounded-2xl p-2 border cursor-pointer">
+            <QuantitySheet isOpen={isOpenSheet} setIsOpen={setIsOpenSheet} />
             <div className="flex gap-3">
                 <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
                     {!images?.length ? (
@@ -47,24 +50,26 @@ export const BasketItem = ({
             </div>
             <div className="flex-1 min-w-0 mt-3">
                 <div className="gap-2">
-                    <span className="border bg-gray-50 p-1 px-2 rounded-md inline-flex items-center">
+                    <span className="border bg-gray-100 p-1 px-2 rounded-md inline-flex items-center">
                         {item?.quantity}(шт)
                         {found_item?.item?.package_measurements?.length ? (
                             <>
-                                &ensp; <ArrowRight size={'14'} className="" />{' '}
-                                &ensp;
+                                &ensp; <ArrowRight size={'14'} /> &ensp;
                                 {
                                     found_item?.item.package_measurements[0]
                                         ?.quantity
                                 }
                                 (
-                                {found_item?.item.package_measurements[0]?.name}
+                                {
+                                    found_item?.item?.package_measurements[0]
+                                        ?.name
+                                }
                                 )
                             </>
                         ) : null}
                     </span>
                     <span> x </span>
-                    <span className="border bg-gray-50 p-1 px-2 rounded-md">
+                    <span className="border bg-gray-100 p-1 px-2 rounded-md">
                         {numericFormat(item?.price?.amount)}{' '}
                         {item?.net_price?.currency?.name}
                     </span>
@@ -109,6 +114,7 @@ export const BasketItem = ({
                         icon={<Plus size={16} className="text-gray-700" />}
                         onClick={(e) => {
                             e.stopPropagation()
+                            setIsOpenSheet(true)
                             onUpdateQuantity(
                                 item?.id,
                                 item?.item?.id,
