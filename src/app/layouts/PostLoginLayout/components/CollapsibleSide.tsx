@@ -1,28 +1,30 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/shared/ui/kit'
+import { Button, Input } from '@/shared/ui/kit'
 import Header from '@/shared/ui/template/Header'
 import { useTelegram } from '@/shared/lib/hooks'
-import { ShoppingCart, User } from 'lucide-react'
 import SideNav from '@/shared/ui/template/SideNav'
 import type { CommonProps } from '@/@types/common'
+import { Link, useLocation } from 'react-router-dom'
 import MobileNav from '@/shared/ui/template/MobileNav'
 import { useNotApprovedOrder } from '@/entities/order'
 import LayoutBase from '@/shared/ui/template/LayoutBase'
+import { Search, ShoppingCart, User } from 'lucide-react'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
-import { getBasketPath, getProfilePath } from '@/shared/config'
-// import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
+import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
+import { getBasketPath, getMainPath, getProfilePath } from '@/shared/config'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/shared/config/constants/theme.constant'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
     const tg = useTelegram()
-    // const location = useLocation()
+    const location = useLocation()
     const { larger, smaller } = useResponsive()
     const { data: order } = useNotApprovedOrder()
-    // const isMainPage = location.pathname === getMainPath()
+    const isMainPage = location.pathname === getMainPath()
     const cart = order?.items?.filter((item) => !item?.is_deleted) || []
     const totalItems = cart?.length
-    // const { setSearchItemName, searchItemName } = useHeaderSearchStore((store) => store)
+    const { setSearchItemName, searchItemName } = useHeaderSearchStore(
+        (store) => store,
+    )
 
     return (
         <LayoutBase
@@ -39,6 +41,31 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                 {smaller.lg && <MobileNav />}
                                 {larger.lg && <SideNavToggle />}
                             </>
+                        }
+                        headerMiddle={
+                            isMainPage && (
+                                <>
+                                    <div
+                                        className={`flex items-center gap-2 bg-gray-100 rounded-md px-3`}
+                                    >
+                                        <Search
+                                            size={20}
+                                            className="text-gray-400"
+                                        />
+                                        <Input
+                                            type="text"
+                                            placeholder="Поиск"
+                                            value={searchItemName}
+                                            className="h-full focus:ring-0 focus-within:ring-0 focus-within:border-none focus:border-none"
+                                            onChange={(e) =>
+                                                setSearchItemName(
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                </>
+                            )
                         }
                         headerEnd={
                             <>

@@ -51,20 +51,18 @@ export const BasketItem = ({
             <div className="flex-1 min-w-0 mt-3">
                 <div className="gap-2">
                     <span className="border bg-gray-100 p-1 px-2 rounded-md inline-flex items-center">
-                        {item?.quantity}(шт)
+                        {item?.quantity} шт
                         {found_item?.item?.package_measurements?.length ? (
                             <>
                                 &ensp; <ArrowRight size={'14'} /> &ensp;
                                 {
                                     found_item?.item.package_measurements[0]
                                         ?.quantity
-                                }
-                                (
+                                }{' '}
                                 {
                                     found_item?.item?.package_measurements[0]
                                         ?.name
                                 }
-                                )
                             </>
                         ) : null}
                     </span>
@@ -105,7 +103,10 @@ export const BasketItem = ({
                             )
                         }}
                     />
-                    <span className="text-base font-medium w-8 text-center">
+                    <span
+                        className="text-base font-medium w-8 text-center"
+                        onClick={() => setIsOpenSheet(true)}
+                    >
                         {item?.quantity}
                     </span>
                     <Button
@@ -114,7 +115,6 @@ export const BasketItem = ({
                         icon={<Plus size={16} className="text-gray-700" />}
                         onClick={(e) => {
                             e.stopPropagation()
-                            setIsOpenSheet(true)
                             onUpdateQuantity(
                                 item?.id,
                                 item?.item?.id,
