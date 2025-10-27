@@ -49,7 +49,7 @@ export const BasketItem = ({
                 <div className="gap-2">
                     <span className="border bg-gray-50 p-1 px-2 rounded-md inline-flex items-center">
                         {item?.quantity}(шт)
-                        {found_item?.item.package_measurements[0]?.quantity ? (
+                        {found_item?.item?.package_measurements?.length ? (
                             <>
                                 &ensp; <ArrowRight size={'14'} className="" />{' '}
                                 &ensp;
