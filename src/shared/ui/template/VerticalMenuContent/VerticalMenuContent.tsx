@@ -161,11 +161,15 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
             }
         >
             {renderNavigation(navigationTree, 0)}
-            <AuthorityCheck userAuthority={userAuthority} authority={[]}>
-                <div
-                    className={`fixed ${larger?.lg ? 'w-[260px]' : 'w-[300px]'} bottom-6 ${collapsed ? 'hidden' : ''}`}
-                >
-                    {/* {isLoading ? (
+            {/* <AuthorityCheck userAuthority={userAuthority} authority={[]}> */}
+            <div
+                className={`fixed   ${larger?.lg ? 'w-[260px]' : 'w-[300px]'} bottom-14 ${collapsed ? 'hidden' : ''}`}
+            >
+                <div className="flex justify-between items-center p-2">
+                    <span>Время работы:</span>
+                    <span className="text-base">07:00 - 24:00</span>
+                </div>
+                {/* {isLoading ? (
                         <Loader />
                     ) : (
                         <div
@@ -183,7 +187,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
                             </p>
                         </div>
                     )} */}
-                    {/* <div className="pt-4">
+                {/* <div className="pt-4">
                         <span>Разработано: &ensp; </span>
                         <Link
                             to={'https://hippo.uz/uz/'}
@@ -193,8 +197,8 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
                             <span>Hippo.uz</span>
                         </Link>
                     </div> */}
-                </div>
-            </AuthorityCheck>
+            </div>
+            {/* </AuthorityCheck> */}
         </Menu>
     )
 }
