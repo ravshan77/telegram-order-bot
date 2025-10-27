@@ -38,8 +38,9 @@ export const useOrders = (
     return useQuery<Order[], Error>({
         queryKey: ORDER_KEYS.lists(filters),
         queryFn: () => orderApi.getOrders(filters),
-        staleTime: 2 * 60 * 1000,
         ...options,
+        staleTime: 0,
+        // cacheTime: 0,
     })
 }
 
@@ -49,7 +50,7 @@ export const useOrdersCount = (
     return useQuery<number, Error>({
         queryKey: ORDER_KEYS.count(),
         queryFn: () => orderApi.getOrdersCount(),
-        staleTime: 2 * 60 * 1000,
+        staleTime: 0,
         ...options,
     })
 }
@@ -79,7 +80,7 @@ export const useOrder = (
         queryKey: ORDER_KEYS.detail(id),
         queryFn: () => orderApi.getOrderById(id),
         enabled: !!id,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 0,
         ...options,
     })
 }

@@ -1,11 +1,11 @@
 import dayjs from 'dayjs'
 import DatePicker from 'react-datepicker'
 import { useOrders } from '@/entities/order'
-import { ApprovedStatus, getOrderDetailsPath } from '@/shared/config'
 import { Spinner, Alert, Input, Tag } from '@/shared/ui/kit'
 import { useCallback, useEffect, useState } from 'react'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { ApprovedStatus, getOrderDetailsPath } from '@/shared/config'
 
 type FilterKey = 'date_start' | 'date_end'
 
