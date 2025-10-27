@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom'
 import MobileNav from '@/shared/ui/template/MobileNav'
 import { useNotApprovedOrder } from '@/entities/order'
 import LayoutBase from '@/shared/ui/template/LayoutBase'
-import { Search, ShoppingCart, User } from 'lucide-react'
+import { Search, ShoppingCart, User, X } from 'lucide-react'
 import useResponsive from '@/shared/lib/hooks/useResponsive'
 import SideNavToggle from '@/shared/ui/template/SideNavToggle'
 import useHeaderSearchStore from '@/shared/store/useHeaderSearch'
@@ -63,6 +63,13 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                                 )
                                             }
                                         />
+                                        {searchItemName && (
+                                            <X
+                                                onClick={() =>
+                                                    setSearchItemName('')
+                                                }
+                                            />
+                                        )}
                                     </div>
                                 </>
                             )

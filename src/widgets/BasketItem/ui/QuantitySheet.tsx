@@ -1,4 +1,3 @@
-import { Items } from '@/entities/product'
 import {
     Input,
     Sheet,
@@ -7,6 +6,9 @@ import {
     DrawerContent,
     DrawerDescription,
 } from '@/shared/ui/kit'
+import { useState } from 'react'
+import { SingleValue } from 'react-select'
+import { Items } from '@/entities/product'
 
 interface Props {
     item?: Items
@@ -15,6 +17,9 @@ interface Props {
 }
 
 export function QuantitySheet({ isOpen, setIsOpen, item }: Props) {
+    const [select, setSelect] = useState<
+        SingleValue<{ label: string; value: number }>
+    >({ label: `шт: ${1}`, value: 1 })
     const handleClose = () => setIsOpen(false)
     return (
         <Sheet open={isOpen} onOpenChange={handleClose}>
@@ -28,28 +33,28 @@ export function QuantitySheet({ isOpen, setIsOpen, item }: Props) {
                     <div className="flex items-center justify-between bg-gray-100 rounded-md border">
                         <Input
                             autoFocus
+                            value={1}
                             type="number"
-                            inputMode="decimal"
                             className="w-1/2"
+                            inputMode="decimal"
                         />
                         <div className="border h-8 w-[1px]"></div>
                         <Select
                             className="w-1/2"
-                            options={
-                                item?.item?.package_measurements
-                                    ? item.item.package_measurements.map(
-                                          (pkg) => ({
-                                              label: pkg.name,
-                                              value: pkg.quantity,
-                                          }),
-                                      )
-                                    : [{ label: 'шт', value: 1 }]
-                            }
                             placeholder={''}
-                            defaultValue={[{ label: 'шт', value: 1 }]}
-                            defaultOptions={[{ label: 'шт', value: 1 }]}
-                            value={[{ label: 'шт', value: 1 }]}
+                            options={[
+                                { label: `шт: ${1}`, value: 1 },
+                                ...(item?.item?.package_measurements?.map(
+                                    (pkg) => ({
+                                        label: `${pkg.name}:  ${pkg.quantity}`,
+                                        value: pkg.quantity,
+                                    }),
+                                ) ?? []),
+                            ]}
+                            isSearchable={false}
+                            value={select}
                             menuPlacement="top"
+                            onChange={(e) => setSelect(e)}
                         />
                     </div>
                 </div>
