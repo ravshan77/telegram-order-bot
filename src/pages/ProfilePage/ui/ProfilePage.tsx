@@ -2,9 +2,21 @@ import React from 'react'
 import { Button } from '@/shared/ui/kit'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useTelegram } from '@/shared/lib/hooks'
-import { Settings, MessageCircle, User } from 'lucide-react'
+import {
+    Settings,
+    MessageCircle,
+    User,
+    ChevronRight,
+    Loader,
+} from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useDeliveryAddresses } from '@/entities/deliveryAddress'
+import { getDeliveryAddressPath } from '@/shared/config'
 
 export const ProfilePage: React.FC = () => {
+    const navigate = useNavigate()
+    const { data: addresses, isLoading } = useDeliveryAddresses()
+
     const tg = useTelegram()
     const tg_user = tg?.initDataUnsafe?.user
 
@@ -21,8 +33,14 @@ export const ProfilePage: React.FC = () => {
         console.log('Navigate to chat ID')
     }
 
+    const handleNavigatePath = () => {
+        navigate(getDeliveryAddressPath())
+    }
+
+    const address = addresses?.locations?.find((adrss) => adrss.is_default)
+
     return (
-        <div className="">
+        <div className="relative h-full">
             <div className="bg-white w-full">
                 <GoBack />
             </div>
@@ -81,6 +99,24 @@ export const ProfilePage: React.FC = () => {
                     </Button>
                 </div>
             </div>
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <div
+                    className="bg-gray-100 w-full p-3 flex flex-col items-start rounded-lg overflow-hidden absolute left-0 right-0 bottom-0"
+                    onClick={handleNavigatePath}
+                >
+                    <div className="w-full flex justify-between items-center">
+                        <span>Адрес доставки</span>
+                        <ChevronRight size={24} />
+                    </div>
+                    <p className="pt-1 text-base text-black line-clamp-2">
+                        {address?.name
+                            ? address?.name
+                            : 'Введите ваш основной адрес доставки'}
+                    </p>
+                </div>
+            )}
         </div>
     )
 }

@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { Apple } from 'lucide-react'
 import { Drawer } from '@/shared/ui/kit'
 import Loading from '../kit-pro/Loading'
 import appConfig from '@/app/config/app.config'
@@ -12,7 +13,7 @@ import { DIR_RTL } from '@/shared/config/constants/theme.constant'
 import withHeaderItem, {
     WithHeaderItemProps,
 } from '@/shared/lib/hoc/withHeaderItem'
-import Logo from './Logo'
+import { Link } from 'react-router-dom'
 
 const VerticalMenuContent = lazy(
     () => import('@/shared/ui/template/VerticalMenuContent'),
@@ -32,12 +33,13 @@ const MobileNavToggle = withHeaderItem<
 
 const NavTitle = () => {
     return (
-        // <div className="border border-red-500">
-        //     <p>Время работы</p>
-        //     <p className="text-base">07:00 - 24:00</p>
-        // </div>
-        <Logo size={30} />
+        <div className="rounded-full">
+            <Apple size={35} />
+        </div>
     )
+}
+{
+    /* <Logo size={30} /> */
 }
 
 const MobileNav = ({
@@ -69,6 +71,18 @@ const MobileNav = ({
                 bodyClass={classNames('p-0')}
                 width={330}
                 placement={direction === DIR_RTL ? 'right' : 'left'}
+                footer={
+                    <div className="">
+                        <span>Разработано: &ensp; </span>
+                        <Link
+                            to={'https://hippo.uz/uz/'}
+                            className="text-primary"
+                            target="_blank"
+                        >
+                            <span>Hippo.uz</span>
+                        </Link>
+                    </div>
+                }
                 onClose={handleDrawerClose}
                 onRequestClose={handleDrawerClose}
             >
