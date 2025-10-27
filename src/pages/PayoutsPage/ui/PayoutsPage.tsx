@@ -125,6 +125,7 @@ export const PayoutsPage = () => {
                 isOpen={isDrawerOpen}
                 setIsOpen={setIsDrawerOpen}
                 payment={selectedPayment}
+                title={'Выплаты'}
                 allPayments={payments || []}
             />
 

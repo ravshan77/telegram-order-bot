@@ -1,11 +1,12 @@
 import dayjs from 'dayjs'
+import { useEffect } from 'react'
 import { useOrder } from '@/entities/order'
 import { GoBack } from '@/shared/ui/kit-pro'
 import { useParams } from 'react-router-dom'
-import { Alert, Spinner } from '@/shared/ui/kit'
-import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
+import { ApprovedStatus } from '@/shared/config'
+import { Alert, Spinner, Tag } from '@/shared/ui/kit'
 import { numericFormat } from '@/shared/lib/numericFormat'
-import { useEffect } from 'react'
+import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
 
 export const OrderDetailsPage = () => {
     const { orderId } = useParams<{ orderId: string }>()
@@ -45,17 +46,21 @@ export const OrderDetailsPage = () => {
 
                 <div className="my-4">
                     <div className="mb-4">
-                        <span
-                            className={`text-xs font-semibold px-3 py-1 rounded ${
-                                order?.is_approved
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-yellow-50 text-yellow-400'
-                            }`}
+                        <Tag
+                            className={
+                                ApprovedStatus[Number(order?.is_approved)]
+                                    .bgClass
+                            }
                         >
-                            {order.is_approved
-                                ? 'Подтвержден'
-                                : 'Не подтвержден'}
-                        </span>
+                            <span
+                                className={`capitalize font-semibold ${ApprovedStatus[Number(order?.is_approved)].textClass}`}
+                            >
+                                {
+                                    ApprovedStatus[Number(order?.is_approved)]
+                                        .label
+                                }
+                            </span>
+                        </Tag>
                     </div>
 
                     <div className="space-y-2 text-sm">

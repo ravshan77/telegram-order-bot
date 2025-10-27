@@ -1,8 +1,8 @@
 import dayjs from 'dayjs'
 import DatePicker from 'react-datepicker'
 import { useOrders } from '@/entities/order'
-import { getOrderDetailsPath } from '@/shared/config'
-import { Spinner, Alert, Input } from '@/shared/ui/kit'
+import { ApprovedStatus, getOrderDetailsPath } from '@/shared/config'
+import { Spinner, Alert, Input, Tag } from '@/shared/ui/kit'
 import { useCallback, useEffect, useState } from 'react'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -186,17 +186,26 @@ export const OrdersPage = () => {
                                     className="bg-white border rounded-lg shadow-sm p-3"
                                 >
                                     <div className="flex items-start justify-between mb-3">
-                                        <span
-                                            className={`text-xs font-semibold px-3 py-1 rounded ${
-                                                order.is_approved
-                                                    ? 'bg-green-100 text-green-700'
-                                                    : 'bg-yellow-50 text-yellow-400'
-                                            }`}
+                                        <Tag
+                                            className={
+                                                ApprovedStatus[
+                                                    Number(order?.is_approved)
+                                                ].bgClass
+                                            }
                                         >
-                                            {order.is_approved
-                                                ? 'Подтверждён'
-                                                : 'Не подтверждён'}
-                                        </span>
+                                            <span
+                                                className={`capitalize font-semibold ${ApprovedStatus[Number(order?.is_approved)].textClass}`}
+                                            >
+                                                {
+                                                    ApprovedStatus[
+                                                        Number(
+                                                            order?.is_approved,
+                                                        )
+                                                    ].label
+                                                }
+                                            </span>
+                                        </Tag>
+
                                         <span className="font-medium text-black">
                                             {dayjs(order.date).format(
                                                 'DD.MM.YYYY',

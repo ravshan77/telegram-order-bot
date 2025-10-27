@@ -58,7 +58,7 @@ export const RefundViewPage: React.FC = () => {
                     <div className="bg-gray-50 rounded-2xl p-4 mb-4 shadow-sm border">
                         <div className="flex items-start justify-between mb-4">
                             <h2 className="text-base font-semibold">
-                                Продавец № {refund?.number}
+                                Возврат № {refund?.number}
                             </h2>
                             <span
                                 className={`px-3 py-1 text-xs font-medium rounded-full ${

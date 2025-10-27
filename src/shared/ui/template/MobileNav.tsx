@@ -10,6 +10,7 @@ import { useThemeStore } from '@/shared/model/themeStore'
 import navigationConfig from '@/app/config/navigation.config'
 import { useRouteKeyStore } from '@/shared/model/routeKeyStore'
 import { DIR_RTL } from '@/shared/config/constants/theme.constant'
+import LogoBrandImg from '../../../../public/hippo-logo-150x41.png'
 import withHeaderItem, {
     WithHeaderItemProps,
 } from '@/shared/lib/hoc/withHeaderItem'
@@ -33,12 +34,9 @@ const MobileNavToggle = withHeaderItem<
 const NavTitle = () => {
     return (
         <div className="rounded-full">
-            <img src="/public/hippo-logo-150x41.png" className="w-30 h-8" />
+            <img src={LogoBrandImg} className="w-30 h-8" />
         </div>
     )
-}
-{
-    /* <Logo size={30} /> */
 }
 
 const MobileNav = ({

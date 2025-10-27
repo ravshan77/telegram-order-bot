@@ -10,6 +10,7 @@ import { numericFormat } from '@/shared/lib/numericFormat'
 
 interface PaymentViewBottomSheetProps {
     isOpen: boolean
+    title?: string
     setIsOpen: (open: boolean) => void
     payment: Payment | null
     allPayments: Payment[]
@@ -26,6 +27,7 @@ export function PaymentViewBottomSheet({
     isOpen,
     setIsOpen,
     payment,
+    title,
     allPayments,
 }: PaymentViewBottomSheetProps) {
     const getSinglePaymentData = (payment: Payment): PaymentTypeTotal[] => {
@@ -95,7 +97,7 @@ export function PaymentViewBottomSheet({
                 <div className="mx-auto w-full px-4">
                     <DrawerHeader className="p-0">
                         <DrawerTitle className="text-start text-xl">
-                            {payment ? 'Детали оплаты' : 'Все оплаты'}
+                            {payment ? `Детали  ${title}` : `Все ${title}`}
                         </DrawerTitle>
                     </DrawerHeader>
                     <div className="px-4 pb-8">
