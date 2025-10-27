@@ -48,7 +48,7 @@ export const RefundViewPage: React.FC = () => {
     }
 
     return (
-        <div className="pb-32">
+        <div className="pb-44">
             <div>
                 <div className="bg-white w-full">
                     <GoBack navigatePath={-1} />
@@ -169,8 +169,8 @@ export const RefundViewPage: React.FC = () => {
                                         </span>
                                         <span className="text-sm font-medium">
                                             {numericFormat(
-                                                item?.price.amount *
-                                                    item.quantity,
+                                                item?.price?.amount *
+                                                    item?.quantity,
                                             )}{' '}
                                             {item?.price?.currency?.name}
                                         </span>
@@ -182,63 +182,59 @@ export const RefundViewPage: React.FC = () => {
 
                 {/* Fixed Footer - Summary */}
 
-                <div className="fixed bottom-0 h-40 left-0 right-0 bg-white border-t shadow-2xl">
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-2xl">
                     <div className="m-4 px-4 py-4 space-y-3 rounded-md bg-primary-subtle">
-                        <div className="flex justify-between">
-                            <div className="flex flex-col items-start justify-between w-1/2">
-                                <span className="text-xs text-gray-600">
-                                    Общая сумма:
-                                </span>
-                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {refund?.net_price?.map((total) => (
-                                        <span
-                                            key={total.currency.id}
-                                            className="text-sm font-semibold text-primary"
-                                        >
-                                            {numericFormat(total.amount)}{' '}
-                                            {total.currency.name}
-                                        </span>
-                                    )) ?? 0}
-                                </div>
+                        {/* <div className="flex justify-between"> */}
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-600">
+                                Общая сумма:
+                            </span>
+                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {refund?.net_price?.map((total) => (
+                                    <span
+                                        key={total?.currency?.id}
+                                        className="text-sm font-semibold text-primary"
+                                    >
+                                        {numericFormat(total?.amount)}{' '}
+                                        {total?.currency?.name}
+                                    </span>
+                                )) ?? 0}
                             </div>
                         </div>
-                        <div className="flex justify-between">
-                            <div className="flex flex-col items-start justify-between w-1/2">
-                                <span className="text-xs text-gray-600">
-                                    Оплата:
-                                </span>
+                        {/* </div> */}
+                        {/* <div className="flex justify-between"> */}
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-600">
+                                Оплата:
+                            </span>
 
-                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {refund?.payout?.debt_states?.map(
-                                        (total) => (
-                                            <span
-                                                key={total.currency.id}
-                                                className="text-sm font-semibold text-primary"
-                                            >
-                                                {numericFormat(total.amount)}{' '}
-                                                {total.currency.name}
-                                            </span>
-                                        ),
-                                    ) ?? 0}
-                                </div>
-                            </div>
-                            <div className="flex flex-col items-start justify-between w-1/2">
-                                <span className="text-xs text-gray-600">
-                                    Долг:
-                                </span>
-                                <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                                    {refund?.debts?.map((total) => (
-                                        <span
-                                            key={total.currency.id}
-                                            className="text-sm font-semibold text-primary"
-                                        >
-                                            {numericFormat(total.amount)}{' '}
-                                            {total.currency.name}
-                                        </span>
-                                    )) ?? 0}
-                                </div>
+                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {refund?.payout?.debt_states?.map((total) => (
+                                    <span
+                                        key={total?.currency?.id}
+                                        className="text-sm font-semibold text-primary"
+                                    >
+                                        {numericFormat(total?.amount)}{' '}
+                                        {total?.currency?.name}
+                                    </span>
+                                )) ?? 0}
                             </div>
                         </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-600">Долг:</span>
+                            <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                                {refund?.debts?.map((total) => (
+                                    <span
+                                        key={total?.currency?.id}
+                                        className="text-sm font-semibold text-primary"
+                                    >
+                                        {numericFormat(total?.amount)}{' '}
+                                        {total?.currency?.name}
+                                    </span>
+                                )) ?? 0}
+                            </div>
+                        </div>
+                        {/* </div> */}
                     </div>
                 </div>
             </div>
