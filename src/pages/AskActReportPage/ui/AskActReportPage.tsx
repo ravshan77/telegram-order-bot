@@ -255,7 +255,7 @@ export const AskActReportPage: React.FC = () => {
                                             return (
                                                 <span
                                                     key={crn?.currency.id}
-                                                    className={`text-lg font-semibold flex items-center text-primary ${Operation?.textColor}`}
+                                                    className={`text-sm font-semibold flex items-center text-primary ${Operation?.textColor}`}
                                                 >
                                                     {Operation?.upArrowIcon ? (
                                                         <ArrowUp size={20} />

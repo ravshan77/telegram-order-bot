@@ -107,7 +107,7 @@ export function UpdateQuantityDrawer({
                                 variant="solid"
                                 className="w-full"
                             >
-                                Изменить
+                                Редактировать
                             </Button>
                         </div>
                     </form>

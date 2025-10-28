@@ -102,7 +102,7 @@ class OrderApi extends BaseRestClient {
 
         if (response) {
             if (response.approve_order_not_allowed) {
-                throw new Error('Утверждение заказа не разрешено')
+                throw new Error('Оформление заказа не разрешено')
             }
             if (response.order_not_found) {
                 throw new Error('Заказ не найден')
