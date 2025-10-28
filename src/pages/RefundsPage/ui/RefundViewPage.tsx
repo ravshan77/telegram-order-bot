@@ -190,10 +190,10 @@ export const RefundViewPage: React.FC = () => {
                 {/* Fixed Footer - Summary */}
 
                 <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-2xl">
-                    <div className="m-4 px-4 py-4 space-y-3 rounded-md bg-primary-subtle">
+                    <div className="m-4 px-4 py-4 space-y-2 rounded-md bg-primary-subtle">
                         {/* <div className="flex justify-between"> */}
                         <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600">
+                            <span className="text-sm text-gray-600">
                                 Общая сумма:
                             </span>
                             <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
@@ -211,7 +211,7 @@ export const RefundViewPage: React.FC = () => {
                         {/* </div> */}
                         {/* <div className="flex justify-between"> */}
                         <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600">
+                            <span className="text-sm text-gray-600">
                                 Оплата:
                             </span>
 
@@ -228,7 +228,7 @@ export const RefundViewPage: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600">Долг:</span>
+                            <span className="text-sm text-gray-600">Долг:</span>
                             <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
                                 {refund?.debts?.map((total) => (
                                     <span

@@ -112,7 +112,6 @@ export const AskActReportPage: React.FC = () => {
                         selected={selected('date_start')}
                         dateFormat="dd.MM.yyyy"
                         name="date_start"
-                        maxDate={dayjs().toDate()}
                         disabledKeyboardNavigation={true}
                         placeholderText="от"
                         popperPlacement="bottom-end"
@@ -130,8 +129,6 @@ export const AskActReportPage: React.FC = () => {
                     <DatePicker
                         selected={selected('date_end')}
                         dateFormat="dd.MM.yyyy"
-                        maxDate={dayjs().toDate()}
-                        minDate={dayjs(filters?.date_start).toDate()}
                         disabledKeyboardNavigation={true}
                         placeholderText="до"
                         popperPlacement="bottom-start"
@@ -165,7 +162,7 @@ export const AskActReportPage: React.FC = () => {
                             {totalCreditAmount(dataAkt)?.map((cures) => (
                                 <p
                                     key={cures?.currency}
-                                    className="text-sm font-medium"
+                                    className="text-sm font-medium text-black"
                                 >
                                     {numericFormat(cures?.amount)}{' '}
                                     {cures?.currency}
@@ -185,7 +182,7 @@ export const AskActReportPage: React.FC = () => {
                             {totalDebitAmount(dataAkt)?.map((cures) => (
                                 <p
                                     key={cures?.currency}
-                                    className="text-sm font-medium"
+                                    className="text-sm font-medium text-black"
                                 >
                                     {numericFormat(cures?.amount)}{' '}
                                     {cures?.currency}

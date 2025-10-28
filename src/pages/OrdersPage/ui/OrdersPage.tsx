@@ -129,7 +129,6 @@ export const OrdersPage = () => {
                             selected={selected('date_start')}
                             dateFormat="dd.MM.yyyy"
                             name="date_start"
-                            maxDate={dayjs().toDate()}
                             disabledKeyboardNavigation={true}
                             placeholderText="от"
                             popperPlacement="bottom-end"
@@ -151,8 +150,6 @@ export const OrdersPage = () => {
                             dateFormat="dd.MM.yyyy"
                             disabledKeyboardNavigation={true}
                             placeholderText="до"
-                            maxDate={dayjs().toDate()}
-                            minDate={dayjs(filters?.date_start).toDate()}
                             popperPlacement="bottom-start"
                             customInput={
                                 <Input

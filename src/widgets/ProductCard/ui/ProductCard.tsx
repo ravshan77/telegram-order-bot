@@ -9,7 +9,7 @@ import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { Pagination } from 'swiper/modules'
 import { useNavigate } from 'react-router-dom'
-import { getProductPath } from '@/shared/config'
+import React, { useRef, useState } from 'react'
 import { ProductView } from '@/entities/product'
 import { useFlyToCart } from '@/shared/lib/hooks'
 import { Image, Minus, Plus } from 'lucide-react'
@@ -17,7 +17,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
-import React, { useCallback, useRef, useState } from 'react'
+import { getProductPath, MeasurementType } from '@/shared/config'
 import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 
 interface ProductCardProps {
@@ -127,20 +127,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         }
     }
 
-    const handlePackageQuantity = useCallback(
-        (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-            pkg_quantity: number,
-        ) => {
-            const is_cart = cartItem?.quantity ? cartItem?.quantity : 0
-            if (cartItem) {
-                handleUpdateQuantity(is_cart + pkg_quantity)
-            } else {
-                handleAddToCart(e, pkg_quantity)
-            }
-        },
-        [product],
-    )
+    // const handlePackageQuantity = useCallback(
+    //     (
+    //         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    //         pkg_quantity: number,
+    //     ) => {
+    //         const is_cart = cartItem?.quantity ? cartItem?.quantity : 0
+    //         if (cartItem) {
+    //             handleUpdateQuantity(is_cart + pkg_quantity)
+    //         } else {
+    //             handleAddToCart(e, pkg_quantity)
+    //         }
+    //     },
+    //     [product],
+    // )
 
     const renderActionButton = () => {
         const isLoading =
@@ -171,6 +171,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                             package_measurements={
                                 product?.package_measurements ?? []
                             }
+                            measurement={product?.measurement || 0}
                         />
                     )}
                     <div className="flex items-center justify-between h-10 rounded border overflow-hidden">
@@ -282,8 +283,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 >
                     {product.name}
                 </div>
-                {!(product?.stock === 0) ? (
-                    <div className="flex gap-1 h-7">
+                <div className="flex gap-1 items-center">
+                    <BoxSvg width={16} height={16} /> Остаток: {product?.stock}{' '}
+                    {product?.measurement
+                        ? MeasurementType[product?.measurement]?.label
+                        : null}
+                </div>
+                {/* {!(product?.stock === 0) ? (
+                    <div className="flex gap-1 h-7 border">
                         {product.package_measurements?.map((pkg) => (
                             <div
                                 key={pkg.name}
@@ -297,7 +304,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                             </div>
                         ))}
                     </div>
-                ) : null}
+                ) : null} */}
                 <div className="mt-3">{renderActionButton()}</div>
             </div>
         </div>

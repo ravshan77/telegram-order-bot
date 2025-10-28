@@ -129,7 +129,6 @@ export const SalesPage = () => {
                             selected={selected('date_start')}
                             dateFormat="dd.MM.yyyy"
                             name="date_start"
-                            maxDate={dayjs().toDate()}
                             disabledKeyboardNavigation={true}
                             placeholderText="от"
                             popperPlacement="bottom-end"
@@ -151,8 +150,6 @@ export const SalesPage = () => {
                             dateFormat="dd.MM.yyyy"
                             disabledKeyboardNavigation={true}
                             placeholderText="до"
-                            maxDate={dayjs().toDate()}
-                            minDate={dayjs(filters?.date_start).toDate()}
                             popperPlacement="bottom-start"
                             customInput={
                                 <Input
@@ -220,9 +217,9 @@ export const SalesPage = () => {
                                     </div>
 
                                     <div className="space-y-2 text-sm cursor-pointer">
-                                        <div className="space-y-3">
+                                        <div className="space-y-2">
                                             <div className="flex items-start justify-between">
-                                                <span className="text-xs text-gray-600">
+                                                <span className="text-sm text-gray-600">
                                                     Общая сумма:
                                                 </span>
 
@@ -259,7 +256,7 @@ export const SalesPage = () => {
                                                 </div>
                                             </div>
                                             <div className="flex items-start justify-between">
-                                                <span className="text-xs text-gray-600">
+                                                <span className="text-sm text-gray-600">
                                                     Скидка:
                                                 </span>
 
@@ -308,7 +305,7 @@ export const SalesPage = () => {
 
                                             {is_excat_discount ? (
                                                 <div className="flex items-start justify-between">
-                                                    <span className="text-xs text-gray-600">
+                                                    <span className="text-sm text-gray-600">
                                                         Цена со скидкой:
                                                     </span>
 
@@ -361,7 +358,7 @@ export const SalesPage = () => {
                                             ) : null}
 
                                             <div className="flex items-start justify-between">
-                                                <span className="text-xs text-gray-600">
+                                                <span className="text-sm text-gray-600">
                                                     Оплата:
                                                 </span>
 
@@ -399,7 +396,7 @@ export const SalesPage = () => {
                                                 </div>
                                             </div>
                                             <div className="flex items-start justify-between">
-                                                <span className="text-xs text-gray-600">
+                                                <span className="text-sm text-gray-600">
                                                     Долг:
                                                 </span>
 

@@ -10,7 +10,7 @@ export class BaseRestClient {
 
     constructor(baseURL: string, timeout: number = 1000000) {
         this.axiosInstance = axios.create({
-            baseURL: baseURL || '/api',
+            baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
             timeout: timeout,
             withCredentials: true,
             headers: {

@@ -135,7 +135,6 @@ export const RefundsPage = () => {
                             name="date_time_start"
                             disabledKeyboardNavigation={true}
                             placeholderText="от"
-                            maxDate={dayjs().toDate()}
                             popperPlacement="bottom-end"
                             customInput={
                                 <Input
@@ -155,8 +154,6 @@ export const RefundsPage = () => {
                             dateFormat="dd.MM.yyyy"
                             disabledKeyboardNavigation={true}
                             placeholderText="до"
-                            maxDate={dayjs().toDate()}
-                            minDate={dayjs(filters?.date_time_start).toDate()}
                             popperPlacement="bottom-start"
                             customInput={
                                 <Input

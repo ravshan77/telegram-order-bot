@@ -8,12 +8,14 @@ import {
     DrawerDescription,
 } from '@/shared/ui/kit'
 import { SingleValue } from 'react-select'
+import { MeasurementType } from '@/shared/config'
 import { FormEvent, useEffect, useState } from 'react'
 import { Package_measurements } from '@/entities/product'
 
 interface Props {
     isOpen: boolean
     quantity: number
+    measurement: number
     package_measurements: Package_measurements[]
     updateQuantity: (quantity: number) => void
     setIsOpen: (open: boolean) => void
@@ -23,6 +25,7 @@ export function UpdateQuantityDrawer({
     isOpen,
     setIsOpen,
     quantity,
+    measurement,
     updateQuantity,
     package_measurements,
 }: Props) {
@@ -58,8 +61,8 @@ export function UpdateQuantityDrawer({
                                 autoFocus
                                 value={count}
                                 type="number"
-                                className="w-1/2"
                                 min={0}
+                                className="w-1/2 focus:ring-0 focus-within:border-none"
                                 inputMode="decimal"
                                 onChange={(e) => {
                                     setCount(e.target.value)
@@ -68,9 +71,18 @@ export function UpdateQuantityDrawer({
                             <div className="border h-8 w-[1px]"></div>
                             <Select
                                 className="w-1/2"
+                                classNames={{
+                                    control: (state) =>
+                                        state.isFocused
+                                            ? 'select-control no-ring no-border'
+                                            : 'select-control',
+                                }}
                                 placeholder={''}
                                 options={[
-                                    { label: `шт: ${1}`, value: 1 },
+                                    {
+                                        label: `${MeasurementType[measurement].label}: ${1}`,
+                                        value: 1,
+                                    },
                                     ...(package_measurements?.map((pkg) => ({
                                         label: `${pkg.name}:  ${pkg.quantity}`,
                                         value: pkg.quantity,

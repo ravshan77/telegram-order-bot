@@ -58,6 +58,7 @@ export const BasketItem = ({
                     quantity={item.quantity}
                     setIsOpen={setIsOpenSheet}
                     updateQuantity={updateQuantity}
+                    measurement={found_item?.item?.measurement || 0}
                     package_measurements={
                         found_item?.item?.package_measurements ?? []
                     }

@@ -1,24 +1,22 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense } from 'react'
 import PreLoginLayout from './PreLoginLayout'
 import PostLoginLayout from './PostLoginLayout'
-import { useTelegram } from '@/shared/lib/hooks'
 import Loading from '@/shared/ui/kit-pro/Loading'
 import type { CommonProps } from '@/@types/common'
 import { useThemeStore } from '@/shared/model/themeStore'
-import 'react-datepicker/dist/react-datepicker.css'
 
 const Layout = ({ children }: CommonProps) => {
     const layoutType = useThemeStore((state) => state.layout.type)
-    const tg = useTelegram()
+    // const tg = useTelegram()
 
     // const { authenticated } = useUserStore()
     const { authenticated } = { authenticated: true }
 
-    useEffect(() => {
-        tg?.ready()
-        tg?.expand()
-        tg?.enableClosingConfirmation()
-    }, [tg])
+    // useEffect(() => {
+    //     tg?.ready()
+    //     tg?.expand()
+    //     tg?.enableClosingConfirmation()
+    // }, [tg])
 
     return (
         <Suspense

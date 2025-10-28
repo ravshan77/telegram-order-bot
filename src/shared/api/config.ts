@@ -59,6 +59,9 @@ export const API_ENDPOINTS = {
         downloadExcel: (filters: DowlandExcelFilter) =>
             `/report/ask-act-report-excel?date_start=${filters?.date_start}&date_end=${filters?.date_end}`,
     },
+    botConfigs: {
+        getAll: '/get-bot-configuration',
+    },
 } as const
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL

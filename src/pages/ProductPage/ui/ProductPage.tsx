@@ -9,6 +9,7 @@ import { APP_CDN } from '@/shared/api'
 import { Button } from '@/shared/ui/kit'
 import { Image, Minus, Plus } from 'lucide-react'
 import { useFlyToCart } from '@/shared/lib/hooks'
+import { MeasurementType } from '@/shared/config'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { ProductSection } from '@/widgets/ProductSection'
 import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
@@ -143,6 +144,7 @@ export const ProductPage: React.FC = () => {
                             package_measurements={
                                 selectedProduct?.package_measurements ?? []
                             }
+                            measurement={selectedProduct?.measurement || 0}
                         />
                     )}
                     <div className="flex items-center justify-between h-10 rounded border overflow-hidden">
@@ -255,7 +257,15 @@ export const ProductPage: React.FC = () => {
                                 </span>
                             </div>
                         )}
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 items-center">
+                            <BoxSvg width={16} height={16} /> Остаток:{' '}
+                            {selectedProduct?.stock}{' '}
+                            {selectedProduct?.measurement
+                                ? MeasurementType[selectedProduct?.measurement]
+                                      ?.label
+                                : null}
+                        </div>
+                        {/* <div className="flex gap-1">
                             {selectedProduct.package_measurements?.map(
                                 (pkg) => (
                                     <div
@@ -269,7 +279,7 @@ export const ProductPage: React.FC = () => {
                                     </div>
                                 ),
                             )}
-                        </div>
+                        </div> */}
                     </div>
 
                     <hr />
@@ -285,7 +295,11 @@ export const ProductPage: React.FC = () => {
                                 Единица измерения:
                             </span>
                             <span className="font-medium">
-                                {selectedProduct.measurement}
+                                {
+                                    MeasurementType[
+                                        selectedProduct?.measurement
+                                    ]?.label
+                                }
                             </span>
                         </div>
                         <div className="flex justify-between">
