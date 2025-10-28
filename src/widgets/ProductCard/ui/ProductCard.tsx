@@ -17,9 +17,9 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { BasketSvg, BoxSvg } from '@/shared/ui/svg'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
 import { getProductPath, MeasurementType } from '@/shared/config'
 import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
-import useBotConfigStore from '@/shared/store/useBotConfigStore'
 
 interface ProductCardProps {
     product: ProductView

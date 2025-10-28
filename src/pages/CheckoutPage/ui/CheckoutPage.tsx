@@ -9,14 +9,14 @@ import { SelectOption } from '@/shared/types'
 import { Select } from '@/shared/ui/kit/Select'
 import { useNavigate } from 'react-router-dom'
 import { getOrdersPath } from '@/shared/config'
+import { formatHour } from '@/shared/lib/DateFormat'
 import { Form, FormItem } from '@/shared/ui/kit/Form'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
 import { useDeliveryAddresses } from '@/entities/deliveryAddress'
 import { useNotApprovedOrder, useApproveOrder } from '@/entities/order'
 import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
-import useBotConfigStore from '@/shared/store/useBotConfigStore'
-import { formatHour } from '@/shared/lib/DateFormat'
 
 interface FormDataType {
     paymentType: SelectOption<string> | null

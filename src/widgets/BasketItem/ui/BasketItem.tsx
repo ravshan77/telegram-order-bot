@@ -9,8 +9,8 @@ import { Minus, Plus, Trash2, Image } from 'lucide-react'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import { transformProductToView } from '@/entities/product'
-import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 import useBotConfigStore from '@/shared/store/useBotConfigStore'
+import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 
 interface BasketItemProps {
     item: OrderItem

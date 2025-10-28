@@ -16,8 +16,8 @@ import { GoBack, ImageGallery } from '@/shared/ui/kit-pro'
 import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import React, { useEffect, useRef, useState } from 'react'
-import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 import useBotConfigStore from '@/shared/store/useBotConfigStore'
+import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
 
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)

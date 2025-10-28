@@ -1,5 +1,5 @@
-import useBotConfigStore from '@/shared/store/useBotConfigStore'
 import { Items, ProductView } from '../model/types'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
 
 // Product ni ProductView ga o'zgartirish helper function
 export const transformProductToView = (product: Items): ProductView => {
