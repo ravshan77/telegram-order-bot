@@ -12,9 +12,9 @@ interface AppInitializerProps {
 export const AppInitializer: FC<AppInitializerProps> = ({ children }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const tg = useTelegram()
-    const { setBotConfigs } = useBotConfigStore((store) => store)
+    const { setBotConfigs, setBotMe } = useBotConfigStore((store) => store)
 
-    const loadingConfigData = async () => {
+    const loadBotConfig = async () => {
         setIsLoading(true)
         try {
             const bConf = await botConfigurationsApi.getBotConfigurations()
@@ -23,6 +23,15 @@ export const AppInitializer: FC<AppInitializerProps> = ({ children }) => {
             console.error('Bot configuration yuklashda xato:', error)
         } finally {
             setIsLoading(false)
+        }
+    }
+
+    const loadGetMe = async () => {
+        try {
+            const bConf = await botConfigurationsApi.getMe()
+            setBotMe(bConf)
+        } catch (error) {
+            console.error('GetMe yuklashda xato:', error)
         }
     }
 
@@ -36,12 +45,12 @@ export const AppInitializer: FC<AppInitializerProps> = ({ children }) => {
         let session = window.Telegram?.WebApp?.initData || ''
 
         if (import.meta.env.MODE === 'development') {
-            console.log('🧩 Development mode active')
+            // console.log('🧩 Development mode active')
             botID = import.meta.env.VITE_API_X_WEBAPP_BOT
             session = import.meta.env.VITE_API_X_WEBAPP_SESSION
         }
-        console.log(botID)
-        console.log(session)
+        // console.log(botID)
+        // console.log(session)
 
         axios.defaults.headers.common['X-WEBAPP-BOT'] = botID
         axios.defaults.headers.common['X-WEBAPP-SESSION'] = session
@@ -50,7 +59,8 @@ export const AppInitializer: FC<AppInitializerProps> = ({ children }) => {
             axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
         }
 
-        loadingConfigData()
+        loadBotConfig()
+        loadGetMe()
     }, [])
 
     return (

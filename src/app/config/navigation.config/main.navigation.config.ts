@@ -20,7 +20,7 @@ const mainNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.main.incoming',
         icon: 'mainProducts',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [],
+        authority: ['allow_orders', 'allow_orders_contractors_only'],
         subMenu: [],
     },
     {

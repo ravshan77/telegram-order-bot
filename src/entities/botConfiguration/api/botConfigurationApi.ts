@@ -1,4 +1,4 @@
-import { BotConfigurations } from '../model/types'
+import { BotConfigurations, Me } from '../model/types'
 import { BaseRestClient } from '@/shared/api/ApiService'
 import { API_ENDPOINTS, API_BASE_URL } from '@/shared/api/config'
 
@@ -8,11 +8,13 @@ class BotConfigurationsApi extends BaseRestClient {
     }
 
     async getBotConfigurations(): Promise<BotConfigurations> {
-        console.log(
-            this.get<BotConfigurations>(API_ENDPOINTS.botConfigs.getAll),
+        return this.get<BotConfigurations>(
+            API_ENDPOINTS.botConfigs.getBotConfig,
         )
+    }
 
-        return this.get<BotConfigurations>(API_ENDPOINTS.botConfigs.getAll)
+    async getMe(): Promise<Me> {
+        return this.get<Me>(API_ENDPOINTS.botConfigs.getMe)
     }
 }
 

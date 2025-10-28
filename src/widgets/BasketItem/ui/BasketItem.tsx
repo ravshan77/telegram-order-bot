@@ -10,6 +10,7 @@ import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import { transformProductToView } from '@/entities/product'
 import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
 
 interface BasketItemProps {
     item: OrderItem
@@ -32,6 +33,7 @@ export const BasketItem = ({
     const [isOpenSheet, setIsOpenSheet] = useState(false)
     const navigate = useNavigate()
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
+    const { botConfigs } = useBotConfigStore()
 
     const found_item = getItemById(item?.item?.id)
 
@@ -81,17 +83,21 @@ export const BasketItem = ({
                     <span className="border bg-gray-100 p-1 px-2 rounded-md inline-flex items-center">
                         {item?.quantity} шт
                     </span>
-                    <span> x </span>
-                    <span className="border bg-gray-100 p-1 px-2 rounded-md">
-                        {numericFormat(item?.price?.amount)}{' '}
-                        {item?.net_price?.currency?.name}
-                    </span>
-                    <span> = </span>
+                    {botConfigs?.display_item_prices ? (
+                        <>
+                            <span> x </span>
+                            <span className="border bg-gray-100 p-1 px-2 rounded-md">
+                                {numericFormat(item?.price?.amount)}{' '}
+                                {item?.net_price?.currency?.name}
+                            </span>
+                            <span> = </span>
 
-                    <span className="border bg-gray-100 p-1 px-2 rounded-md">
-                        {numericFormat(item?.net_price.amount)}{' '}
-                        {item?.net_price?.currency?.name}
-                    </span>
+                            <span className="border bg-gray-100 p-1 px-2 rounded-md">
+                                {numericFormat(item?.net_price.amount)}{' '}
+                                {item?.net_price?.currency?.name}
+                            </span>
+                        </>
+                    ) : null}
                 </div>
             </div>
 

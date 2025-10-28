@@ -123,6 +123,7 @@ export enum OrderErrorType {
 
 export interface OrderErrorResponse {
     order_not_found?: string
+    approve_order_not_allowed?: string
     bot_user_not_found?: string
     bot_configuration_not_found?: string
     script_not_found?: string

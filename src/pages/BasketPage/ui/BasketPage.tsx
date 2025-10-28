@@ -11,10 +11,12 @@ import { BasketItem } from '@/widgets/BasketItem'
 import { getCheckoutPath } from '@/shared/config/'
 import { Button, Spinner, Alert } from '@/shared/ui/kit'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
 
 export const BasketPage: React.FC = () => {
     const navigate = useNavigate()
     const { data: order, isLoading, isError, error } = useNotApprovedOrder()
+    const { botConfigs } = useBotConfigStore()
 
     const updateItem = useUpdateOrderItem()
     const deleteItem = useDeleteOrderItem()
@@ -142,22 +144,24 @@ export const BasketPage: React.FC = () => {
 
             {/* Bottom fixed bar */}
             <div className="fixed flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
-                <div>
-                    <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
-                        {order?.net_price?.map((prc) => {
-                            return (
-                                <span
-                                    key={prc.currency.id}
-                                    className="font-bold flex text-primary"
-                                >
-                                    {numericFormat(prc?.amount)}{' '}
-                                    {prc?.currency?.name}
-                                </span>
-                            )
-                        })}
+                {botConfigs?.display_item_prices ? (
+                    <div>
+                        <div className="text-right flex gap-1 [&>*:not(:last-child)]:after:content-['|'] [&>*:not(:last-child)]:after:mx-1">
+                            {order?.net_price?.map((prc) => {
+                                return (
+                                    <span
+                                        key={prc.currency.id}
+                                        className="font-bold flex text-primary"
+                                    >
+                                        {numericFormat(prc?.amount)}{' '}
+                                        {prc?.currency?.name}
+                                    </span>
+                                )
+                            })}
+                        </div>
+                        <p className="text-xs font-light">Общая сумма:</p>
                     </div>
-                    <p className="text-xs font-light">Общая сумма:</p>
-                </div>
+                ) : null}
                 <Button
                     variant="solid"
                     shape="round"

@@ -60,7 +60,8 @@ export const API_ENDPOINTS = {
             `/report/ask-act-report-excel?date_start=${filters?.date_start}&date_end=${filters?.date_end}`,
     },
     botConfigs: {
-        getAll: '/get-bot-configuration',
+        getBotConfig: '/get-bot-configuration',
+        getMe: '/get-me',
     },
 } as const
 

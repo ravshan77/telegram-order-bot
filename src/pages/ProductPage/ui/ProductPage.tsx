@@ -17,11 +17,13 @@ import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import React, { useEffect, useRef, useState } from 'react'
 import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
 
 export const ProductPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
     const selectedProduct = useCartStore((state) => state.selectedProduct)
     const [isOpenSheet, setIsOpenSheet] = useState(false)
+    const { botConfigs } = useBotConfigStore()
 
     const { data: order } = useNotApprovedOrder()
     const registerOrder = useRegisterOrder()
@@ -123,7 +125,7 @@ export const ProductPage: React.FC = () => {
             registerOrder.isPending || addItem.isPending || updateItem.isPending
 
         // astatkalar 0 bo'lsa
-        if (selectedProduct?.stock === 0) {
+        if (botConfigs?.enable_order_with_available_items) {
             return (
                 <p className="w-full justify-center flex items-center h-10 text-red-400 text-xs italic">
                     Товар нет в наличии
@@ -257,14 +259,17 @@ export const ProductPage: React.FC = () => {
                                 </span>
                             </div>
                         )}
-                        <div className="flex gap-1 items-center">
-                            <BoxSvg width={16} height={16} /> Остаток:{' '}
-                            {selectedProduct?.stock}{' '}
-                            {selectedProduct?.measurement
-                                ? MeasurementType[selectedProduct?.measurement]
-                                      ?.label
-                                : null}
-                        </div>
+                        {botConfigs?.display_item_warehouse_states ? (
+                            <div className="flex gap-1 items-center">
+                                <BoxSvg width={16} height={16} /> Остаток:{' '}
+                                {selectedProduct?.stock}{' '}
+                                {selectedProduct?.measurement
+                                    ? MeasurementType[
+                                          selectedProduct?.measurement
+                                      ]?.label
+                                    : null}
+                            </div>
+                        ) : null}
                         {/* <div className="flex gap-1">
                             {selectedProduct.package_measurements?.map(
                                 (pkg) => (
@@ -351,14 +356,16 @@ export const ProductPage: React.FC = () => {
                                     : 'Нет'}
                             </span>
                         </div>
-                        <div className="flex p-4 rounded-md justify-between bg-primary-subtle ">
-                            <span className="text-gray-600">
-                                Цена продажи:{' '}
-                            </span>
-                            <span className="text-base text-primary font-bold">
-                                {numericFormat(selectedProduct.price)} UZS
-                            </span>
-                        </div>
+                        {botConfigs?.display_item_prices ? (
+                            <div className="flex p-4 rounded-md justify-between bg-primary-subtle ">
+                                <span className="text-gray-600">
+                                    Цена продажи:{' '}
+                                </span>
+                                <span className="text-base text-primary font-bold">
+                                    {numericFormat(selectedProduct.price)} UZS
+                                </span>
+                            </div>
+                        ) : null}
                     </div>
 
                     <hr />
@@ -369,12 +376,14 @@ export const ProductPage: React.FC = () => {
 
             {/* Bottom fixed bar */}
             <div className="fixed z-10 flex justify-between items-start bottom-0 h-20 left-0 right-0 py-2 px-4 bg-white border-t">
-                <div>
-                    <p className="text-primary font-bold ">
-                        {numericFormat(selectedProduct.price)} UZS
-                    </p>
-                    <p className="text-xs font-light">Цена продажи</p>
-                </div>
+                {botConfigs?.display_item_prices ? (
+                    <div>
+                        <p className="text-primary font-bold ">
+                            {numericFormat(selectedProduct.price)} UZS
+                        </p>
+                        <p className="text-xs font-light">Цена продажи</p>
+                    </div>
+                ) : null}
                 <div>{renderActionButton()}</div>
             </div>
         </div>

@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
 import DatePicker from 'react-datepicker'
 import { useOrders } from '@/entities/order'
-import { Spinner, Alert, Input, Tag } from '@/shared/ui/kit'
 import { useCallback, useEffect, useState } from 'react'
 import { numericFormat } from '@/shared/lib/numericFormat'
+import { Spinner, Alert, Input, Tag } from '@/shared/ui/kit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ApprovedStatus, getOrderDetailsPath } from '@/shared/config'
 
@@ -11,6 +11,7 @@ type FilterKey = 'date_start' | 'date_end'
 
 export const OrdersPage = () => {
     const navigate = useNavigate()
+
     const [searchParams, setSearchParams] = useSearchParams()
     const today = dayjs().format('YYYY-MM-DD')
     const urlDateStart = searchParams.get('date_start')

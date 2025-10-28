@@ -14,6 +14,8 @@ import LogoBrandImg from '../../../../public/hippo-logo-150x41.png'
 import withHeaderItem, {
     WithHeaderItemProps,
 } from '@/shared/lib/hoc/withHeaderItem'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
+import { checkRoutesByAuthority } from '@/shared/lib/checkRoutesByAuthority'
 
 const VerticalMenuContent = lazy(
     () => import('@/shared/ui/template/VerticalMenuContent'),
@@ -54,8 +56,8 @@ const MobileNav = ({
 
     const direction = useThemeStore((state) => state.direction)
     const currentRouteKey = useRouteKeyStore((state) => state.currentRouteKey)
-
     const userAuthority = useSessionUser((state) => state.user.authority)
+    const { botConfigs } = useBotConfigStore()
 
     return (
         <>
@@ -89,7 +91,10 @@ const MobileNav = ({
                     {isOpen && (
                         <VerticalMenuContent
                             collapsed={false}
-                            navigationTree={navigationConfig}
+                            navigationTree={checkRoutesByAuthority(
+                                navigationConfig,
+                                botConfigs!,
+                            )}
                             routeKey={currentRouteKey}
                             userAuthority={userAuthority as string[]}
                             direction={direction}

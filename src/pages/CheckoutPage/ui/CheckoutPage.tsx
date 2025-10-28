@@ -15,6 +15,8 @@ import { numericFormat } from '@/shared/lib/numericFormat'
 import { useDeliveryAddresses } from '@/entities/deliveryAddress'
 import { useNotApprovedOrder, useApproveOrder } from '@/entities/order'
 import { paymentOptions } from '@/shared/config/constants/paymentTypes.constant'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
+import { formatHour } from '@/shared/lib/DateFormat'
 
 interface FormDataType {
     paymentType: SelectOption<string> | null
@@ -26,6 +28,15 @@ interface FormDataType {
 export const CheckoutPage = () => {
     const navigate = useNavigate()
     const today = dayjs().format('YYYY-MM-DD')
+    const { botConfigs } = useBotConfigStore()
+
+    const current_hour = dayjs().hour()
+
+    const is_accept_order =
+        botConfigs?.order_acceptance_time_hour_start &&
+        botConfigs?.order_acceptance_time_hour_end &&
+        current_hour >= botConfigs.order_acceptance_time_hour_start &&
+        current_hour <= botConfigs.order_acceptance_time_hour_end
 
     const {
         data: order,
@@ -37,8 +48,12 @@ export const CheckoutPage = () => {
     const { data: addresses } = useDeliveryAddresses()
     const approveOrder = useApproveOrder()
 
+    const filteredPayments = paymentOptions.filter((opt) =>
+        botConfigs?.order_allowed_payment_types.includes(Number(opt.value)),
+    )
+
     const [formData, setFormData] = useState<FormDataType>({
-        paymentType: paymentOptions[0],
+        paymentType: filteredPayments[0],
         locationType: null,
         orderDate: today,
         additionalInfo: '',
@@ -65,6 +80,14 @@ export const CheckoutPage = () => {
     }, [addresses?.locations])
 
     const handleSubmitOrder = async () => {
+        if (botConfigs?.has_order_acceptance_time) {
+            if (!is_accept_order) {
+                toast.error(
+                    `Заказы можно размещать только с ${formatHour(botConfigs?.order_acceptance_time_hour_start)}:00 до ${formatHour(botConfigs?.order_acceptance_time_hour_end)}:00!`,
+                )
+                return
+            }
+        }
         if (!order) {
             toast.error('Корзина пуста')
             return
@@ -128,7 +151,7 @@ export const CheckoutPage = () => {
                         <FormItem label="Выберите тип оплаты">
                             <Select
                                 placeholder="Выберите"
-                                options={paymentOptions}
+                                options={filteredPayments}
                                 isSearchable={false}
                                 value={formData?.paymentType}
                                 onChange={(
@@ -143,19 +166,6 @@ export const CheckoutPage = () => {
                         </FormItem>
 
                         <FormItem label="Дата заказа">
-                            {/* <Input
-                                type="date"
-                                placeholder="Введите"
-                                className="text-start"
-                                value={formData?.orderDate || ''}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        orderDate: e.target.value,
-                                    })
-                                }
-                            /> */}
-
                             <DatePicker
                                 dateFormat="dd.MM.yyyy"
                                 name="orderDate"
@@ -176,7 +186,9 @@ export const CheckoutPage = () => {
                                             'DD.MM.YYYY',
                                         )}
                                         inputMode="none"
-                                        style={{ width: 'calc(100vw - 34px)' }}
+                                        style={{
+                                            width: 'calc(100vw - 34px)',
+                                        }}
                                         className=""
                                         onFocus={(e) => e.target.blur()}
                                     />

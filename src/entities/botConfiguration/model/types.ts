@@ -25,3 +25,13 @@ export interface BotConfigurations {
     notify_telegram_order_bot_order_events: boolean
     contacts: string[]
 }
+
+export interface Me {
+    id: number
+    is_bot: boolean
+    first_name: string
+    last_name: string
+    username: string
+    language_code: string
+    photo_url: string
+}

@@ -19,6 +19,7 @@ import { useCartStore } from '@/shared/store/useCartStore'
 import { numericFormat } from '@/shared/lib/numericFormat'
 import { getProductPath, MeasurementType } from '@/shared/config'
 import { UpdateQuantityDrawer } from '@/widgets/UpdateQuantityDrawer'
+import useBotConfigStore from '@/shared/store/useBotConfigStore'
 
 interface ProductCardProps {
     product: ProductView
@@ -29,6 +30,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const navigate = useNavigate()
     const setSelectedProduct = useCartStore((state) => state.setSelectedProduct)
     const { data: order, isPending } = useNotApprovedOrder()
+    const { botConfigs } = useBotConfigStore()
 
     const registerOrder = useRegisterOrder()
     const addItem = useAddOrderItem()
@@ -150,7 +152,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             updateItem.isPending
 
         // astatkalar 0 bo'lsa
-        if (product?.stock === 0) {
+        if (botConfigs?.enable_order_with_available_items) {
             return (
                 <p className="w-full justify-center flex items-center h-10 text-red-400 text-xs italic">
                     Товар нет в наличии
@@ -274,21 +276,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
 
             <div className="p-3">
-                <div className="text-primary font-bold text-sm">
-                    {numericFormat(product.price)} {product.currency.name}
-                </div>
+                {botConfigs?.display_item_prices ? (
+                    <div className="text-primary font-bold text-sm">
+                        {numericFormat(product.price)} {product.currency.name}
+                    </div>
+                ) : null}
                 <div
                     className="text-sm text-black mt-2 line-clamp-2 h-11"
                     onClick={goShowProduct}
                 >
                     {product.name}
                 </div>
-                <div className="flex gap-1 items-center">
-                    <BoxSvg width={16} height={16} /> Остаток: {product?.stock}{' '}
-                    {product?.measurement
-                        ? MeasurementType[product?.measurement]?.label
-                        : null}
-                </div>
+                {botConfigs?.display_item_warehouse_states ? (
+                    <div className="flex gap-1 items-center">
+                        <BoxSvg width={16} height={16} /> Остаток:{' '}
+                        {product?.stock}{' '}
+                        {product?.measurement
+                            ? MeasurementType[product?.measurement]?.label
+                            : null}
+                    </div>
+                ) : null}
                 {/* {!(product?.stock === 0) ? (
                     <div className="flex gap-1 h-7 border">
                         {product.package_measurements?.map((pkg) => (
